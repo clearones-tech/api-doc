@@ -55,7 +55,7 @@ openssl rsa -in api_private.pem -out api_public.pem -pubout
 
 **Content-Type:** multipart/form-data
 
-**Description:** 上传文件(把加签加密参数放在url后?apiKey=xxx&bizContent=参数加密哈希后的串&sign=xxx&key=xxx)
+**Description:** 上传文件(把加签加密参数放在url后?apiKey=xxx&bizContent=参数加密哈希后的串&sign=xxx&key=xxx);支持的文件格式: jpg、jpeg、png、pdf、zip、rar、7z
 
 **Query-parameters:**
 
