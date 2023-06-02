@@ -210,6 +210,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/account/detail --dat
 |└─name|string|账号名|-|
 |└─email|string|创建时的邮箱地址|-|
 |└─status|int32|状态 1-审核中 2-已生效 3-审核拒绝|-|
+|└─note|string|审核拒绝的备注|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -224,7 +225,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/account/detail --dat
     "clientId": "1663027675055698121",
     "name": "小蓝的账户",
     "email": "xiaolan@clearones.io",
-    "status": 2
+    "status": 2,
+    "note": "There is a risk to user funds"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
@@ -268,6 +270,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/account/list --data 
 |└─name|string|账号名|-|
 |└─email|string|创建时的邮箱地址|-|
 |└─status|int32|状态 1-审核中 2-已生效 3-审核拒绝|-|
+|└─note|string|审核拒绝的备注|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -283,52 +286,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/account/list --data 
       "clientId": "1663027675055698121",
       "name": "小蓝的账户",
       "email": "xiaolan@clearones.io",
-      "status": 2
+      "status": 2,
+      "note": "There is a risk to user funds"
     }
   ],
-  "timestamp": "1685343278618",
-  "key": "tvJ1Um",
-  "sign": "LwpZUp"
-}
-```
-
-### 测试接口
-**URL:** /api/v1/account/test
-
-**Type:** POST
-
-
-**Content-Type:** application/json
-
-**Description:** 测试接口
-
-**Body-parameters:**
-
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|param|string|false|No comments found.|-|
-
-**Request-example:**
-```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/account/test --data 'z0zin5'
-```
-**Response-fields:**
-
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|string|响应数据|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
-
-**Response-example:**
-```
-{
-  "code": 200,
-  "message": "Success",
-  "data": "6mrvew",
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
   "sign": "LwpZUp"
