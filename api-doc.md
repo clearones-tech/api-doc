@@ -481,11 +481,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/account/creat
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|clientId|string|false|客户的账户ID|-|
-|fromNo|string|false|查询开始cryptoAccountNo|-|
-|limit|int32|false|查询数量，默认20，最大200|-|
+| Parameter | Type | Required | Description         | Since |
+|-----------|------|----------|---------------------|-------|
+|clientId|string|false| 客户的账户ID             |-|
+|fromNo|string|false| 查询开始cryptoAccountNo |-|
+|limit|int32|false| 查询数量，默认20，最大100     |-|
 
 **Request-example:**
 ```
@@ -883,15 +883,15 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/transaction/c
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|clientId|string|false|客户的账户ID|-|
-|fromNo|string|false|查询开始transactionNo|-|
-|limit|int32|false|查询数量，默认20，最大200|-|
-|cryptoAccountNo|string|false|账号编号|-|
-|coinKey|string|false|币种唯一标识|-|
-|createTimestampFrom|int64|false|创建时间开始时间戳，UNIX 时间戳毫秒数|-|
-|createTimestampTo|int64|false|创建时间结束时间戳，UNIX 时间戳毫秒数|-|
+| Parameter | Type | Required | Description           | Since |
+|-----------|------|----------|-----------------------|-------|
+|clientId|string|false| 客户的账户ID               |-|
+|fromNo|string|false| 查询开始transactionNo     |-|
+|limit|int32|false| 查询数量，默认20，最大100       |-|
+|cryptoAccountNo|string|false| 账号编号                  |-|
+|coinKey|string|false| 币种唯一标识                |-|
+|createTimestampFrom|int64|false| 创建时间开始时间戳，UNIX 时间戳毫秒数 |-|
+|createTimestampTo|int64|false| 创建时间结束时间戳，UNIX 时间戳毫秒数 |-|
 
 **Request-example:**
 ```
