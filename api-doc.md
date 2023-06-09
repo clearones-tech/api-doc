@@ -111,7 +111,7 @@ curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/accoun
 **Body-parameters:**
 
 | Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
+|-----------|------|----------|-------|-------|
 |type|int32|true|账号类型 1-机构 2-个人|-|
 |accountName|string|true|账户名称|-|
 |firstName|string|true|用户名|-|
@@ -119,13 +119,13 @@ curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/accoun
 |email|string|true|邮箱|-|
 |country|string|true|国家/地区|-|
 |customerRefId|string|true|调用方唯一业务id|-|
-|materials|array|false|需要上传的材料列表，个人类型为必传，且材料数量符合要求|-|
-|identificationNo|string|false|身份证明文件号，个人类型为必传|-|
-|address|string|false|地址，个人类型为必传|-|
-|birthday|string|false|生日，个人类型为必传|-|
-|occupation|string|false|职业，个人类型为必传|-|
-|gender|string|false|性别，个人类型为必传|-|
-|contactNumber|string|false|电话，个人类型为必传|-|
+|materials|array|false|需要上传的材料列表，且材料数量符合要求|-|
+|identificationNo|string|false|身份证明文件号|-|
+|address|string|false|地址|-|
+|birthday|string|false|生日|-|
+|occupation|string|false|职业|-|
+|gender|string|false|性别|-|
+|contactNumber|string|false|电话|-|
 
 **Request-example:**
 ```
