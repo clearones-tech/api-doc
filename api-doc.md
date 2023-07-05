@@ -1,10 +1,11 @@
 # ClearOnes Open Api接口文档
 
-| Version | Update Time         | Status  | Author     | Description           |
-|---------|---------------------|---------|------------|-----------------------|
-| 1.0.0   | 2023-04-20 12:00:00 | create  | clearones  | 创建文档                  |
-| 1.0.1   | 2023-05-29 10:00:00 | modify  | clearones  | 修改部分接口字段；类似功能接口返回值命名统一 |
-| 1.0.2   | 2023-05-31 10:00:00 | modify  | clearones  | 增加webhook返回内容         |
+| Version | Update Time | Status | Author | Description |
+|---------|-------------|--------|--------|-------------|
+|1.0.0|2023-04-20 12:00:00|create|clearones|创建文档|
+|1.0.1|2023-05-29 10:00:00|modify|clearones|修改部分接口字段；类似功能接口返回值命名统一|
+|1.0.2|2023-05-31 10:00:00|modify|clearones|增加webhook返回内容|
+|1.0.3|2023-07-04 14:17:00|modify|clearones|修改法币转账手续费规则，创建转账接口新增fee参数；新增查询手续费接口；数字货币交易状态新增PROCESSING:处理中；|
 
 ## 接入说明
 ### 请求统一参数
@@ -53,9 +54,10 @@ openssl rsa -in api_private.pem -out api_public.pem -pubout
 
 **Type:** POST
 
+
 **Content-Type:** multipart/form-data
 
-**Description:** 上传文件(把加签加密参数放在url后?apiKey=xxx&bizContent=参数加密哈希后的串&sign=xxx&key=xxx);支持的文件格式: jpg、jpeg、png、pdf、zip、rar、7z
+**Description:** 把加签加密参数放在url后?apiKey=xxx&bizContent=参数加密哈希后的串&sign=xxx&key=xxx;支持的文件格式: jpg、jpeg、png、pdf、zip、rar、7z
 
 **Query-parameters:**
 
@@ -70,7 +72,7 @@ openssl rsa -in api_private.pem -out api_public.pem -pubout
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/account/upload --data 'apiKey=f53m1k&timestamp=2023-05-30 18:17:23&bizContent=jh7ws8&key=0vrek4&sign=r3xhd1'
+curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/account/upload --data 'apiKey=wr1y24&timestamp=2023-07-04 14:18:12&bizContent=waob7s&key=rtodo9&sign=vvxxb3'
 ```
 **Response-fields:**
 
@@ -90,7 +92,7 @@ curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/accoun
   "code": 200,
   "message": "Success",
   "data": {
-    "objectKey": "2rrte9"
+    "objectKey": "ybmxjh"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
@@ -111,7 +113,7 @@ curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/accoun
 **Body-parameters:**
 
 | Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------|-------|
+|-----------|------|----------|-------------|-------|
 |type|int32|true|账号类型 1-机构 2-个人|-|
 |accountName|string|true|账户名称|-|
 |firstName|string|true|用户名|-|
@@ -119,33 +121,33 @@ curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/accoun
 |email|string|true|邮箱|-|
 |country|string|true|国家/地区|-|
 |customerRefId|string|true|调用方唯一业务id|-|
-|materials|array|false|需要上传的材料列表，且材料数量符合要求|-|
-|identificationNo|string|false|身份证明文件号|-|
-|address|string|false|地址|-|
-|birthday|string|false|生日|-|
-|occupation|string|false|职业|-|
-|gender|string|false|性别|-|
-|contactNumber|string|false|电话|-|
+|materials|array|false|需要上传的材料列表，个人类型为必传，且材料数量符合要求|-|
+|identificationNo|string|false|身份证明文件号，个人类型为必传|-|
+|address|string|false|地址，个人类型为必传|-|
+|birthday|string|false|生日，个人类型为必传|-|
+|occupation|string|false|职业，个人类型为必传|-|
+|gender|string|false|性别，个人类型为必传|-|
+|contactNumber|string|false|电话，个人类型为必传|-|
 
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v1/account/create --data '{
-  "type": 163,
-  "accountName": "sandy.sauer",
-  "firstName": "sandy.sauer",
-  "lastName": "sandy.sauer",
-  "email": "verena.koelpin@yahoo.com",
-  "country": "zfz6eo",
-  "customerRefId": "169",
+  "type": 358,
+  "accountName": "lissette.mann",
+  "firstName": "lissette.mann",
+  "lastName": "lissette.mann",
+  "email": "sasha.lind@hotmail.com",
+  "country": "855tbw",
+  "customerRefId": "115",
   "materials": [
-    "dthtt2"
+    "4fste9"
   ],
-  "identificationNo": "69vsfh",
-  "address": "Suite 249 1600 Skiles Spurs， West Rafaelberg， AK 97514",
-  "birthday": "2023-05-30",
-  "occupation": "xceo6d",
-  "gender": "rihfru",
-  "contactNumber": "liu5zw"
+  "identificationNo": "karrz7",
+  "address": "Suite 321 397 Cummerata Creek， Welchview， HI 92380",
+  "birthday": "2023-07-04",
+  "occupation": "rwoflj",
+  "gender": "1w6g7p",
+  "contactNumber": "exr949"
 }'
 ```
 **Response-fields:**
@@ -315,7 +317,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/account/list --data 
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/coin/list --data 'c9hsee'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/coin/list --data 'se714d'
 ```
 **Response-fields:**
 
@@ -373,7 +375,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/coin/list --d
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/blockchain/list --data 'j2ytxl'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/blockchain/list --data 'wmk5yo'
 ```
 **Response-fields:**
 
@@ -481,11 +483,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/account/creat
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description         | Since |
-|-----------|------|----------|---------------------|-------|
-|clientId|string|false| 客户的账户ID             |-|
-|fromNo|string|false| 查询开始cryptoAccountNo |-|
-|limit|int32|false| 查询数量，默认20，最大100     |-|
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|false|客户的账户ID|-|
+|fromNo|string|false|查询开始cryptoAccountNo|-|
+|limit|int32|false|查询数量，默认20，最大100|-|
 
 **Request-example:**
 ```
@@ -883,15 +885,15 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/transaction/c
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description           | Since |
-|-----------|------|----------|-----------------------|-------|
-|clientId|string|false| 客户的账户ID               |-|
-|fromNo|string|false| 查询开始transactionNo     |-|
-|limit|int32|false| 查询数量，默认20，最大100       |-|
-|cryptoAccountNo|string|false| 账号编号                  |-|
-|coinKey|string|false| 币种唯一标识                |-|
-|createTimestampFrom|int64|false| 创建时间开始时间戳，UNIX 时间戳毫秒数 |-|
-|createTimestampTo|int64|false| 创建时间结束时间戳，UNIX 时间戳毫秒数 |-|
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|false|客户的账户ID|-|
+|fromNo|string|false|查询开始transactionNo|-|
+|limit|int32|false|查询数量，默认20，最大100|-|
+|cryptoAccountNo|string|false|账号编号|-|
+|coinKey|string|false|币种唯一标识|-|
+|createTimestampFrom|int64|false|创建时间开始时间戳，UNIX 时间戳毫秒数|-|
+|createTimestampTo|int64|false|创建时间结束时间戳，UNIX 时间戳毫秒数|-|
 
 **Request-example:**
 ```
@@ -920,7 +922,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/transaction/l
 |└─coinKey|string|币种唯一标识|-|
 |└─transactionType|int8|交易类型（1:接收；2:发送；）|-|
 |└─txAmount|string|交易金额|-|
-|└─transactionStatus|string|交易状态（SUBMITTED:审批中；SIGNING:签名中；BROADCASTING:广播中；CONFIRMING:确认中；SUCCESS:成功；FAILED:失败；CANCELLED:取消；REJECTED:拒绝；）|-|
+|└─transactionStatus|string|交易状态（SUBMITTED:审批中；PROCESSING:处理中；SIGNING:签名中；BROADCASTING:广播中；CONFIRMING:确认中；SUCCESS:成功；FAILED:失败；CANCELLED:取消；REJECTED:拒绝；）|-|
 |└─transactionSubStatus|string|交易子状态|-|
 |└─note|string|备注|-|
 |└─blockHeight|int64|区块高度|-|
@@ -1004,7 +1006,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/transaction/d
 |└─coinKey|string|币种唯一标识|-|
 |└─transactionType|int8|交易类型（1:接收；2:发送；）|-|
 |└─txAmount|string|交易金额|-|
-|└─transactionStatus|string|交易状态（SUBMITTED:审批中；SIGNING:签名中；BROADCASTING:广播中；CONFIRMING:确认中；SUCCESS:成功；FAILED:失败；CANCELLED:取消；REJECTED:拒绝；）|-|
+|└─transactionStatus|string|交易状态（SUBMITTED:审批中；PROCESSING:处理中；SIGNING:签名中；BROADCASTING:广播中；CONFIRMING:确认中；SUCCESS:成功；FAILED:失败；CANCELLED:取消；REJECTED:拒绝；）|-|
 |└─transactionSubStatus|string|交易子状态|-|
 |└─note|string|备注|-|
 |└─blockHeight|int64|区块高度|-|
@@ -1064,7 +1066,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/transaction/d
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/country/list --data '6gci7w'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/country/list --data 're00uw'
 ```
 **Response-fields:**
 
@@ -1116,7 +1118,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/country/list --
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/currency/list --data 'jb1ncj'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/currency/list --data 'xz7mhr'
 ```
 **Response-fields:**
 
@@ -1182,7 +1184,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/list --
 |└─balances|array|账户余额列表|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currencyKey|string|币种|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─availableBalance|number|可用余额|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─availableBalanceUsd|number|可用余额转usd金额|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─frozenBalance|number|冻结余额|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─frozenBalanceUsd|number|冻结余额转usd金额|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─fee|number|转账服务费|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─depositAddress|object|存款转账地址|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─bankName|string|银行名称|-|
@@ -1211,7 +1215,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/list --
         {
           "currencyKey": "USD",
           "availableBalance": 1000300.12,
+          "availableBalanceUsd": 1000300.12,
           "frozenBalance": 300.12,
+          "frozenBalanceUsd": 300.12,
           "fee": 300,
           "depositAddress": {
             "bankName": "China CITIC Bank International Limited",
@@ -1269,7 +1275,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/balance
 |data|object|响应数据|-|
 |└─currencyKey|string|币种|-|
 |└─availableBalance|number|可用余额|-|
+|└─availableBalanceUsd|number|可用余额转usd金额|-|
 |└─frozenBalance|number|冻结余额|-|
+|└─frozenBalanceUsd|number|冻结余额转usd金额|-|
 |└─fee|number|转账服务费|-|
 |└─depositAddress|object|存款转账地址|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─bankName|string|银行名称|-|
@@ -1293,7 +1301,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/balance
   "data": {
     "currencyKey": "USD",
     "availableBalance": 1000300.12,
+    "availableBalanceUsd": 1000300.12,
     "frozenBalance": 300.12,
+    "frozenBalanceUsd": 300.12,
     "fee": 300,
     "depositAddress": {
       "bankName": "China CITIC Bank International Limited",
@@ -1357,8 +1367,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/recipie
   "beneficiaryName": "小红",
   "beneficiaryCountryCode": "HK",
   "beneficiaryAddress": "8 Finance Street, Central, Hong Kong",
-  "note": "g1o4iu",
-  "label": "小蓝的账户"
+  "note": "9v6beq",
+  "label": "Blue Account"
 }'
 ```
 **Response-fields:**
@@ -1565,12 +1575,96 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/recipie
       "beneficiaryName": "小红",
       "beneficiaryCountryCode": "HK",
       "beneficiaryAddress": "8 Finance Street, Central, Hong Kong",
-      "note": "l2v12x",
+      "note": "de9j9p",
       "label": "小蓝的账户",
       "status": 2,
       "approvalNote": "同意"
     }
   ],
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 获取收款地址详情
+**URL:** /api/v1/fiat/account/recipient/detail
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 获取收款地址详情
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|fiatAccountNo|string|true|法币账号No|-|
+|recipientId|string|false|收款人id(recipientId和customerRefId至少传一个)|-|
+|customerRefId|string|false|调用方唯一业务id|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/recipient/detail --data '{
+  "clientId": "1663027675055698121",
+  "fiatAccountNo": "11063639",
+  "recipientId": "24221",
+  "customerRefId": "53d73bed-0a15-4ad6-95f6-9e73381ec17d"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─customerRefId|string|调用方唯一业务id|-|
+|└─recipientId|string|收款方地址id|-|
+|└─fiatAccountNo|string|账号No|-|
+|└─currencyKey|string|币种key|-|
+|└─bankCountryCode|string|开户银行所在地iso code|-|
+|└─bankCodeType|string|收款银行代号类型（Only 'SWIFT' be supported）|-|
+|└─bankCode|string|收款银行代号|-|
+|└─bankName|string|收款银行名称|-|
+|└─beneficiaryAccountNo|string|收款人银行账户号码/IBAN|-|
+|└─beneficiaryName|string|收款人姓名|-|
+|└─beneficiaryCountryCode|string|收款人国家iso code|-|
+|└─beneficiaryAddress|string|收款人地址|-|
+|└─note|string|备注|-|
+|└─label|string|标签别称|-|
+|└─status|int32|收款方状态(1:审批中；2:已生效；3:审批拒绝；)|-|
+|└─approvalNote|string|审批备注|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+    "recipientId": "11",
+    "fiatAccountNo": "11063639",
+    "currencyKey": "USD",
+    "bankCountryCode": "HK",
+    "bankCodeType": "SWIFT",
+    "bankCode": "012",
+    "bankName": "China CITIC Bank International Limited",
+    "beneficiaryAccountNo": "123123456789",
+    "beneficiaryName": "小红",
+    "beneficiaryCountryCode": "HK",
+    "beneficiaryAddress": "8 Finance Street, Central, Hong Kong",
+    "note": "448g3c",
+    "label": "小蓝的账户",
+    "status": 2,
+    "approvalNote": "同意"
+  },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
   "sign": "LwpZUp"
@@ -1596,6 +1690,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/recipie
 |fiatAccountNo|string|true|钱包账号编号|-|
 |transferCurrencyKey|string|true|转账币种唯一标识|-|
 |transferAmount|string|true|转账金额|-|
+|fee|string|true|服务费|-|
 |recipientId|string|true|收款方ID|-|
 |note|string|false|备注|-|
 
@@ -1607,8 +1702,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
   "fiatAccountNo": "11063639",
   "transferCurrencyKey": "USD",
   "transferAmount": "100",
+  "fee": "10",
   "recipientId": "11",
-  "note": "f4g70d"
+  "note": "ixwl98"
 }'
 ```
 **Response-fields:**
@@ -1763,12 +1859,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
     "transactionAmount": "1.23456789",
     "fee": "200",
     "transactionStatus": "SUBMITTED",
-    "proofEn": "pq8z30",
-    "proofCn": "emualn",
-    "transactionSubStatus": "8k5tzb",
+    "proofEn": "uzl0gq",
+    "proofCn": "don5k1",
+    "transactionSubStatus": "neuysi",
     "createTimestamp": 1672062254051,
     "completedTimestamp": 1672062254051,
-    "note": "xujs5l",
+    "note": "awu9mo",
     "approvalNote": "同意"
   },
   "timestamp": "1685343278618",
@@ -1862,12 +1958,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
       "transactionAmount": "1.23456789",
       "fee": "200",
       "transactionStatus": "SUBMITTED",
-      "proofEn": "mqe62g",
-      "proofCn": "9k9t6u",
-      "transactionSubStatus": "muyb8u",
+      "proofEn": "030gg3",
+      "proofCn": "u8j94u",
+      "transactionSubStatus": "wrffeg",
       "createTimestamp": 1672062254051,
       "completedTimestamp": 1672062254051,
-      "note": "irevrk",
+      "note": "xiomyx",
       "approvalNote": "同意"
     }
   ],
@@ -1900,7 +1996,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
 curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transaction/proof/add --data '{
   "clientId": "1663027675055698121",
   "transactionNo": "1663027675055698131",
-  "objectKey": "c8952c"
+  "objectKey": "5pa40v"
 }'
 ```
 **Response-fields:**
@@ -1922,6 +2018,60 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
   "message": "Success",
   "data": {
     "result": true
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 查询交易手续费
+**URL:** /api/v1/fiat/account/transaction/fee
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 查询交易手续费
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|fiatAccountNo|string|true|钱包账号编号|-|
+|transferCurrencyKey|string|true|转账币种唯一标识|-|
+|transferAmount|string|true|转账金额|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transaction/fee --data '{
+  "clientId": "1663027675055698121",
+  "fiatAccountNo": "11063639",
+  "transferCurrencyKey": "USD",
+  "transferAmount": "100"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─fee|string|手续费|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "fee": "10"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
@@ -2055,66 +2205,64 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | note                 | string  | 备注                                                                                        |
 | approvalNote         | string  | 审批备注                                                                                      |
 
-
 ## 错误码列表
 
-| Error code | Description                    |
-|------------|--------------------------------|
-| 302        | Repeat operation               |
-| 400        | Request parameter format error |
-| 401        | Insufficient permissions       |
-| 412        | parameter error                |
-| 413        | Remote call business exception |
-| 429        | To many requests               |
-| 500        | System error                   |
-| 501        | Remote call time out           |
-| 1001       | Sign Verification failed       |
-| 1002       | Parameter decrypt failed       |
-| 1003       | Not in the ip whitelist        |
-| 403        | 未授权                            |
-| 10105      | 接口幂等                           |
-| 10203      | 账号已冻结                          |
-| 10204      | 审批人数量大于钱包管理员数量                 |
-| 10205      | 账号不支持的币种                       |
-| 10206      | 存在进行中的审批                       |
-| 10207      | 冻结时间必须是将来时间                    |
-| 10208      | 账号不存在                          |
-| 10401      | 用户已存在                          |
-| 10402      | 用户不存在                          |
-| 10403      | 不能删除审批中的用户                     |
-| 10404      | 不能删除自己                         |
-| 10405      | 当前钱包存在审批，无法删除钱包管理员             |
-| 10406      | 在删除管理员之前需要先减少审批数               |
-| 10501      | 钱包提币白名单标签不能超过20个字符             |
-| 10502      | 钱包提币白名单地址不能超过200个字符            |
-| 10503      | 白名单地址已存在                       |
-| 10504      | 不能删除审批中的白名单                    |
-| 10601      | 提币规则已存在                        |
-| 10701      | 无效的地址                          |
-| 10702      | 您的收款地址有风险，不能转账。                |
-| 10703      | 目标地址不能为合约地址                    |
-| 10704      | 余额不足                           |
-| 10705      | 手续费余额不足                        |
-| 10706      | 提币数量小数精度错误                     |
-| 10707      | 提币数量超过组织限额                     |
-| 10708      | 提币数量超过钱包限额                     |
-| 10709      | 暂停充币                           |
-| 10710      | 暂停提币                           |
-| 10711      | 钱包被冻结，无法提币                     |
-| 10712      | 更新GA后，24小时内禁止提币                |
-| 10713      | 更新密码后，24小时内禁止提币                |
-| 10714      | 该机构已失效，无法提币                    |
-| 10801      | 该机构已失效，无法转账                    |
-| 10802      | 暂停充值                           |
-| 10803      | 暂停转账                           |
-| 10804      | 钱包被冻结，无法转账                     |
-| 10805      | 更新GA后，24小时内禁止转账                |
-| 10806      | 更新密码后，24小时内禁止转账                |
-| 10807      | 转账数量小数精度错误                     |
-| 10808      | 单笔转账最低数量检查不通过                  |
-| 10809      | 收款人不存在                         |
-| 10810      | 收款人和币种未匹配                      |
-| 10901      | 操作授权验证失败                       |
-| 11001      | 交易记录不存在                        |
-| 11002      | 当前交易状态不允许操作                    |
+| Error code | Description |
+|------------|-------------|
+|302|Repeat operation|
+|400|Request parameter format error|
+|401|Insufficient permissions|
+|412|Remote call parameter error|
+|413|Remote call business exception|
+|429|To many requests|
+|500|System error|
+|501|Remote call time out|
+|1001|Sign Verification failed|
+|1002|Parameter decrypt failed|
+|1003|Not in the ip whitelist|
+|403|未授权|
+|10105|接口幂等|
+|10203|账号已冻结|
+|10204|审批人数量大于钱包管理员数量|
+|10205|账号不支持的币种|
+|10206|存在进行中的审批|
+|10207|冻结时间必须是将来时间|
+|10208|账号不存在|
+|10401|用户已存在|
+|10402|用户不存在|
+|10403|不能删除审批中的用户|
+|10404|不能删除自己|
+|10405|当前钱包存在审批，无法删除钱包管理员|
+|10406|在删除管理员之前需要先减少审批数|
+|10501|钱包提币白名单标签不能超过20个字符|
+|10502|钱包提币白名单地址不能超过200个字符|
+|10503|白名单地址已存在|
+|10504|不能删除审批中的白名单|
+|10601|提币规则已存在|
+|10701|无效的地址|
+|10702|您的收款地址有风险，不能转账。|
+|10703|目标地址不能为合约地址|
+|10704|余额不足|
+|10705|手续费余额不足|
+|10706|提币数量小数精度错误|
+|10707|提币数量超过组织限额|
+|10708|提币数量超过钱包限额|
+|10709|暂停充币|
+|10710|暂停提币|
+|10711|钱包被冻结，无法提币|
+|10712|更新GA后，24小时内禁止提币|
+|10713|更新密码后，24小时内禁止提币|
+|10714|该机构已失效，无法提币|
+|10801|该机构已失效，无法转账|
+|10802|暂停充值|
+|10803|暂停转账|
+|10804|钱包被冻结，无法转账|
+|10805|更新GA后，24小时内禁止转账|
+|10806|更新密码后，24小时内禁止转账|
+|10807|转账数量小数精度错误|
+|10808|单笔转账最低数量检查不通过|
+|10812|手续费变更，请重新提交|
+|10901|操作授权验证失败|
+|11001|交易记录不存在|
+|11002|当前交易状态不允许操作|
 
