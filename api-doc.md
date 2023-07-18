@@ -6,6 +6,7 @@
 |1.0.1|2023-05-29 10:00:00|modify|clearones|修改部分接口字段；类似功能接口返回值命名统一|
 |1.0.2|2023-05-31 10:00:00|modify|clearones|增加webhook返回内容|
 |1.0.3|2023-07-04 14:17:00|modify|clearones|修改法币转账手续费规则，创建转账接口新增fee参数；新增查询手续费接口；数字货币交易状态新增PROCESSING:处理中；|
+|1.0.4|2023-07-18 15:28:00|modify|clearones|加密货币创建交易接口参数添加feeLevel，feeRate修改为非必须|
 
 ## 接入说明
 ### 请求统一参数
@@ -59,6 +60,7 @@ openssl rsa -in api_private.pem -out api_public.pem -pubout
 
 **Description:** 把加签加密参数放在url后?apiKey=xxx&bizContent=参数加密哈希后的串&sign=xxx&key=xxx;支持的文件格式: jpg、jpeg、png、pdf、zip、rar、7z
 
+
 **Query-parameters:**
 
 | Parameter | Type | Required | Description | Since |
@@ -72,7 +74,7 @@ openssl rsa -in api_private.pem -out api_public.pem -pubout
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/account/upload --data 'apiKey=wr1y24&timestamp=2023-07-04 14:18:12&bizContent=waob7s&key=rtodo9&sign=vvxxb3'
+curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/account/upload --data 'apiKey=j64y2y&timestamp=2023-07-18 15:30:53&bizContent=l8593s&key=yahvv9&sign=1pitps'
 ```
 **Response-fields:**
 
@@ -92,7 +94,7 @@ curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/accoun
   "code": 200,
   "message": "Success",
   "data": {
-    "objectKey": "ybmxjh"
+    "objectKey": "y7xdwr"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
@@ -132,22 +134,22 @@ curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/accoun
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v1/account/create --data '{
-  "type": 358,
-  "accountName": "lissette.mann",
-  "firstName": "lissette.mann",
-  "lastName": "lissette.mann",
-  "email": "sasha.lind@hotmail.com",
-  "country": "855tbw",
-  "customerRefId": "115",
+  "type": 180,
+  "accountName": "rex.ankunding",
+  "firstName": "rex.ankunding",
+  "lastName": "rex.ankunding",
+  "email": "adolph.oreilly@gmail.com",
+  "country": "7x5ptc",
+  "customerRefId": "161",
   "materials": [
-    "4fste9"
+    "1m3gzn"
   ],
-  "identificationNo": "karrz7",
-  "address": "Suite 321 397 Cummerata Creek， Welchview， HI 92380",
-  "birthday": "2023-07-04",
-  "occupation": "rwoflj",
-  "gender": "1w6g7p",
-  "contactNumber": "exr949"
+  "identificationNo": "0a4j2e",
+  "address": "Apt. 114 48511 Melvin Forest， North Nolan， LA 77720",
+  "birthday": "2023-07-18",
+  "occupation": "bivi6u",
+  "gender": "doea1p",
+  "contactNumber": "5jrxz3"
 }'
 ```
 **Response-fields:**
@@ -317,7 +319,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/account/list --data 
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/coin/list --data 'se714d'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/coin/list --data '8vuiu7'
 ```
 **Response-fields:**
 
@@ -375,7 +377,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/coin/list --d
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/blockchain/list --data 'wmk5yo'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/blockchain/list --data 'tw3dw1'
 ```
 **Response-fields:**
 
@@ -761,7 +763,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/account/coin/
 |cryptoAccountNo|string|true|账号编号|-|
 |coinKey|string|true|币种唯一标识|-|
 |amount|string|true|交易金额|-|
-|feeRate|object|true|手续费费率|-|
+|feeLevel|string|false|手续费级别（LOW：低；MIDDLE：中；HIGH：高；），与手续费费率二选一，如果设置了手续费费率，优先使用设置的费率|-|
+|feeRate|object|false|手续费费率，feeLevel 和 feeRate 二选一，如果设置了手续费费率，优先使用设置的费率|-|
 |└─baseFee|string|false|EIP-1559 的 baseFee|-|
 |└─fee|string|false|TRON 的预估手续费，只有波场有|-|
 |└─feeRate|string|false|费率：UTXO 的 feePerByte; EVM 类的 gasPrice; 以及 TRON 的 feeLimit (对于 TRON 也可以不传)|-|
@@ -780,6 +783,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/transaction/c
   "cryptoAccountNo": "11063639",
   "coinKey": "BTC",
   "amount": "1.2",
+  "feeLevel": "MIDDLE",
   "feeRate": {
     "baseFee": "0.000049522",
     "fee": "0.00001",
@@ -1066,7 +1070,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/transaction/d
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/country/list --data 're00uw'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/country/list --data 'v4gvs8'
 ```
 **Response-fields:**
 
@@ -1118,7 +1122,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/country/list --
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/currency/list --data 'xz7mhr'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/currency/list --data 'ji8xl6'
 ```
 **Response-fields:**
 
@@ -1183,11 +1187,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/list --
 |└─name|string|账号名|-|
 |└─balances|array|账户余额列表|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currencyKey|string|币种|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─availableBalance|number|可用余额|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─availableBalanceUsd|number|可用余额转usd金额|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─frozenBalance|number|冻结余额|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─frozenBalanceUsd|number|冻结余额转usd金额|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─fee|number|转账服务费|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─availableBalance|string|可用余额|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─availableBalanceUsd|string|可用余额转usd金额|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─frozenBalance|string|冻结余额|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─frozenBalanceUsd|string|冻结余额转usd金额|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─fee|string|转账服务费|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─depositAddress|object|存款转账地址|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─bankName|string|银行名称|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─bankAddress|string|银行地址|-|
@@ -1214,11 +1218,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/list --
       "balances": [
         {
           "currencyKey": "USD",
-          "availableBalance": 1000300.12,
-          "availableBalanceUsd": 1000300.12,
-          "frozenBalance": 300.12,
-          "frozenBalanceUsd": 300.12,
-          "fee": 300,
+          "availableBalance": "1000300.12",
+          "availableBalanceUsd": "1000300.12",
+          "frozenBalance": "300.12",
+          "frozenBalanceUsd": "300.12",
+          "fee": "300",
           "depositAddress": {
             "bankName": "China CITIC Bank International Limited",
             "bankAddress": "61-65 Des Voeux Road Central. Hong Kong",
@@ -1274,11 +1278,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/balance
 |message|string|响应描述|-|
 |data|object|响应数据|-|
 |└─currencyKey|string|币种|-|
-|└─availableBalance|number|可用余额|-|
-|└─availableBalanceUsd|number|可用余额转usd金额|-|
-|└─frozenBalance|number|冻结余额|-|
-|└─frozenBalanceUsd|number|冻结余额转usd金额|-|
-|└─fee|number|转账服务费|-|
+|└─availableBalance|string|可用余额|-|
+|└─availableBalanceUsd|string|可用余额转usd金额|-|
+|└─frozenBalance|string|冻结余额|-|
+|└─frozenBalanceUsd|string|冻结余额转usd金额|-|
+|└─fee|string|转账服务费|-|
 |└─depositAddress|object|存款转账地址|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─bankName|string|银行名称|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─bankAddress|string|银行地址|-|
@@ -1300,11 +1304,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/balance
   "message": "Success",
   "data": {
     "currencyKey": "USD",
-    "availableBalance": 1000300.12,
-    "availableBalanceUsd": 1000300.12,
-    "frozenBalance": 300.12,
-    "frozenBalanceUsd": 300.12,
-    "fee": 300,
+    "availableBalance": "1000300.12",
+    "availableBalanceUsd": "1000300.12",
+    "frozenBalance": "300.12",
+    "frozenBalanceUsd": "300.12",
+    "fee": "300",
     "depositAddress": {
       "bankName": "China CITIC Bank International Limited",
       "bankAddress": "61-65 Des Voeux Road Central. Hong Kong",
@@ -1367,7 +1371,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/recipie
   "beneficiaryName": "小红",
   "beneficiaryCountryCode": "HK",
   "beneficiaryAddress": "8 Finance Street, Central, Hong Kong",
-  "note": "9v6beq",
+  "note": "8qwszm",
   "label": "Blue Account"
 }'
 ```
@@ -1575,7 +1579,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/recipie
       "beneficiaryName": "小红",
       "beneficiaryCountryCode": "HK",
       "beneficiaryAddress": "8 Finance Street, Central, Hong Kong",
-      "note": "de9j9p",
+      "note": "wdeo7z",
       "label": "小蓝的账户",
       "status": 2,
       "approvalNote": "同意"
@@ -1660,7 +1664,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/recipie
     "beneficiaryName": "小红",
     "beneficiaryCountryCode": "HK",
     "beneficiaryAddress": "8 Finance Street, Central, Hong Kong",
-    "note": "448g3c",
+    "note": "148984",
     "label": "小蓝的账户",
     "status": 2,
     "approvalNote": "同意"
@@ -1704,7 +1708,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
   "transferAmount": "100",
   "fee": "10",
   "recipientId": "11",
-  "note": "ixwl98"
+  "note": "8auehj"
 }'
 ```
 **Response-fields:**
@@ -1859,12 +1863,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
     "transactionAmount": "1.23456789",
     "fee": "200",
     "transactionStatus": "SUBMITTED",
-    "proofEn": "uzl0gq",
-    "proofCn": "don5k1",
-    "transactionSubStatus": "neuysi",
+    "proofEn": "3q3j47",
+    "proofCn": "daivet",
+    "transactionSubStatus": "58f8qj",
     "createTimestamp": 1672062254051,
     "completedTimestamp": 1672062254051,
-    "note": "awu9mo",
+    "note": "drjixv",
     "approvalNote": "同意"
   },
   "timestamp": "1685343278618",
@@ -1958,12 +1962,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
       "transactionAmount": "1.23456789",
       "fee": "200",
       "transactionStatus": "SUBMITTED",
-      "proofEn": "030gg3",
-      "proofCn": "u8j94u",
-      "transactionSubStatus": "wrffeg",
+      "proofEn": "g9y8a9",
+      "proofCn": "fu8pcv",
+      "transactionSubStatus": "6kzzro",
       "createTimestamp": 1672062254051,
       "completedTimestamp": 1672062254051,
-      "note": "xiomyx",
+      "note": "7xu15d",
       "approvalNote": "同意"
     }
   ],
@@ -1996,7 +2000,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
 curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transaction/proof/add --data '{
   "clientId": "1663027675055698121",
   "transactionNo": "1663027675055698131",
-  "objectKey": "5pa40v"
+  "objectKey": "p3mrg9"
 }'
 ```
 **Response-fields:**
@@ -2203,7 +2207,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | createTimestamp      | int64   | 创建时间戳毫秒                                                                                   |
 | completedTimestamp   | int64   | 完成时间戳毫秒                                                                                   |
 | note                 | string  | 备注                                                                                        |
-| approvalNote         | string  | 审批备注                                                                                      |
+| approvalNote         | string  | 审批备注   
 
 ## 错误码列表
 
