@@ -7,6 +7,7 @@
 |1.0.2|2023-05-31 10:00:00|modify|clearones|增加webhook返回内容|
 |1.0.3|2023-07-04 14:17:00|modify|clearones|修改法币转账手续费规则，创建转账接口新增fee参数；新增查询手续费接口；数字货币交易状态新增PROCESSING:处理中；|
 |1.0.4|2023-07-18 15:28:00|modify|clearones|加密货币创建交易接口参数添加feeLevel，feeRate修改为非必须|
+|1.0.5|2023-10-13 15:14:00|modify|clearones|添加法币内部转账接口|
 
 ## 接入说明
 ### 请求统一参数
@@ -74,7 +75,7 @@ openssl rsa -in api_private.pem -out api_public.pem -pubout
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/account/upload --data 'apiKey=j64y2y&timestamp=2023-07-18 15:30:53&bizContent=l8593s&key=yahvv9&sign=1pitps'
+curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/account/upload --data 'apiKey=ikqrjn&timestamp=2023-10-13 15:01:09&bizContent=izt6qs&key=aw3kzf&sign=y9pfwo'
 ```
 **Response-fields:**
 
@@ -94,7 +95,7 @@ curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/accoun
   "code": 200,
   "message": "Success",
   "data": {
-    "objectKey": "y7xdwr"
+    "objectKey": "229q5v"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
@@ -134,22 +135,22 @@ curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/accoun
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v1/account/create --data '{
-  "type": 180,
-  "accountName": "rex.ankunding",
-  "firstName": "rex.ankunding",
-  "lastName": "rex.ankunding",
-  "email": "adolph.oreilly@gmail.com",
-  "country": "7x5ptc",
-  "customerRefId": "161",
+  "type": 90,
+  "accountName": "bertram.gutmann",
+  "firstName": "bertram.gutmann",
+  "lastName": "bertram.gutmann",
+  "email": "chung.conn@yahoo.com",
+  "country": "0vzmnr",
+  "customerRefId": "181",
   "materials": [
-    "1m3gzn"
+    "amijre"
   ],
-  "identificationNo": "0a4j2e",
-  "address": "Apt. 114 48511 Melvin Forest， North Nolan， LA 77720",
-  "birthday": "2023-07-18",
-  "occupation": "bivi6u",
-  "gender": "doea1p",
-  "contactNumber": "5jrxz3"
+  "identificationNo": "szdfcj",
+  "address": "535 Darin Cove， New Robstad， MT 94299",
+  "birthday": "2023-10-13",
+  "occupation": "t08jmd",
+  "gender": "l5o7vm",
+  "contactNumber": "dtvjx1"
 }'
 ```
 **Response-fields:**
@@ -319,7 +320,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/account/list --data 
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/coin/list --data '8vuiu7'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/coin/list --data '9w7jps'
 ```
 **Response-fields:**
 
@@ -377,7 +378,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/coin/list --d
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/blockchain/list --data 'tw3dw1'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/blockchain/list --data 't1bwws'
 ```
 **Response-fields:**
 
@@ -905,7 +906,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/transaction/l
   "clientId": "1663027675055698121",
   "fromNo": "1663027675055698130",
   "limit": 20,
-  "cryptoAccountNo": "@mock 11063639",
+  "cryptoAccountNo": "11063639",
   "coinKey": "BTC",
   "createTimestampFrom": 1672056033898,
   "createTimestampTo": 1672056033898
@@ -1070,7 +1071,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/transaction/d
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/country/list --data 'v4gvs8'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/country/list --data 'qnykvd'
 ```
 **Response-fields:**
 
@@ -1122,7 +1123,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/country/list --
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/currency/list --data 'ji8xl6'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/currency/list --data 'fnn5u2'
 ```
 **Response-fields:**
 
@@ -1371,7 +1372,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/recipie
   "beneficiaryName": "小红",
   "beneficiaryCountryCode": "HK",
   "beneficiaryAddress": "8 Finance Street, Central, Hong Kong",
-  "note": "8qwszm",
+  "note": "78gywm",
   "label": "Blue Account"
 }'
 ```
@@ -1579,7 +1580,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/recipie
       "beneficiaryName": "小红",
       "beneficiaryCountryCode": "HK",
       "beneficiaryAddress": "8 Finance Street, Central, Hong Kong",
-      "note": "wdeo7z",
+      "note": "8hmcey",
       "label": "小蓝的账户",
       "status": 2,
       "approvalNote": "同意"
@@ -1664,7 +1665,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/recipie
     "beneficiaryName": "小红",
     "beneficiaryCountryCode": "HK",
     "beneficiaryAddress": "8 Finance Street, Central, Hong Kong",
-    "note": "148984",
+    "note": "0st2wu",
     "label": "小蓝的账户",
     "status": 2,
     "approvalNote": "同意"
@@ -1708,7 +1709,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
   "transferAmount": "100",
   "fee": "10",
   "recipientId": "11",
-  "note": "8auehj"
+  "note": "vv40rt"
 }'
 ```
 **Response-fields:**
@@ -1863,12 +1864,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
     "transactionAmount": "1.23456789",
     "fee": "200",
     "transactionStatus": "SUBMITTED",
-    "proofEn": "3q3j47",
-    "proofCn": "daivet",
-    "transactionSubStatus": "58f8qj",
+    "proofEn": "s1x8z6",
+    "proofCn": "ghrkvt",
+    "transactionSubStatus": "ppgnlv",
     "createTimestamp": 1672062254051,
     "completedTimestamp": 1672062254051,
-    "note": "drjixv",
+    "note": "kc6nxg",
     "approvalNote": "同意"
   },
   "timestamp": "1685343278618",
@@ -1962,12 +1963,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
       "transactionAmount": "1.23456789",
       "fee": "200",
       "transactionStatus": "SUBMITTED",
-      "proofEn": "g9y8a9",
-      "proofCn": "fu8pcv",
-      "transactionSubStatus": "6kzzro",
+      "proofEn": "ayr60r",
+      "proofCn": "eo7r6w",
+      "transactionSubStatus": "130b0x",
       "createTimestamp": 1672062254051,
       "completedTimestamp": 1672062254051,
-      "note": "7xu15d",
+      "note": "jdciua",
       "approvalNote": "同意"
     }
   ],
@@ -2000,7 +2001,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
 curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transaction/proof/add --data '{
   "clientId": "1663027675055698121",
   "transactionNo": "1663027675055698131",
-  "objectKey": "p3mrg9"
+  "objectKey": "8lrs5z"
 }'
 ```
 **Response-fields:**
@@ -2076,6 +2077,124 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
   "message": "Success",
   "data": {
     "fee": "10"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 发起内部转出申请
+**URL:** /api/v1/fiat/account/transaction/internal/transfer/create
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 发起内部转出申请
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|customerRefId|string|true|调用方唯一业务id，最长 100|-|
+|fromAccountNo|string|true|付款钱包账号编号|-|
+|transferCurrencyKey|string|true|转账币种唯一标识|-|
+|transferAmount|string|true|转账金额|-|
+|toAccountNo|string|true|收款钱包账号编号|-|
+|note|string|false|备注，最长100|-|
+|paymentReasonType|int64|true|付款原因类型（1:同名賬戶匯款；2:業務支出；3:派息或分紅；4:捐贈；100:其他）|-|
+|paymentReason|string|false|付款原因，最长100，当paymentReasonType为其他时，必填|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transaction/internal/transfer/create --data '{
+  "clientId": "1663027675055698121",
+  "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+  "fromAccountNo": "11063639",
+  "transferCurrencyKey": "USD",
+  "transferAmount": "100",
+  "toAccountNo": "11063640",
+  "note": "yppvv7",
+  "paymentReasonType": 2,
+  "paymentReason": "业务付款"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─operateId|string|操作ID|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "operateId": "10"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 提交创建内部转出交易操作码
+**URL:** /api/v1/fiat/account/transaction/internal/transfer/create/authorize
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 提交创建内部转出交易操作码
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|operateId|string|true|操作记录id|-|
+|verificationCode|string|true|邮件下发的验证码|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transaction/internal/transfer/create/authorize --data '{
+  "clientId": "1663027675055698121",
+  "operateId": "10",
+  "verificationCode": "123456"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─customerRefId|string|调用方唯一业务id|-|
+|└─transactionNo|string|交易号|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+    "transactionNo": "1663027675055698131"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
