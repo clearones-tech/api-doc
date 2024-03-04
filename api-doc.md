@@ -8,6 +8,7 @@
 |1.0.3|2023-07-04 14:17:00|modify|clearones|修改法币转账手续费规则，创建转账接口新增fee参数；新增查询手续费接口；数字货币交易状态新增PROCESSING:处理中；|
 |1.0.4|2023-07-18 15:28:00|modify|clearones|加密货币创建交易接口参数添加feeLevel，feeRate修改为非必须|
 |1.0.5|2023-10-13 15:14:00|modify|clearones|添加法币内部转账接口|
+|1.0.6|2024-03-04 15:35:00|modify|clearones|添加加密货币预估手续费接口|
 
 ## 接入说明
 ### 请求统一参数
@@ -61,7 +62,6 @@ openssl rsa -in api_private.pem -out api_public.pem -pubout
 
 **Description:** 把加签加密参数放在url后?apiKey=xxx&bizContent=参数加密哈希后的串&sign=xxx&key=xxx;支持的文件格式: jpg、jpeg、png、pdf、zip、rar、7z
 
-
 **Query-parameters:**
 
 | Parameter | Type | Required | Description | Since |
@@ -75,7 +75,7 @@ openssl rsa -in api_private.pem -out api_public.pem -pubout
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/account/upload --data 'apiKey=ikqrjn&timestamp=2023-10-13 15:01:09&bizContent=izt6qs&key=aw3kzf&sign=y9pfwo'
+curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/account/upload --data 'apiKey=q5pofe&timestamp=2024-03-04 15:35:57&bizContent=be1zlq&key=3o97ym&sign=7feax0'
 ```
 **Response-fields:**
 
@@ -95,7 +95,7 @@ curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/accoun
   "code": 200,
   "message": "Success",
   "data": {
-    "objectKey": "229q5v"
+    "objectKey": "i27ml2"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
@@ -135,22 +135,22 @@ curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v1/accoun
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v1/account/create --data '{
-  "type": 90,
-  "accountName": "bertram.gutmann",
-  "firstName": "bertram.gutmann",
-  "lastName": "bertram.gutmann",
-  "email": "chung.conn@yahoo.com",
-  "country": "0vzmnr",
-  "customerRefId": "181",
+  "type": 760,
+  "accountName": "james.gutkowski",
+  "firstName": "james.gutkowski",
+  "lastName": "james.gutkowski",
+  "email": "carrol.ledner@yahoo.com",
+  "country": "xciyrf",
+  "customerRefId": "101",
   "materials": [
-    "amijre"
+    "onu7il"
   ],
-  "identificationNo": "szdfcj",
-  "address": "535 Darin Cove， New Robstad， MT 94299",
-  "birthday": "2023-10-13",
-  "occupation": "t08jmd",
-  "gender": "l5o7vm",
-  "contactNumber": "dtvjx1"
+  "identificationNo": "8lcy26",
+  "address": "Apt. 030 810 Saturnina Plaza， West Eleonora， TX 08612",
+  "birthday": "2024-03-04",
+  "occupation": "mvchmn",
+  "gender": "l6b8oe",
+  "contactNumber": "bdp1kr"
 }'
 ```
 **Response-fields:**
@@ -320,7 +320,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/account/list --data 
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/coin/list --data '9w7jps'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/coin/list --data 'x4yen5'
 ```
 **Response-fields:**
 
@@ -378,7 +378,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/coin/list --d
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/blockchain/list --data 't1bwws'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/blockchain/list --data 'wrfyno'
 ```
 **Response-fields:**
 
@@ -1052,6 +1052,132 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/transaction/d
 }
 ```
 
+### 查询预估手续费
+**URL:** /api/v1/crypto/transaction/estimated/fee
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 查询预估手续费
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|cryptoAccountNo|string|true|账号编号|-|
+|coinKey|string|true|币种唯一标识|-|
+|amount|string|false|交易金额（非必传，传了则计算预估手续费会更精确）|-|
+|toAddress|string|false|提币目标地址（非必传，传了则计算预估手续费会更精确）|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/transaction/estimated/fee --data '{
+  "clientId": "1663027675055698121",
+  "cryptoAccountNo": "11063639",
+  "coinKey": "USDT_ERC20",
+  "amount": "1.23456789",
+  "toAddress": "0x006619aa8a4DaF1323e9AA109e6A9E1b3DeF308b"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─feeUnit|string|费率单位|-|
+|└─feeCoinKey|string|手续费币种唯一标识|-|
+|└─minFeeRate|object|最小费率|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─baseFee|string|EIP-1559 的 baseFee|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─fee|string|TRON 链和 UTXO 币种的预估手续费|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─feeRate|string|费率，UTXO 的 feePerByte 以及 EVM 类的 gasPrice，以及 TRON 的 feeLimit (费率上限)|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gasLimit|string|EVM 类的 gasLimit|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─maxFee|string|EIP-1559 的 maxFee|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─maxPriorityFee|string|EIP-1559 的 maxPriorityFee|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─bytesSize|string|UTXO 字节数，不包含小于 1000 聪的 UTXO|-|
+|└─lowFeeRate|object|普通费率|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─baseFee|string|EIP-1559 的 baseFee|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─fee|string|TRON 链和 UTXO 币种的预估手续费|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─feeRate|string|费率，UTXO 的 feePerByte 以及 EVM 类的 gasPrice，以及 TRON 的 feeLimit (费率上限)|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gasLimit|string|EVM 类的 gasLimit|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─maxFee|string|EIP-1559 的 maxFee|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─maxPriorityFee|string|EIP-1559 的 maxPriorityFee|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─bytesSize|string|UTXO 字节数，不包含小于 1000 聪的 UTXO|-|
+|└─middleFeeRate|object|快速费率|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─baseFee|string|EIP-1559 的 baseFee|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─fee|string|TRON 链和 UTXO 币种的预估手续费|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─feeRate|string|费率，UTXO 的 feePerByte 以及 EVM 类的 gasPrice，以及 TRON 的 feeLimit (费率上限)|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gasLimit|string|EVM 类的 gasLimit|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─maxFee|string|EIP-1559 的 maxFee|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─maxPriorityFee|string|EIP-1559 的 maxPriorityFee|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─bytesSize|string|UTXO 字节数，不包含小于 1000 聪的 UTXO|-|
+|└─highFeeRate|object|急速费率|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─baseFee|string|EIP-1559 的 baseFee|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─fee|string|TRON 链和 UTXO 币种的预估手续费|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─feeRate|string|费率，UTXO 的 feePerByte 以及 EVM 类的 gasPrice，以及 TRON 的 feeLimit (费率上限)|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gasLimit|string|EVM 类的 gasLimit|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─maxFee|string|EIP-1559 的 maxFee|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─maxPriorityFee|string|EIP-1559 的 maxPriorityFee|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─bytesSize|string|UTXO 字节数，不包含小于 1000 聪的 UTXO|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "feeUnit": "Gwei",
+    "feeCoinKey": "ETH",
+    "minFeeRate": {
+      "baseFee": "0.000049522",
+      "fee": "0.00001",
+      "feeRate": "1.100049522",
+      "gasLimit": "22000",
+      "maxFee": "1.100055713",
+      "maxPriorityFee": "1.1",
+      "bytesSize": "53"
+    },
+    "lowFeeRate": {
+      "baseFee": "0.000049522",
+      "fee": "0.00001",
+      "feeRate": "1.100049522",
+      "gasLimit": "22000",
+      "maxFee": "1.100055713",
+      "maxPriorityFee": "1.1",
+      "bytesSize": "53"
+    },
+    "middleFeeRate": {
+      "baseFee": "0.000049522",
+      "fee": "0.00001",
+      "feeRate": "1.100049522",
+      "gasLimit": "22000",
+      "maxFee": "1.100055713",
+      "maxPriorityFee": "1.1",
+      "bytesSize": "53"
+    },
+    "highFeeRate": {
+      "baseFee": "0.000049522",
+      "fee": "0.00001",
+      "feeRate": "1.100049522",
+      "gasLimit": "22000",
+      "maxFee": "1.100055713",
+      "maxPriorityFee": "1.1",
+      "bytesSize": "53"
+    }
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
 ## 法币模块
 ### 国家
 **URL:** /api/v1/fiat/country/list
@@ -1071,7 +1197,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/transaction/d
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/country/list --data 'qnykvd'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/country/list --data '4dwp6k'
 ```
 **Response-fields:**
 
@@ -1123,7 +1249,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/country/list --
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/currency/list --data 'fnn5u2'
+curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/currency/list --data 'w04igc'
 ```
 **Response-fields:**
 
@@ -1372,7 +1498,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/recipie
   "beneficiaryName": "小红",
   "beneficiaryCountryCode": "HK",
   "beneficiaryAddress": "8 Finance Street, Central, Hong Kong",
-  "note": "78gywm",
+  "note": "u43n81",
   "label": "Blue Account"
 }'
 ```
@@ -1580,7 +1706,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/recipie
       "beneficiaryName": "小红",
       "beneficiaryCountryCode": "HK",
       "beneficiaryAddress": "8 Finance Street, Central, Hong Kong",
-      "note": "8hmcey",
+      "note": "4mjb0m",
       "label": "小蓝的账户",
       "status": 2,
       "approvalNote": "同意"
@@ -1665,7 +1791,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/recipie
     "beneficiaryName": "小红",
     "beneficiaryCountryCode": "HK",
     "beneficiaryAddress": "8 Finance Street, Central, Hong Kong",
-    "note": "0st2wu",
+    "note": "7hjp63",
     "label": "小蓝的账户",
     "status": 2,
     "approvalNote": "同意"
@@ -1709,7 +1835,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
   "transferAmount": "100",
   "fee": "10",
   "recipientId": "11",
-  "note": "vv40rt"
+  "note": "izdt9d"
 }'
 ```
 **Response-fields:**
@@ -1864,12 +1990,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
     "transactionAmount": "1.23456789",
     "fee": "200",
     "transactionStatus": "SUBMITTED",
-    "proofEn": "s1x8z6",
-    "proofCn": "ghrkvt",
-    "transactionSubStatus": "ppgnlv",
+    "proofEn": "tipojk",
+    "proofCn": "x5a9l7",
+    "transactionSubStatus": "s7ljw1",
     "createTimestamp": 1672062254051,
     "completedTimestamp": 1672062254051,
-    "note": "kc6nxg",
+    "note": "cl9wf7",
     "approvalNote": "同意"
   },
   "timestamp": "1685343278618",
@@ -1963,12 +2089,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
       "transactionAmount": "1.23456789",
       "fee": "200",
       "transactionStatus": "SUBMITTED",
-      "proofEn": "ayr60r",
-      "proofCn": "eo7r6w",
-      "transactionSubStatus": "130b0x",
+      "proofEn": "29xf3a",
+      "proofCn": "kts01k",
+      "transactionSubStatus": "vbe0qj",
       "createTimestamp": 1672062254051,
       "completedTimestamp": 1672062254051,
-      "note": "jdciua",
+      "note": "r24srj",
       "approvalNote": "同意"
     }
   ],
@@ -2001,7 +2127,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
 curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transaction/proof/add --data '{
   "clientId": "1663027675055698121",
   "transactionNo": "1663027675055698131",
-  "objectKey": "8lrs5z"
+  "objectKey": "x0s6ci"
 }'
 ```
 **Response-fields:**
@@ -2117,7 +2243,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/fiat/account/transac
   "transferCurrencyKey": "USD",
   "transferAmount": "100",
   "toAccountNo": "11063640",
-  "note": "yppvv7",
+  "note": "2v7nne",
   "paymentReasonType": 2,
   "paymentReason": "业务付款"
 }'
