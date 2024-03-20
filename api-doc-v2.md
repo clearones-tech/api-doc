@@ -2186,7 +2186,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | FIAT_TX_STATUS_CHANGED          | [transactionDetail](#transactionDetail)             | 法币交易状态变更     |
 | CURRENCY_STATUS_CHANGED         | [currencyStatusDetail](#currencyStatusDetail)       | 账户币种状态变更     |
 | DEPOSIT_INFO_ADD                | [depositAddressAddDetail](#depositAddressAddDetail) | 账户币种收款信息添加   |
-| DEPOSIT_INFO_CHANGE             | [depositAddressChangeDetail](#depositAddressChangeDetail) | 账户币种收款信息状态变更 |
+| DEPOSIT_INFO_CHANGED            | [depositAddressChangeDetail](#depositAddressChangeDetail) | 账户币种收款信息状态变更 |
 
 ### 事件详情
 **<div id="clientDetail"> clientDetail </div>**
