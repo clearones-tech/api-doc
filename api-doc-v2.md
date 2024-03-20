@@ -1258,17 +1258,21 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/del
 | Parameter | Type | Required | Description | Since |
 |-----------|------|----------|-------------|-------|
 |clientId|string|true|客户的账户ID|-|
+|customerRefId|string|true|调用方唯一业务id，最长 100|-|
 |currencyKey|string|true|币种唯一标识|-|
 |amount|string|true|交易金额|-|
 |recipientId|string|true|收款方ID|-|
+|note|string|false|备注，最长100|-|
 
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/create --data '{
   "clientId": "1663027675055698121",
+  "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
   "currencyKey": "BTC",
   "amount": "1.2",
-  "recipientId": "11"
+  "recipientId": "11",
+  "note": "差旅费"
 }'
 ```
 **Response-fields:**
