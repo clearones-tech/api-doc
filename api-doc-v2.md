@@ -1088,14 +1088,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/cre
 |-----------|------|----------|-------------|-------|
 |clientId|string|true|客户的账户ID|-|
 |currencyKey|string|false|资金币种|-|
-|status|int32|false|收款方状态(1:审批中；2:已生效；3:审批拒绝；)|-|
 
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/list --data '{
   "clientId": "1663027675055698121",
-  "currencyKey": "USD",
-  "status": 2
+  "currencyKey": "USD"
 }'
 ```
 **Response-fields:**
@@ -1107,7 +1105,6 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/lis
 |data|array|响应数据|-|
 |└─customerRefId|string|调用方唯一业务id|-|
 |└─recipientId|string|收款方地址id|-|
-|└─status|int32|收款人状态(1:审批中；2:已生效；3:审批拒绝)|-|
 |└─currencyKey|string|币种标识|-|
 |└─address|string|加密货币地址|-|
 |└─label|string|别称|-|
@@ -1124,7 +1121,6 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/lis
     {
       "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
       "recipientId": "11",
-      "status": 2,
       "currencyKey": "USD",
       "address": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
       "label": "小红的地址"
@@ -1171,7 +1167,6 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/det
 |data|object|响应数据|-|
 |└─customerRefId|string|调用方唯一业务id|-|
 |└─recipientId|string|收款方地址id|-|
-|└─status|int32|收款人状态(1:审批中；2:已生效；3:审批拒绝)|-|
 |└─currencyKey|string|币种标识|-|
 |└─address|string|加密货币地址|-|
 |└─label|string|别称|-|
@@ -1187,7 +1182,6 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/det
   "data": {
     "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
     "recipientId": "11",
-    "status": 2,
     "currencyKey": "USD",
     "address": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
     "label": "小红的地址"
@@ -1264,17 +1258,21 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/del
 | Parameter | Type | Required | Description | Since |
 |-----------|------|----------|-------------|-------|
 |clientId|string|true|客户的账户ID|-|
+|customerRefId|string|true|调用方唯一业务id，最长 100|-|
 |currencyKey|string|true|币种唯一标识|-|
 |amount|string|true|交易金额|-|
 |recipientId|string|true|收款方ID|-|
+|note|string|false|备注，最长100|-|
 
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/create --data '{
   "clientId": "1663027675055698121",
+  "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
   "currencyKey": "BTC",
   "amount": "1.2",
-  "recipientId": "11"
+  "recipientId": "11",
+  "note": "差旅费"
 }'
 ```
 **Response-fields:**
@@ -2188,7 +2186,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | FIAT_TX_STATUS_CHANGED          | [transactionDetail](#transactionDetail)             | 法币交易状态变更     |
 | CURRENCY_STATUS_CHANGED         | [currencyStatusDetail](#currencyStatusDetail)       | 账户币种状态变更     |
 | DEPOSIT_INFO_ADD                | [depositAddressAddDetail](#depositAddressAddDetail) | 账户币种收款信息添加   |
-| DEPOSIT_INFO_CHANGE             | [depositAddressChangeDetail](#depositAddressChangeDetail) | 账户币种收款信息状态变更 |
+| DEPOSIT_INFO_CHANGED            | [depositAddressChangeDetail](#depositAddressChangeDetail) | 账户币种收款信息状态变更 |
 
 ### 事件详情
 **<div id="clientDetail"> clientDetail </div>**
