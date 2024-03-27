@@ -712,15 +712,15 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/suppo
 |subChannelKey|string|false|法币-local转账子通道 ach,chats,fps,channelKey=local时必传|-|
 |currencyKey|string|true|币种标识|-|
 |conetId|string|false|平台内部的收款账号id|-|
-|swiftCode|string|false|银行swift码 法币类型为必填|-|
+|swiftCode|string|false|银行swift码|-|
 |bankCode|string|false|收款银行code local-fps类型为必填|-|
-|bankName|string|false|收款银行名称 法币类型为必填|-|
+|bankName|string|false|收款银行名称|-|
 |bankCountryCode|string|false|收款银行国家ISO code|-|
 |bankAddress|string|false|收款银行地址|-|
 |beneficiaryRoutingCode|string|false|ABA/ACH的路由号 local-ach类型为必填|-|
-|beneficiaryAccountNo|string|false|收款人银行账户号码/IBAN 法币类型为必填|-|
-|beneficiaryName|string|false|收款人姓名 法币类型为必填|-|
-|beneficiaryCountryCode|string|false|收款人国家ISO code 法币类型为必填|-|
+|beneficiaryAccountNo|string|false|收款人银行账户号码/IBAN|-|
+|beneficiaryName|string|false|收款人姓名|-|
+|beneficiaryCountryCode|string|false|收款人国家ISO code|-|
 |beneficiaryStreet|string|false|收款人街道|-|
 |beneficiaryCity|string|false|收款人城市|-|
 |beneficiaryState|string|false|收款人州/省|-|
@@ -1606,7 +1606,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/detail -
 |transferCurrencyKey|string|true|转账币种唯一标识|-|
 |transferAmount|string|true|转账金额|-|
 |feeMethod|int32|true|手续费方式（1:支付本地银行服务费；2:支付本地银行服务费与收款行服务费；）|-|
-|channelKey|string|false|法币-转账通道 swift,local,conet|-|
+|channelKey|string|false|法币-转账通道 swift,local|-|
 
 **Request-example:**
 ```
