@@ -3,6 +3,7 @@
 | Version | Update Time         | Status | Author | Description |
 |---------|---------------------|--------|--------|-------------|
 | 2.0.0   | 2023-03-14 12:00:00 |create|clearones|创建文档|
+| 2.0.1   | 2024-03-28 12:59:00 |modify|clearones|授权验证接口新增类型5:连接账号提币；连接账号模块新增接口：查询账号列表、查询账号详情、查询账号币种列表、查询账号币种详情、预估交易手续费、创建交易；连接账号模查询交易详情接口参数新增参数：调用方唯一业务ID(customerRefId)|
 
 ## 接入说明
 ### 请求统一参数
@@ -362,7 +363,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/currency/list --data
       "currencyName": "USDT",
       "currencyCategory": 1,
       "currencyDecimals": 6,
-      "withdrawalSwitch": 718,
+      "withdrawalSwitch": 1,
       "cryptoCurrencyType": "ERC20",
       "cryptoCurrencyContract": "0xdAC17F958D2ee523a2206206994597C13D831ec7"
     }
@@ -404,7 +405,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/currency/list --data
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: multipart/form-data' -H 'x-user-ip:255.136.163.171' -F 'file=' -i /api/v2/file/upload --data 'apiKey=6o2hdx&timestamp=2024-03-14 17:58:37&bizContent=conkhb&key=w5et16&sign=i8dqwf'
+curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v2/file/upload --data 'apiKey=6o2hdx&timestamp=2024-03-14 17:58:37&bizContent=conkhb&key=w5et16&sign=i8dqwf'
 ```
 **Response-fields:**
 
@@ -1093,7 +1094,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/cre
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/list --data '{
   "clientId": "1663027675055698121",
-  "currencyKey": "USD"
+  "currencyKey": "USDT_TRC20"
 }'
 ```
 **Response-fields:**
@@ -1386,7 +1387,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/cre
 
 | Parameter | Type | Required | Description | Since |
 |-----------|------|----------|-------------|-------|
-|clientId|string|true|客户的账户ID|-|
+|clientId|string|false|客户的账户ID|-|
 |fromNo|string|false|查询开始transactionNo|-|
 |limit|int32|false|查询数量，默认20，最大100|-|
 |currencyKey|string|false|币种唯一标识|-|
@@ -1462,7 +1463,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/list --d
       "beneficiaryName": "Jack's Wallet",
       "transactionAmount": "1.23456789",
       "transactionStatus": "SUCCESS",
-      "transactionSubStatus": "il3fcv",
+      "transactionSubStatus": "t1wn5c",
       "platformFee": "1.2",
       "note": "差旅费",
       "beneficiaryId": 123,
@@ -1760,14 +1761,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/proof/ad
 **Content-Type:** application/json
 
 **Description:** 对于创建交易和收款人的操作,Clearones会下发邮件验证码给用户,用户收到验证码后需要填写验证码才能继续后续的业务操作;
-授权验证接口就是在调用写操作接口(1:加密货币提币；2:法币转账；3:加密货币添加收款地址；4:法币添加收款人；)后续需要验证该操作并真正执行上述接口操作的接口
+授权验证接口就是在调用写操作接口(1:加密货币提币；2:法币转账；3:加密货币添加收款地址；4:法币添加收款人；5:连接账号提币；)后续需要验证该操作并真正执行上述接口操作的接口
 
 **Body-parameters:**
 
 | Parameter | Type | Required | Description | Since |
 |-----------|------|----------|-------------|-------|
 |clientId|string|true|客户的账户ID|-|
-|authorizationType|int32|true|授权类型（1:加密货币提币；2:法币转账；3:加密货币添加收款地址；4:法币添加收款人；）|-|
+|authorizationType|int32|true|授权类型（1:加密货币提币；2:法币转账；3:加密货币添加收款地址；4:法币添加收款人；5:连接账号提币；）|-|
 |operateId|string|true|操作记录ID|-|
 |verificationCode|string|true|验证码|-|
 
@@ -1961,7 +1962,396 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/bill/sub/list --data
 }
 ```
 
+## 连接账号
+### 查询账号列表
+**URL:** /api/v2/connect/account/list
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 查询账号列表
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|false|客户的账户ID|-|
+|fromNo|string|false|查询开始transactionNo|-|
+|limit|int32|false|查询数量，默认20，最大100|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/list --data '{
+  "clientId": "1663027675055698121",
+  "fromNo": "1663027675055698130",
+  "limit": 20
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|array|响应数据|-|
+|└─customerRefId|string|调用方唯一业务id|-|
+|└─clientId|string|客户的账户ID|-|
+|└─accountNo|string|账号编号|-|
+|└─accountName|string|账号名称|-|
+|└─blockchainKey|string|区块链唯一标识|-|
+|└─addressList|array|地址列表|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─address|string|地址|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressType|string|地址类型（DEFAULT：默认地址）|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": [
+    {
+      "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+      "clientId": "1663027675055698121",
+      "accountNo": "11063639",
+      "accountName": "小红的ETH账户",
+      "blockchainKey": "ethereum",
+      "addressList": [
+        {
+          "address": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
+          "addressType": "DEFAULT"
+        }
+      ]
+    }
+  ],
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 查询账号详情
+**URL:** /api/v2/connect/account/detail
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 查询账号详情
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|customerRefId|string|false|调用方唯一业务id，与参数accountNo二选一必填，如果两个都有值，将按照两个参数查询|-|
+|accountNo|string|false|账号编号，与参数customerRefId二选一必填，如果两个都有值，将按照两个参数查询|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/detail --data '{
+  "clientId": "1663027675055698121",
+  "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+  "accountNo": "11063639"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─customerRefId|string|调用方唯一业务id|-|
+|└─clientId|string|客户的账户ID|-|
+|└─accountNo|string|账号编号|-|
+|└─accountName|string|账号名称|-|
+|└─blockchainKey|string|区块链唯一标识|-|
+|└─addressList|array|地址列表|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─address|string|地址|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressType|string|地址类型（DEFAULT：默认地址）|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+    "clientId": "1663027675055698121",
+    "accountNo": "11063639",
+    "accountName": "小红的ETH账户",
+    "blockchainKey": "ethereum",
+    "addressList": [
+      {
+        "address": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
+        "addressType": "DEFAULT"
+      }
+    ]
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 查询账号币种列表
+**URL:** /api/v2/connect/account/currency/list
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 查询账号币种列表
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|accountNo|string|true|账号编号|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/currency/list --data '{
+  "clientId": "1663027675055698121",
+  "accountNo": "11063639"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|array|响应数据|-|
+|└─currencyKey|string|币种唯一标识|-|
+|└─currencyName|string|币种名称|-|
+|└─balance|string|余额|-|
+|└─addressList|array|地址列表|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─address|string|地址|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressType|string|地址类型（DEFAULT：默认地址）|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": [
+    {
+      "currencyKey": "USDT_ERC20",
+      "currencyName": "USDT",
+      "balance": "101.2",
+      "addressList": [
+        {
+          "address": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
+          "addressType": "DEFAULT"
+        }
+      ]
+    }
+  ],
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 查询账号币种详情
+**URL:** /api/v2/connect/account/currency/detail
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 查询账号币种详情
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|accountNo|string|true|账号编号|-|
+|currencyKey|string|true|币种唯一标识|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/currency/detail --data '{
+  "clientId": "1663027675055698121",
+  "accountNo": "11063639",
+  "currencyKey": "BTC"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─currencyKey|string|币种唯一标识|-|
+|└─currencyName|string|币种名称|-|
+|└─balance|string|余额|-|
+|└─addressList|array|地址列表|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─address|string|地址|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressType|string|地址类型（DEFAULT：默认地址）|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "currencyKey": "USDT_ERC20",
+    "currencyName": "USDT",
+    "balance": "101.2",
+    "addressList": [
+      {
+        "address": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
+        "addressType": "DEFAULT"
+      }
+    ]
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
 ## 连接账号交易
+### 预估交易手续费
+**URL:** /api/v2/connect/transaction/estimated/fee
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 预估交易手续费
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|accountNo|string|true|账号编号|-|
+|currencyKey|string|true|币种唯一标识|-|
+|amount|string|false|提币数量|-|
+|toAddress|string|false|提币目标地址|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/estimated/fee --data '{
+  "clientId": "1663027675055698121",
+  "accountNo": "11063639",
+  "currencyKey": "USDT_ERC20",
+  "amount": "1.23456789",
+  "toAddress": "0xfDb1FC3Ff8479bA88D4Ee44fF5Dbf8BB904a0E93"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─feeCurrencyKey|string|手续费币种标识|-|
+|└─fee|string|手续费|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "feeCurrencyKey": "ETH",
+    "fee": "0.0009"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 创建交易
+**URL:** /api/v2/connect/transaction/create
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 创建交易
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|customerRefId|string|true|调用方唯一业务id，最长 100|-|
+|accountNo|string|true|账号编号|-|
+|currencyKey|string|true|币种唯一标识|-|
+|amount|string|true|交易金额|-|
+|toAddress|string|true|目标地址|-|
+|note|string|false|备注，最长100|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/create --data '{
+  "clientId": "1663027675055698121",
+  "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+  "accountNo": "11063639",
+  "currencyKey": "ETH",
+  "amount": "1.2",
+  "toAddress": "0xfDb1FC3Ff8479bA88D4Ee44fF5Dbf8BB904a0E93",
+  "note": "差旅费"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─operateId|string|操作ID|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "operateId": "101"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
 ### 查询交易列表
 **URL:** /api/v2/connect/transaction/list
 
@@ -1976,7 +2366,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/bill/sub/list --data
 
 | Parameter | Type | Required | Description | Since |
 |-----------|------|----------|-------------|-------|
-|clientId|string|true|客户的账户ID|-|
+|clientId|string|false|客户的账户ID|-|
 |fromNo|string|false|查询开始transactionNo|-|
 |limit|int32|false|查询数量，默认20，最大100|-|
 |accountNo|string|false|账号编号|-|
@@ -1993,7 +2383,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
   "limit": 20,
   "accountNo": "11063639",
   "currencyKey": "BTC",
-  "transactionType": 374,
+  "transactionType": 1,
   "createTimestampFrom": 1672056033898,
   "createTimestampTo": 1672056033898
 }'
@@ -2069,12 +2459,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 | Parameter | Type | Required | Description | Since |
 |-----------|------|----------|-------------|-------|
 |clientId|string|true|客户的账户ID|-|
+|customerRefId|string|false|调用方唯一业务ID，与参数transactionNo二选一必填，如果两个都有值，将按照两个参数查询|-|
 |transactionNo|string|false|交易号，与参数customerRefId二选一必填，如果两个都有值，将按照两个参数查询|-|
 
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/detail --data '{
   "clientId": "1663027675055698121",
+  "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
   "transactionNo": "1663027675055698130"
 }'
 ```
