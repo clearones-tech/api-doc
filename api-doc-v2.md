@@ -2175,17 +2175,18 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 
 ### 事件类型
 
-| eventType                       | eventDetail                                         | Description  |
-|---------------------------------|-----------------------------------------------------|--------------|
-| CLIENT_STATUS_CHANGED           | [clientDetail](#clientDetail)                       | 创建用户状态变更     |
-| CRYPTO_TX_CREATED               | [transactionDetail](#transactionDetail)             | 数字货币交易创建     |
-| CRYPTO_TX_STATUS_CHANGED        | [transactionDetail](#transactionDetail)             | 数字货币交易状态变更   |
-| FIAT_RECIPIENT_STATUS_CHANGED   | [fiatRecipientDetail](#fiatRecipientDetail)         | 法币收款人信息变更    |
-| CRYPTO_RECIPIENT_STATUS_CHANGED | [cryptoRecipientDetail](#cryptoRecipientDetail)     | 加密货币收款人信息变更  |
-| FIAT_TX_CREATED                 | [transactionDetail](#transactionDetail)             | 法币创建交易       |
-| FIAT_TX_STATUS_CHANGED          | [transactionDetail](#transactionDetail)             | 法币交易状态变更     |
-| CURRENCY_STATUS_CHANGED         | [currencyStatusDetail](#currencyStatusDetail)       | 账户币种状态变更     |
-| DEPOSIT_INFO_ADD                | [depositAddressAddDetail](#depositAddressAddDetail) | 账户币种收款信息添加   |
+| eventType                       | eventDetail                                               | Description  |
+|---------------------------------|-----------------------------------------------------------|--------------|
+| CLIENT_STATUS_CHANGED           | [clientDetail](#clientDetail)                             | 创建用户状态变更     |
+| FUND_ACCOUNT_CREATED            | [fundAccountCreated](#fundAccountCreated)                 | 资金账号已创建      |
+| CRYPTO_TX_CREATED               | [transactionDetail](#transactionDetail)                   | 数字货币交易创建     |
+| CRYPTO_TX_STATUS_CHANGED        | [transactionDetail](#transactionDetail)                   | 数字货币交易状态变更   |
+| FIAT_RECIPIENT_STATUS_CHANGED   | [fiatRecipientDetail](#fiatRecipientDetail)               | 法币收款人信息变更    |
+| CRYPTO_RECIPIENT_STATUS_CHANGED | [cryptoRecipientDetail](#cryptoRecipientDetail)           | 加密货币收款人信息变更  |
+| FIAT_TX_CREATED                 | [transactionDetail](#transactionDetail)                   | 法币创建交易       |
+| FIAT_TX_STATUS_CHANGED          | [transactionDetail](#transactionDetail)                   | 法币交易状态变更     |
+| CURRENCY_STATUS_CHANGED         | [currencyStatusDetail](#currencyStatusDetail)             | 账户币种状态变更     |
+| DEPOSIT_INFO_ADD                | [depositAddressAddDetail](#depositAddressAddDetail)       | 账户币种收款信息添加   |
 | DEPOSIT_INFO_CHANGED            | [depositAddressChangeDetail](#depositAddressChangeDetail) | 账户币种收款信息状态变更 |
 
 ### 事件详情
@@ -2198,6 +2199,15 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | name           | string | 账号名                   |
 | email          | string | 创建时的邮箱地址              |
 | status         | int32  | 状态 1-审核中 2-已生效 3-审核拒绝 |
+
+**<div id="fundAccountCreated"> fundAccountCreated </div>**
+
+| Parameter          | Type   | Description      |
+|--------------------|--------|------------------|
+| clientId           | string | 客户的账户Id          |
+| currencyList       | array  | 币种列表             | -     |
+| └─currencyKey      | string | 币种唯一标识           | -     |
+| └─currencyCategory | int32  | 币种分类 1-数字货币 2-法币 | -     |
 
 **<div id="fiatRecipientDetail"> fiatRecipientDetail </div>**
 
