@@ -1,9 +1,10 @@
 # ClearOnes Open Api v2 接口文档
 
-| Version | Update Time         | Status | Author | Description |
-|---------|---------------------|--------|--------|-------------|
-| 2.0.0   | 2023-03-14 12:00:00 |create|clearones|创建文档|
-| 2.0.1   | 2024-03-28 12:59:00 |modify|clearones|授权验证接口新增类型5:连接账号提币；连接账号模块新增接口：查询账号列表、查询账号详情、查询账号币种列表、查询账号币种详情、预估交易手续费、创建交易；连接账号模块查询交易详情接口参数新增：调用方唯一业务ID(customerRefId)|
+| Version | Update Time         | Status | Author | Description                                                                                                           |
+|---------|---------------------|--------|--------|-----------------------------------------------------------------------------------------------------------------------|
+| 2.0.0   | 2023-03-14 12:00:00 |create|clearones| 创建文档                                                                                                                  |
+| 2.0.1   | 2024-03-28 12:59:00 |modify|clearones| 授权验证接口新增类型5:连接账号提币；连接账号模块新增接口：查询账号列表、查询账号详情、查询账号币种列表、查询账号币种详情、预估交易手续费、创建交易；连接账号模块查询交易详情接口参数新增：调用方唯一业务ID(customerRefId) |
+| 2.0.2   | 2024-04-18 10:59:00 |modify|clearones| 法币预估手续费接口增加必填字段recipientId                                                                                            |
 
 ## 接入说明
 ### 请求统一参数
@@ -1599,13 +1600,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/detail -
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|clientId|string|true|客户的账户ID|-|
-|transferCurrencyKey|string|true|转账币种唯一标识|-|
-|transferAmount|string|true|转账金额|-|
-|feeMethod|int32|true|手续费方式（1:支付本地银行服务费；2:支付本地银行服务费与收款行服务费；）|-|
-|channelKey|string|false|法币-转账通道 swift,local|-|
+| Parameter           | Type   | Required | Description                            | Since |
+|---------------------|--------|----------|----------------------------------------|-------|
+| clientId            | string | true     | 客户的账户ID                                | -     |
+| transferCurrencyKey | string | true     | 转账币种唯一标识                               | -     |
+| recipientId         | string | true     | 收款方ID                                  | -     |
+| transferAmount      | string | true     | 转账金额                                   | -     |
+| feeMethod           | int32  | true     | 手续费方式（1:支付本地银行服务费；2:支付本地银行服务费与收款行服务费；） | -     |
+| channelKey          | string | false    | 法币-转账通道 swift,local                    | -     |
 
 **Request-example:**
 ```
