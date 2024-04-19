@@ -395,14 +395,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/currency/list --data
 
 **Query-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|file|file|false|文件|-|
-|apiKey|string|true|apiKey|-|
-|timestamp|string|true|时间戳|-|
-|bizContent|string|true|格式:{"fileType":"ACCOUNT_CREATE/FIAT_PROOF"} ACCOUNT_CREATE:创建用户;FIAT_PROOF:上传交易凭证|-|
-|key|string|true|加密key|-|
-|sign|string|true|签名|-|
+| Parameter  | Type   | Required | Description                                                                       | Since |
+|------------|--------|----------|-----------------------------------------------------------------------------------|-------|
+| file       | file   | true     | 文件,最大支持10M                                                                        | -     |
+| apiKey     | string | true     | apiKey                                                                            | -     |
+| timestamp  | string | true     | 时间戳                                                                               | -     |
+| bizContent | string | true     | 格式:{"fileType":"ACCOUNT_CREATE/FIAT_PROOF"} ACCOUNT_CREATE:创建用户;FIAT_PROOF:上传交易凭证 | -     |
+| key        | string | true     | 加密key                                                                             | -     |
+| sign       | string | true     | 签名                                                                                | -     |
 
 **Request-example:**
 ```
