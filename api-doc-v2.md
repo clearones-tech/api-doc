@@ -2583,7 +2583,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | CURRENCY_STATUS_CHANGED         | [currencyStatusDetail](#currencyStatusDetail)             | 账户币种状态变更     |
 | DEPOSIT_INFO_ADD                | [depositAddressAddDetail](#depositAddressAddDetail)       | 账户币种收款信息添加   |
 | DEPOSIT_INFO_CHANGED            | [depositAddressChangeDetail](#depositAddressChangeDetail) | 账户币种收款信息状态变更 |
-| CONNECT_TX_CREATED              | [transactionDetail](#transactionDetail)                   | 连接账号交易创建     |
+| CONNECT_TX_CREATED              | [connectTransactionDetail](#connectTransactionDetail)     | 连接账号交易创建     |
 | CONNECT_TX_STATUS_CHANGED       | [connectTransactionDetail](#connectTransactionDetail)     | 连接账号交易状态变更   |
 
 ### 事件详情
