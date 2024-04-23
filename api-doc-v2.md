@@ -4,7 +4,8 @@
 |---------|---------------------|--------|--------|-----------------------------------------------------------------------------------------------------------------------|
 | 2.0.0   | 2023-03-14 12:00:00 |create|clearones| 创建文档                                                                                                                  |
 | 2.0.1   | 2024-03-28 12:59:00 |modify|clearones| 授权验证接口新增类型5:连接账号提币；连接账号模块新增接口：查询账号列表、查询账号详情、查询账号币种列表、查询账号币种详情、预估交易手续费、创建交易；连接账号模块查询交易详情接口参数新增：调用方唯一业务ID(customerRefId) |
-| 2.0.2   | 2024-04-18 10:59:00 |modify|clearones| 法币预估手续费接口增加必填字段recipientId                                                                                            |
+| 2.0.2   | 2024-04-18 10:59:00 |modify|clearones| 法币预估手续费接口增加必填字段recipientId       
+| 2.0.3   | 2024-04-23 21:25:00 |modify|clearones| webhook新增“连接账号交易创建“和”连接账号交易状态变更”事件                                                                                    |
 
 ## 接入说明
 ### 请求统一参数
@@ -2582,6 +2583,8 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | CURRENCY_STATUS_CHANGED         | [currencyStatusDetail](#currencyStatusDetail)             | 账户币种状态变更     |
 | DEPOSIT_INFO_ADD                | [depositAddressAddDetail](#depositAddressAddDetail)       | 账户币种收款信息添加   |
 | DEPOSIT_INFO_CHANGED            | [depositAddressChangeDetail](#depositAddressChangeDetail) | 账户币种收款信息状态变更 |
+| CONNECT_TX_CREATED              | [transactionDetail](#transactionDetail)                   | 连接账号交易创建     |
+| CONNECT_TX_STATUS_CHANGED       | [connectTransactionDetail](#connectTransactionDetail)     | 连接账号交易状态变更   |
 
 ### 事件详情
 **<div id="clientDetail"> clientDetail </div>**
@@ -2735,7 +2738,25 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | status               | int32  | 状态 1-关闭 2-开启                                | -     |
 | note                 | string | 法币-转入需要的附言                                  | -     |
 
+**<div id="connectTransactionDetail"> connectTransactionDetail </div>**
 
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
+|transactionNo|string|交易号|-|
+|clientId|string|客户的账户ID|-|
+|accountNo|string|账号编号|-|
+|currencyKey|string|币种唯一标识|-|
+|transactionType|int8|交易类型（1:接收；2:发送；）|-|
+|txAmount|string|交易金额|-|
+|transactionStatus|string|交易状态（SUBMITTED:审批中；PROCESSING:处理中；SIGNING:签名中；BROADCASTING:广播中；CONFIRMING:确认中；SUCCESS:成功；FAILED:失败；CANCELLED:取消；REJECTED:拒绝；）|-|
+|transactionSubStatus|string|交易子状态|-|
+|note|string|备注|-|
+|blockHeight|int64|区块高度|-|
+|fromAddress|string|交易来源地址|-|
+|toAddress|string|交易目标地址|-|
+|txHash|string|交易hash|-|
+|txFee|string|交易手续费|-|
 
 
 ## 错误码列表
