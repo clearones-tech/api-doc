@@ -1,10 +1,11 @@
 # ClearOnes Open Api v2 接口文档
 
-| Version | Update Time         | Status | Author | Description                                                                                                           |
-|---------|---------------------|--------|--------|-----------------------------------------------------------------------------------------------------------------------|
-| 2.0.0   | 2023-03-14 12:00:00 |create|clearones| 创建文档                                                                                                                  |
+| Version | Update Time         | Status | Author | Description                                                                                                            |
+|---------|---------------------|--------|--------|------------------------------------------------------------------------------------------------------------------------|
+| 2.0.0   | 2023-03-14 12:00:00 |create|clearones| 创建文档                                                                                                                   |
 | 2.0.1   | 2024-03-28 12:59:00 |modify|clearones| 授权验证接口新增类型5:连接账号提币；连接账号模块新增接口：查询账号列表、查询账号详情、查询账号币种列表、查询账号币种详情、预估交易手续费、创建交易；连接账号模块查询交易详情接口参数新增：调用方唯一业务ID(customerRefId) |
-| 2.0.2   | 2024-04-18 10:59:00 |modify|clearones| 法币预估手续费接口增加必填字段recipientId                                                                                            |
+| 2.0.2   | 2024-04-18 10:59:00 |modify|clearones| 法币预估手续费接口增加必填字段recipientId                                                                                             |
+| 2.0.3   | 2024-04-24 10:59:00 |modify|clearones| 添加交易凭证接口支持一次传递多个objectKey                                                                                              |
 
 ## 接入说明
 ### 请求统一参数
@@ -1717,7 +1718,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/e
 |-----------|------|----------|-------------|-------|
 |clientId|string|true|客户的账户ID|-|
 |transactionNo|string|true|交易号|-|
-|objectKey|string|true|上传后的对象key|-|
+|objectKeyList|array|true| 上传后的对象key列表 |-|
 
 **Request-example:**
 ```
