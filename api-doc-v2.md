@@ -83,13 +83,13 @@ openssl rsa -in api_private.pem -out api_public.pem -pubout
 |country|string|true|国家/地区|-|
 |customerRefId|string|true|调用方唯一业务id|-|
 |businessRegistrationNumber|string|false|机构的商业注册编号，机构用户为必填|-|
-|materials|array|false|需要上传的材料列表，个人类型为必传，且材料数量符合要求|-|
+|materials|array|false|需要上传的材料列表|-|
 |identificationNo|string|false|身份证明文件号，个人类型为必传|-|
-|address|string|false|地址，个人类型为必传|-|
-|birthday|string|false|生日，个人类型为必传|-|
-|occupation|string|false|职业，个人类型为必传|-|
-|gender|string|false|性别，个人类型为必传|-|
-|contactNumber|string|false|电话，个人类型为必传|-|
+|address|string|true|地址|-|
+|birthday|string|false|生日|-|
+|occupation|string|false|职业|-|
+|gender|string|false|性别|-|
+|contactNumber|string|false|电话|-|
 
 **Request-example:**
 ```
@@ -2584,6 +2584,9 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | CURRENCY_STATUS_CHANGED         | [currencyStatusDetail](#currencyStatusDetail)             | 账户币种状态变更     |
 | DEPOSIT_INFO_ADD                | [depositAddressAddDetail](#depositAddressAddDetail)       | 账户币种收款信息添加   |
 | DEPOSIT_INFO_CHANGED            | [depositAddressChangeDetail](#depositAddressChangeDetail) | 账户币种收款信息状态变更 |
+| CONNECT_TX_CREATED              | [connectTransactionDetail](#connectTransactionDetail)     | 连接账号交易创建     |
+| CONNECT_TX_STATUS_CHANGED       | [connectTransactionDetail](#connectTransactionDetail)     | 连接账号交易状态变更   |
+
 
 ### 事件详情
 **<div id="clientDetail"> clientDetail </div>**
@@ -2736,6 +2739,26 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | beneficiaryAddress   | string | 法币-收款人地址                                    | -     |
 | status               | int32  | 状态 1-关闭 2-开启                                | -     |
 | note                 | string | 法币-转入需要的附言                                  | -     |
+
+**<div id="connectTransactionDetail"> connectTransactionDetail </div>**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
+|transactionNo|string|交易号|-|
+|clientId|string|客户的账户ID|-|
+|accountNo|string|账号编号|-|
+|currencyKey|string|币种唯一标识|-|
+|transactionType|int8|交易类型（1:接收；2:发送；）|-|
+|txAmount|string|交易金额|-|
+|transactionStatus|string|交易状态（SUBMITTED:审批中；PROCESSING:处理中；SIGNING:签名中；BROADCASTING:广播中；CONFIRMING:确认中；SUCCESS:成功；FAILED:失败；CANCELLED:取消；REJECTED:拒绝；）|-|
+|transactionSubStatus|string|交易子状态|-|
+|note|string|备注|-|
+|blockHeight|int64|区块高度|-|
+|fromAddress|string|交易来源地址|-|
+|toAddress|string|交易目标地址|-|
+|txHash|string|交易hash|-|
+|txFee|string|交易手续费|-|
 
 
 
