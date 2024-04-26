@@ -7,10 +7,7 @@
 | 2.0.2   | 2024-04-18 10:59:00 |modify|clearones| 法币预估手续费接口增加必填字段recipientId       
 | 2.0.3   | 2024-04-23 21:25:00 |modify|clearones| webhook新增“连接账号交易创建“和”连接账号交易状态变更”事件                                                                                    |
 | 2.0.4   | 2024-04-24 10:59:00 |modify|clearones| 添加交易凭证接口支持一次传递多个objectKey  
-| 2.0.5   | 2024-04-26 15:22:00 |modify|clearones| 1、/api/v2/recipient/fiat/create接口增加参数branchCode，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName
-2、/api/v2/recipient/fiat/list接口返回值新增branchCode，bankAddress，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName
-3、/api/v2/recipient/fiat/detail接口返回值新增branchCode，bankAddress，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName
-4、/api/v2/fund/account/currency/deposit接口返回值新增sortCode、routingCode                                                                                            |
+| 2.0.5   | 2024-04-26 15:22:00 |modify|clearones| 1、/api/v2/recipient/fiat/create接口增加参数branchCode，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName. 2、/api/v2/recipient/fiat/list接口返回值新增branchCode，bankAddress，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName. 3、/api/v2/recipient/fiat/detail接口返回值新增branchCode，bankAddress，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName. 4、/api/v2/fund/account/currency/deposit接口返回值新增sortCode、routingCode.
 
 ## 接入说明
 ### 请求统一参数
