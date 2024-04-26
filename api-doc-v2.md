@@ -6,7 +6,11 @@
 | 2.0.1   | 2024-03-28 12:59:00 |modify|clearones| 授权验证接口新增类型5:连接账号提币；连接账号模块新增接口：查询账号列表、查询账号详情、查询账号币种列表、查询账号币种详情、预估交易手续费、创建交易；连接账号模块查询交易详情接口参数新增：调用方唯一业务ID(customerRefId) |
 | 2.0.2   | 2024-04-18 10:59:00 |modify|clearones| 法币预估手续费接口增加必填字段recipientId       
 | 2.0.3   | 2024-04-23 21:25:00 |modify|clearones| webhook新增“连接账号交易创建“和”连接账号交易状态变更”事件                                                                                    |
-| 2.0.4   | 2024-04-24 10:59:00 |modify|clearones| 添加交易凭证接口支持一次传递多个objectKey                                                                                              |
+| 2.0.4   | 2024-04-24 10:59:00 |modify|clearones| 添加交易凭证接口支持一次传递多个objectKey  
+| 2.0.5   | 2024-04-26 15:22:00 |modify|clearones| 1、/api/v2/recipient/fiat/create接口增加参数branchCode，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName
+2、/api/v2/recipient/fiat/list接口返回值新增branchCode，bankAddress，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName
+3、/api/v2/recipient/fiat/detail接口返回值新增branchCode，bankAddress，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName
+4、/api/v2/fund/account/currency/deposit接口返回值新增sortCode、routingCode                                                                                            |
 
 ## 接入说明
 ### 请求统一参数
@@ -533,16 +537,18 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/currenc
 |└─currencyCategory|int32|币种分类 1-数字货币 2-法币|-|
 |└─currencyKey|string|币种标识|-|
 |└─currencyName|string|币种名|-|
-|└─channelKey|string|币种-转账通道 crypto,swift,local,conet|-|
-|└─subChannelKey|string|法币-转账子通道,当channelKey=local时有值 ach,chats,fps|-|
+|└─channelKey|string|币种-转账通道（crypto;swift;local;conet;）|-|
+|└─subChannelKey|string|法币-转账子通道（fps;chats;ach;fedwire;）|-|
 |└─bankAccountType|int32|法币-银行账号类型 1-CA 2-VA|-|
+|└─bankCountry|string|法币-银行国家|-|
 |└─bankName|string|法币-银行名称|-|
 |└─bankAddress|string|法币-银行地址|-|
 |└─bankCode|string|法币-银行代码|-|
 |└─branchCode|string|法币-分行代码|-|
 |└─swiftCode|string|法币-SWIFT|-|
-|└─bankCountry|string|法币-银行国家|-|
-|└─beneficiaryAccountNo|string|法币-银行账号|-|
+|└─sortCode|string|法币-Sort Code|-|
+|└─routingCode|string|法币-Routing Code|-|
+|└─beneficiaryAccountNo|string|法币-银行账户号码/IBAN|-|
 |└─beneficiaryName|string|法币-收款人姓名|-|
 |└─beneficiaryCountry|string|法币-收款人国家|-|
 |└─beneficiaryAddress|string|法币-收款人地址|-|
@@ -565,15 +571,17 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/currenc
       "currencyKey": "USD",
       "currencyName": "USD",
       "channelKey": "local",
-      "subChannelKey": "chats",
+      "subChannelKey": "fps",
       "bankAccountType": 1,
+      "bankCountry": "Hong Kong",
       "bankName": "China CITIC Bank International Limited",
       "bankAddress": "61-65 Des Voeux Road Central. Hong Kong",
       "bankCode": "012",
       "branchCode": "123",
       "swiftCode": "KWHKHKHH",
-      "bankCountry": "Hong Kong",
-      "beneficiaryAccountNo": "123123456789",
+      "sortCode": "041404",
+      "routingCode": "35210009",
+      "beneficiaryAccountNo": "8334331484",
       "beneficiaryName": "CLEARONES TRUST LIMITED - CLIENT'S A/C",
       "beneficiaryCountry": "Hong Kong",
       "beneficiaryAddress": "61-65 Des Voeux Road Central. Hong Kong",
@@ -712,23 +720,29 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/suppo
 |-----------|------|----------|-------------|-------|
 |clientId|string|true|客户的账户ID|-|
 |customerRefId|string|true|调用方唯一业务id|-|
-|channelKey|string|true|法币-转账通道 swift,local,conet|-|
-|subChannelKey|string|false|法币-local转账子通道 ach,chats,fps,channelKey=local时必传|-|
+|channelKey|string|true|法币-转账通道（swift;local;conet;）|-|
+|subChannelKey|string|false|法币-转账子通道（fps;chats;ach;fedwire;sepa;fast_payment;eft;）,当channelKey为local时，必填。|-|
 |currencyKey|string|true|币种标识|-|
-|conetId|string|false|平台内部的收款账号id|-|
-|swiftCode|string|false|银行swift码|-|
-|bankCode|string|false|收款银行code local-fps类型为必填|-|
+|conetId|string|false|平台内部的收款账号id，当channelKey为conet时，必填。|-|
+|swiftCode|string|false|银行swift码，当channelKey为swift或local时，必填。|-|
+|bankCode|string|false|收款银行code, 当channelKey为local，subChannelKey为fps、chats时，必填。|-|
+|branchCode|string|false|收款银行分行code, 当channelKey为local，subChannelKey为fps、chats时，可选。|-|
 |bankName|string|false|收款银行名称|-|
-|bankCountryCode|string|false|收款银行国家ISO code|-|
+|bankCountryCode|string|false|收款银行国家ISO code，当channelKey为swift或local时，必填。|-|
 |bankAddress|string|false|收款银行地址|-|
-|beneficiaryRoutingCode|string|false|ABA/ACH的路由号 local-ach类型为必填|-|
-|beneficiaryAccountNo|string|false|收款人银行账户号码/IBAN|-|
-|beneficiaryName|string|false|收款人姓名|-|
-|beneficiaryCountryCode|string|false|收款人国家ISO code|-|
-|beneficiaryStreet|string|false|收款人街道|-|
-|beneficiaryCity|string|false|收款人城市|-|
-|beneficiaryState|string|false|收款人州/省|-|
-|beneficiaryPostalCode|string|false|收款人邮编|-|
+|sortCode|string|false|Sort Code, 当channelKey为local，subChannelKey为fast_payment时，必填|-|
+|beneficiaryRoutingCode|string|false|Routing Code, 当channelKey为local，subChannelKey为ach、fedwire、sepa、eft时，必填。|-|
+|beneficiaryAccountNo|string|false|收款人银行账户号码/IBAN，当channelKey为swift或local时，必填。|-|
+|beneficiaryName|string|false|银行账号持有者姓名，当channelKey为swift或local时，必填。|-|
+|beneficiaryEntityType|string|false|收款人实体类型（individual：个人；company：公司；），当channelKey为swift或local时，必填。|-|
+|beneficiaryCompanyName|string|false|收款人公司名，当beneficiaryEntityType为company时，必填|-|
+|beneficiaryFirstName|string|false|收款人first name，当beneficiaryEntityType为individual时，必填|-|
+|beneficiaryLastName|string|false|收款人last name，当beneficiaryEntityType为individual时，必填|-|
+|beneficiaryCountryCode|string|false|收款人国家ISO code，当channelKey为swift或local时，必填。|-|
+|beneficiaryStreet|string|false|收款人街道，当channelKey为swift或local时，必填。|-|
+|beneficiaryCity|string|false|收款人城市，当channelKey为swift或local时，必填。|-|
+|beneficiaryState|string|false|收款人州/省，当收款人国家为美国（US）、加拿大（CA）、墨西哥（MX）时，必填|-|
+|beneficiaryPostalCode|string|false|收款人邮编，当收款人国家为美国（US）、加拿大（CA）、墨西哥（MX）时，必填|-|
 |note|string|false|备注|-|
 |label|string|false|标签别称|-|
 
@@ -737,24 +751,30 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/suppo
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/create --data '{
   "clientId": "1663027675055698121",
   "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
-  "channelKey": "swift",
-  "subChannelKey": "chats",
+  "channelKey": "local",
+  "subChannelKey": "fps",
   "currencyKey": "USD",
   "conetId": "1009131",
   "swiftCode": "HSBCHKHHHKH",
   "bankCode": "012",
+  "branchCode": "456",
   "bankName": "China CITIC Bank International Limited",
   "bankCountryCode": "HK",
   "bankAddress": "8 Finance Street, Central, Hong Kong",
+  "sortCode": "1719",
   "beneficiaryRoutingCode": "123123456",
   "beneficiaryAccountNo": "123123456789",
   "beneficiaryName": "XIAO HONG",
+  "beneficiaryEntityType": "individual",
+  "beneficiaryCompanyName": "Xiaohong Technology Co., Ltd.",
+  "beneficiaryFirstName": "XIAO",
+  "beneficiaryLastName": "HONG",
   "beneficiaryCountryCode": "HK",
   "beneficiaryStreet": "8 Finance Street",
   "beneficiaryCity": "Central",
   "beneficiaryState": "Hong Kong",
   "beneficiaryPostalCode": "999077",
-  "note": "xtgmqx",
+  "note": "nup5m3",
   "label": "zhangsan"
 }'
 ```
@@ -819,18 +839,25 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/list 
 |data|array|响应数据|-|
 |└─customerRefId|string|调用方唯一业务id|-|
 |└─recipientId|string|收款方地址id|-|
-|└─channelKey|string|法币-转账通道 crypto,swift,local,conet|-|
-|└─subChannelKey|string|法币-转账子通道 ach,chats,fps|-|
+|└─channelKey|string|法币-转账通道（swift;local;conet;）|-|
+|└─subChannelKey|string|法币-转账子通道（fps;chats;ach;fedwire;sepa;fast_payment;eft;）|-|
 |└─status|int32|收款人状态(1:审批中；2:已生效；3:审批拒绝)|-|
 |└─currencyKey|string|币种标识|-|
 |└─swiftCode|string|收款银行swift码|-|
 |└─bankCode|string|收款银行代号|-|
+|└─branchCode|string|收款银行分行code|-|
 |└─bankName|string|收款银行名称|-|
-|└─bankCountryCode|string|开户银行所在地iso code|-|
-|└─beneficiaryRoutingCode|string|ABA/ACH的路由号|-|
+|└─bankCountryCode|string|收款银行国家ISO code|-|
+|└─bankAddress|string|收款银行地址|-|
+|└─sortCode|string|Sort Code|-|
+|└─beneficiaryRoutingCode|string|Routing Code|-|
 |└─beneficiaryAccountNo|string|收款人银行账户号码/IBAN|-|
-|└─beneficiaryName|string|收款人姓名|-|
-|└─beneficiaryCountryCode|string|收款人国家iso code|-|
+|└─beneficiaryName|string|银行账号持有者姓名|-|
+|└─beneficiaryEntityType|string|收款人实体类型（individual：个人；company：公司；）|-|
+|└─beneficiaryCompanyName|string|收款人公司名|-|
+|└─beneficiaryFirstName|string|收款人first name|-|
+|└─beneficiaryLastName|string|收款人last name|-|
+|└─beneficiaryCountryCode|string|收款人国家ISO code|-|
 |└─beneficiaryStreet|string|收款人街道|-|
 |└─beneficiaryCity|string|收款人城市|-|
 |└─beneficiaryState|string|收款人州/省|-|
@@ -852,24 +879,31 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/list 
       "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
       "recipientId": "11",
       "channelKey": "local",
-      "subChannelKey": "chats",
+      "subChannelKey": "pfs",
       "status": 2,
       "currencyKey": "USD",
       "swiftCode": "HSBCHKHHHKH",
       "bankCode": "012",
+      "branchCode": "456",
       "bankName": "China CITIC Bank International Limited",
       "bankCountryCode": "HK",
-      "beneficiaryRoutingCode": "123",
+      "bankAddress": "8 Finance Street, Central, Hong Kong",
+      "sortCode": "1719",
+      "beneficiaryRoutingCode": "123123456",
       "beneficiaryAccountNo": "123123456789",
       "beneficiaryName": "XIAO HONG",
+      "beneficiaryEntityType": "individual",
+      "beneficiaryCompanyName": "Xiaohong Technology Co., Ltd.",
+      "beneficiaryFirstName": "XIAO",
+      "beneficiaryLastName": "HONG",
       "beneficiaryCountryCode": "HK",
       "beneficiaryStreet": "8 Finance Street",
       "beneficiaryCity": "Central",
-      "beneficiaryState": "Central",
+      "beneficiaryState": "Hong Kong",
       "beneficiaryPostalCode": "999077",
       "conetId": 1009213,
-      "note": "it89z8",
-      "label": "9dtzqj"
+      "note": "11x997",
+      "label": "ikrddi"
     }
   ],
   "timestamp": "1685343278618",
@@ -913,18 +947,25 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/detai
 |data|object|响应数据|-|
 |└─customerRefId|string|调用方唯一业务id|-|
 |└─recipientId|string|收款方地址id|-|
-|└─channelKey|string|法币-转账通道 crypto,swift,local,conet|-|
-|└─subChannelKey|string|法币-转账子通道 ach,chats,fps|-|
+|└─channelKey|string|法币-转账通道（swift;local;conet;）|-|
+|└─subChannelKey|string|法币-转账子通道（fps;chats;ach;fedwire;sepa;fast_payment;eft;）|-|
 |└─status|int32|收款人状态(1:审批中；2:已生效；3:审批拒绝)|-|
 |└─currencyKey|string|币种标识|-|
 |└─swiftCode|string|收款银行swift码|-|
 |└─bankCode|string|收款银行代号|-|
+|└─branchCode|string|收款银行分行code|-|
 |└─bankName|string|收款银行名称|-|
-|└─bankCountryCode|string|开户银行所在地iso code|-|
-|└─beneficiaryRoutingCode|string|ABA/ACH的路由号|-|
+|└─bankCountryCode|string|收款银行国家ISO code|-|
+|└─bankAddress|string|收款银行地址|-|
+|└─sortCode|string|Sort Code|-|
+|└─beneficiaryRoutingCode|string|Routing Code|-|
 |└─beneficiaryAccountNo|string|收款人银行账户号码/IBAN|-|
-|└─beneficiaryName|string|收款人姓名|-|
-|└─beneficiaryCountryCode|string|收款人国家iso code|-|
+|└─beneficiaryName|string|银行账号持有者姓名|-|
+|└─beneficiaryEntityType|string|收款人实体类型（individual：个人；company：公司；）|-|
+|└─beneficiaryCompanyName|string|收款人公司名|-|
+|└─beneficiaryFirstName|string|收款人first name|-|
+|└─beneficiaryLastName|string|收款人last name|-|
+|└─beneficiaryCountryCode|string|收款人国家ISO code|-|
 |└─beneficiaryStreet|string|收款人街道|-|
 |└─beneficiaryCity|string|收款人城市|-|
 |└─beneficiaryState|string|收款人州/省|-|
@@ -945,24 +986,31 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/detai
     "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
     "recipientId": "11",
     "channelKey": "local",
-    "subChannelKey": "chats",
+    "subChannelKey": "pfs",
     "status": 2,
     "currencyKey": "USD",
     "swiftCode": "HSBCHKHHHKH",
     "bankCode": "012",
+    "branchCode": "456",
     "bankName": "China CITIC Bank International Limited",
     "bankCountryCode": "HK",
-    "beneficiaryRoutingCode": "123",
+    "bankAddress": "8 Finance Street, Central, Hong Kong",
+    "sortCode": "1719",
+    "beneficiaryRoutingCode": "123123456",
     "beneficiaryAccountNo": "123123456789",
     "beneficiaryName": "XIAO HONG",
+    "beneficiaryEntityType": "individual",
+    "beneficiaryCompanyName": "Xiaohong Technology Co., Ltd.",
+    "beneficiaryFirstName": "XIAO",
+    "beneficiaryLastName": "HONG",
     "beneficiaryCountryCode": "HK",
     "beneficiaryStreet": "8 Finance Street",
     "beneficiaryCity": "Central",
-    "beneficiaryState": "Central",
+    "beneficiaryState": "Hong Kong",
     "beneficiaryPostalCode": "999077",
     "conetId": 1009213,
-    "note": "vdw7km",
-    "label": "hn0em6"
+    "note": "i9c3hx",
+    "label": "fey1hr"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
