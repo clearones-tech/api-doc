@@ -9,6 +9,7 @@
 |1.0.4|2023-07-18 15:28:00|modify|clearones|加密货币创建交易接口参数添加feeLevel，feeRate修改为非必须|
 |1.0.5|2023-10-13 15:14:00|modify|clearones|添加法币内部转账接口|
 |1.0.6|2024-03-04 15:35:00|modify|clearones|添加加密货币预估手续费接口|
+|1.0.7|2024-04-28 14:23:00|modify|clearones|/api/v1/crypto/transaction/estimated/fee接口参数toAddress修改为当blockchainKey是solana时，必传|
 
 ## 接入说明
 ### 请求统一参数
@@ -767,7 +768,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/account/coin/
 |feeLevel|string|false|手续费级别（LOW：低；MIDDLE：中；HIGH：高；），与手续费费率二选一，如果设置了手续费费率，优先使用设置的费率|-|
 |feeRate|object|false|手续费费率，feeLevel 和 feeRate 二选一，如果设置了手续费费率，优先使用设置的费率|-|
 |└─baseFee|string|false|EIP-1559 的 baseFee|-|
-|└─fee|string|false|TRON 的预估手续费，只有波场有|-|
+|└─fee|string|false|预估手续费|-|
 |└─feeRate|string|false|费率：UTXO 的 feePerByte; EVM 类的 gasPrice; 以及 TRON 的 feeLimit (对于 TRON 也可以不传)|-|
 |└─gasLimit|int32|false|EVM 类的 gasLimit|-|
 |└─maxFee|string|false|EIP-1559 的 maxFee|-|
@@ -1070,7 +1071,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v1/crypto/transaction/d
 |cryptoAccountNo|string|true|账号编号|-|
 |coinKey|string|true|币种唯一标识|-|
 |amount|string|false|交易金额（非必传，传了则计算预估手续费会更精确）|-|
-|toAddress|string|false|提币目标地址（非必传，传了则计算预估手续费会更精确）|-|
+|toAddress|string|false|提币目标地址（当blockchainKey是solana时，必传，其他传了计算预估手续费会更精确）|-|
 
 **Request-example:**
 ```
