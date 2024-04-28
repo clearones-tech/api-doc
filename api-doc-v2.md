@@ -8,6 +8,7 @@
 | 2.0.3   | 2024-04-23 21:25:00 |modify|clearones| webhook新增“连接账号交易创建“和”连接账号交易状态变更”事件                                                                                    |
 | 2.0.4   | 2024-04-24 10:59:00 |modify|clearones| 添加交易凭证接口支持一次传递多个objectKey  
 | 2.0.5   | 2024-04-26 15:22:00 |modify|clearones| 1、/api/v2/recipient/fiat/create接口增加参数branchCode，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName. 2、/api/v2/recipient/fiat/list接口返回值新增branchCode，bankAddress，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName. 3、/api/v2/recipient/fiat/detail接口返回值新增branchCode，bankAddress，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName. 4、/api/v2/fund/account/currency/deposit接口返回值新增sortCode、routingCode.
+| 2.0.6   | 2024-04-28 15:41:00 |modify|clearones| 1、/api/v2/connect/transaction/list接口返回值增加customerRefId。2、/api/v2/connect/transaction/detail接口返回值增加customerRefId。3、webhook事件“CONNECT_TX_CREATED”和“CONNECT_TX_STATUS_CHANGED”的内容增加customerRefId。
 
 ## 接入说明
 ### 请求统一参数
@@ -2301,7 +2302,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/curr
 |accountNo|string|true|账号编号|-|
 |currencyKey|string|true|币种唯一标识|-|
 |amount|string|false|提币数量|-|
-|toAddress|string|false|提币目标地址|-|
+|toAddress|string|false|提币目标地址（当blockchainKey是solana时，必传，其他传了计算预估手续费会更精确）|-|
 
 **Request-example:**
 ```
@@ -2444,6 +2445,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 |code|int32|响应码|-|
 |message|string|响应描述|-|
 |data|array|响应数据|-|
+|└─customerRefId|string|调用方唯一业务ID|-|
 |└─createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
 |└─transactionNo|string|交易号|-|
 |└─clientId|string|客户的账户ID|-|
@@ -2470,6 +2472,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
   "message": "Success",
   "data": [
     {
+      "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
       "createTimestamp": 1672056033898,
       "transactionNo": "1663027675055698130",
       "clientId": "1663027675055698121",
@@ -2526,6 +2529,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 |code|int32|响应码|-|
 |message|string|响应描述|-|
 |data|object|响应数据|-|
+|└─customerRefId|string|调用方唯一业务ID|-|
 |└─createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
 |└─transactionNo|string|交易号|-|
 |└─clientId|string|客户的账户ID|-|
@@ -2551,6 +2555,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
   "code": 200,
   "message": "Success",
   "data": {
+    "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
     "createTimestamp": 1672056033898,
     "transactionNo": "1663027675055698130",
     "clientId": "1663027675055698121",
@@ -2631,7 +2636,6 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | DEPOSIT_INFO_CHANGED            | [depositAddressChangeDetail](#depositAddressChangeDetail) | 账户币种收款信息状态变更 |
 | CONNECT_TX_CREATED              | [connectTransactionDetail](#connectTransactionDetail)     | 连接账号交易创建     |
 | CONNECT_TX_STATUS_CHANGED       | [connectTransactionDetail](#connectTransactionDetail)     | 连接账号交易状态变更   |
-
 
 ### 事件详情
 **<div id="clientDetail"> clientDetail </div>**
@@ -2789,6 +2793,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 
 | Field | Type | Description | Since |
 |-------|------|-------------|-------|
+|customerRefId|string|调用方唯一业务ID|-|
 |createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
 |transactionNo|string|交易号|-|
 |clientId|string|客户的账户ID|-|
