@@ -730,7 +730,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/suppo
 |bankAddress|string|false|收款银行地址|-|
 |sortCode|string|false|Sort Code, 当channelKey为local，subChannelKey为fast_payment时，必填|-|
 |beneficiaryRoutingCode|string|false|Routing Code, 当channelKey为local，subChannelKey为ach、fedwire、sepa、eft时，必填。|-|
-|beneficiaryAccountNo|string|false|收款人银行账户号码/IBAN，当channelKey为swift或local时，必填。|-|
+|beneficiaryAccountNo|string|false|收款人银行账户号码/IBAN（当收款银行国家为欧盟成员时，填写IBAN），当channelKey为swift或local时，必填。|-|
 |beneficiaryName|string|false|银行账号持有者姓名，当channelKey为swift或local时，必填。|-|
 |beneficiaryEntityType|string|false|收款人实体类型（individual：个人；company：公司；），当channelKey为swift或local时，必填。|-|
 |beneficiaryCompanyName|string|false|收款人公司名，当beneficiaryEntityType为company时，必填|-|
