@@ -714,35 +714,35 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/suppo
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|clientId|string|true|客户的账户ID|-|
-|customerRefId|string|true|调用方唯一业务id|-|
-|channelKey|string|true|法币-转账通道（swift;local;conet;）|-|
-|subChannelKey|string|false|法币-转账子通道（fps;chats;ach;fedwire;sepa;fast_payment;eft;）,当channelKey为local时，必填。|-|
-|currencyKey|string|true|币种标识|-|
-|conetId|string|false|平台内部的收款账号id，当channelKey为conet时，必填。|-|
-|swiftCode|string|false|银行swift码，当channelKey为swift或local时，必填。|-|
-|bankCode|string|false|收款银行code, 当channelKey为local，subChannelKey为fps、chats时，必填。|-|
-|branchCode|string|false|收款银行分行code, 当channelKey为local，subChannelKey为fps、chats时，可选。|-|
-|bankName|string|false|收款银行名称|-|
-|bankCountryCode|string|false|收款银行国家ISO code，当channelKey为swift或local时，必填。|-|
-|bankAddress|string|false|收款银行地址|-|
-|sortCode|string|false|Sort Code, 当channelKey为local，subChannelKey为fast_payment时，必填|-|
-|beneficiaryRoutingCode|string|false|Routing Code, 当channelKey为local，subChannelKey为ach、fedwire、sepa、eft时，必填。|-|
-|beneficiaryAccountNo|string|false|收款人银行账户号码/IBAN（当收款银行国家为欧盟成员时，填写IBAN），当channelKey为swift或local时，必填。|-|
-|beneficiaryName|string|false|银行账号持有者姓名，当channelKey为swift或local时，必填。|-|
-|beneficiaryEntityType|string|false|收款人实体类型（individual：个人；company：公司；），当channelKey为swift或local时，必填。|-|
-|beneficiaryCompanyName|string|false|收款人公司名，当beneficiaryEntityType为company时，必填|-|
-|beneficiaryFirstName|string|false|收款人first name，当beneficiaryEntityType为individual时，必填|-|
-|beneficiaryLastName|string|false|收款人last name，当beneficiaryEntityType为individual时，必填|-|
-|beneficiaryCountryCode|string|false|收款人国家ISO code，当channelKey为swift或local时，必填。|-|
-|beneficiaryStreet|string|false|收款人街道，当channelKey为swift或local时，必填。|-|
-|beneficiaryCity|string|false|收款人城市，当channelKey为swift或local时，必填。|-|
-|beneficiaryState|string|false|收款人州/省，当收款人国家为美国（US）、加拿大（CA）、墨西哥（MX）时，必填|-|
-|beneficiaryPostalCode|string|false|收款人邮编，当收款人国家为美国（US）、加拿大（CA）、墨西哥（MX）时，必填|-|
-|note|string|false|备注|-|
-|label|string|false|标签别称|-|
+| Parameter | Type | Required | Description                                                                     | Since |
+|-----------|------|----------|---------------------------------------------------------------------------------|-------|
+|clientId|string|true| 客户的账户ID                                                                         |-|
+|customerRefId|string|true| 调用方唯一业务id                                                                       |-|
+|channelKey|string|true| 法币-转账通道（swift;local;conet;）                                                     |-|
+|subChannelKey|string|false| 法币-转账子通道（fps;chats;ach;fedwire;sepa;faster_payment;eft;）,当channelKey为local时，必填。 |-|
+|currencyKey|string|true| 币种标识                                                                            |-|
+|conetId|string|false| 平台内部的收款账号id，当channelKey为conet时，必填。                                              |-|
+|swiftCode|string|false| 银行swift码，当channelKey为swift或local时，必填。                                           |-|
+|bankCode|string|false| 收款银行code, 当channelKey为local，subChannelKey为fps、chats时，必填。                        |-|
+|branchCode|string|false| 收款银行分行code, 当channelKey为local，subChannelKey为fps、chats时，可选。                      |-|
+|bankName|string|false| 收款银行名称                                                                          |-|
+|bankCountryCode|string|false| 收款银行国家ISO code，当channelKey为swift或local时，必填。                                     |-|
+|bankAddress|string|false| 收款银行地址                                                                          |-|
+|sortCode|string|false| Sort Code, 当channelKey为local，subChannelKey为faster_payment时，必填                   |-|
+|beneficiaryRoutingCode|string|false| Routing Code, 当channelKey为local，subChannelKey为ach、fedwire、sepa、eft时，必填。         |-|
+|beneficiaryAccountNo|string|false| 收款人银行账户号码/IBAN（当收款银行国家为欧盟成员时，填写IBAN），当channelKey为swift或local时，必填。               |-|
+|beneficiaryName|string|false| 银行账号持有者姓名，当channelKey为swift或local时，必填。                                          |-|
+|beneficiaryEntityType|string|false| 收款人实体类型（individual：个人；company：公司；），当channelKey为swift或local时，必填。                 |-|
+|beneficiaryCompanyName|string|false| 收款人公司名，当beneficiaryEntityType为company时，必填                                       |-|
+|beneficiaryFirstName|string|false| 收款人first name，当beneficiaryEntityType为individual时，必填                             |-|
+|beneficiaryLastName|string|false| 收款人last name，当beneficiaryEntityType为individual时，必填                              |-|
+|beneficiaryCountryCode|string|false| 收款人国家ISO code，当channelKey为swift或local时，必填。                                      |-|
+|beneficiaryStreet|string|false| 收款人街道，当channelKey为swift或local时，必填。                                              |-|
+|beneficiaryCity|string|false| 收款人城市，当channelKey为swift或local时，必填。                                              |-|
+|beneficiaryState|string|false| 收款人州/省，当收款人国家为美国（US）、加拿大（CA）、墨西哥（MX）时，必填                                        |-|
+|beneficiaryPostalCode|string|false| 收款人邮编，当收款人国家为美国（US）、加拿大（CA）、墨西哥（MX）时，必填                                         |-|
+|note|string|false| 备注                                                                              |-|
+|label|string|false| 标签别称                                                                            |-|
 
 **Request-example:**
 ```
@@ -830,42 +830,42 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/list 
 ```
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|array|响应数据|-|
-|└─customerRefId|string|调用方唯一业务id|-|
-|└─recipientId|string|收款方地址id|-|
-|└─channelKey|string|法币-转账通道（swift;local;conet;）|-|
-|└─subChannelKey|string|法币-转账子通道（fps;chats;ach;fedwire;sepa;fast_payment;eft;）|-|
-|└─status|int32|收款人状态(1:审批中；2:已生效；3:审批拒绝)|-|
-|└─currencyKey|string|币种标识|-|
-|└─swiftCode|string|收款银行swift码|-|
-|└─bankCode|string|收款银行代号|-|
-|└─branchCode|string|收款银行分行code|-|
-|└─bankName|string|收款银行名称|-|
-|└─bankCountryCode|string|收款银行国家ISO code|-|
-|└─bankAddress|string|收款银行地址|-|
-|└─sortCode|string|Sort Code|-|
-|└─beneficiaryRoutingCode|string|Routing Code|-|
-|└─beneficiaryAccountNo|string|收款人银行账户号码/IBAN|-|
-|└─beneficiaryName|string|银行账号持有者姓名|-|
-|└─beneficiaryEntityType|string|收款人实体类型（individual：个人；company：公司；）|-|
-|└─beneficiaryCompanyName|string|收款人公司名|-|
-|└─beneficiaryFirstName|string|收款人first name|-|
-|└─beneficiaryLastName|string|收款人last name|-|
-|└─beneficiaryCountryCode|string|收款人国家ISO code|-|
-|└─beneficiaryStreet|string|收款人街道|-|
-|└─beneficiaryCity|string|收款人城市|-|
-|└─beneficiaryState|string|收款人州/省|-|
-|└─beneficiaryPostalCode|string|收款人邮编|-|
-|└─conetId|int64|conet收款方式对方conetId|-|
-|└─note|string|备注|-|
-|└─label|string|别称|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field | Type | Description                                              | Since |
+|-------|------|----------------------------------------------------------|-------|
+|code|int32| 响应码                                                      |-|
+|message|string| 响应描述                                                     |-|
+|data|array| 响应数据                                                     |-|
+|└─customerRefId|string| 调用方唯一业务id                                                |-|
+|└─recipientId|string| 收款方地址id                                                  |-|
+|└─channelKey|string| 法币-转账通道（swift;local;conet;）                              |-|
+|└─subChannelKey|string| 法币-转账子通道（fps;chats;ach;fedwire;sepa;faster_payment;eft;） |-|
+|└─status|int32| 收款人状态(1:审批中；2:已生效；3:审批拒绝)                                |-|
+|└─currencyKey|string| 币种标识                                                     |-|
+|└─swiftCode|string| 收款银行swift码                                               |-|
+|└─bankCode|string| 收款银行代号                                                   |-|
+|└─branchCode|string| 收款银行分行code                                               |-|
+|└─bankName|string| 收款银行名称                                                   |-|
+|└─bankCountryCode|string| 收款银行国家ISO code                                           |-|
+|└─bankAddress|string| 收款银行地址                                                   |-|
+|└─sortCode|string| Sort Code                                                |-|
+|└─beneficiaryRoutingCode|string| Routing Code                                             |-|
+|└─beneficiaryAccountNo|string| 收款人银行账户号码/IBAN                                           |-|
+|└─beneficiaryName|string| 银行账号持有者姓名                                                |-|
+|└─beneficiaryEntityType|string| 收款人实体类型（individual：个人；company：公司；）                       |-|
+|└─beneficiaryCompanyName|string| 收款人公司名                                                   |-|
+|└─beneficiaryFirstName|string| 收款人first name                                            |-|
+|└─beneficiaryLastName|string| 收款人last name                                             |-|
+|└─beneficiaryCountryCode|string| 收款人国家ISO code                                            |-|
+|└─beneficiaryStreet|string| 收款人街道                                                    |-|
+|└─beneficiaryCity|string| 收款人城市                                                    |-|
+|└─beneficiaryState|string| 收款人州/省                                                   |-|
+|└─beneficiaryPostalCode|string| 收款人邮编                                                    |-|
+|└─conetId|int64| conet收款方式对方conetId                                       |-|
+|└─note|string| 备注                                                       |-|
+|└─label|string| 别称                                                       |-|
+|timestamp|string| 时间戳毫秒                                                    |-|
+|key|string| 加密key                                                    |-|
+|sign|string| 签名                                                       |-|
 
 **Response-example:**
 ```
@@ -938,42 +938,42 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/detai
 ```
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|└─customerRefId|string|调用方唯一业务id|-|
-|└─recipientId|string|收款方地址id|-|
-|└─channelKey|string|法币-转账通道（swift;local;conet;）|-|
-|└─subChannelKey|string|法币-转账子通道（fps;chats;ach;fedwire;sepa;fast_payment;eft;）|-|
-|└─status|int32|收款人状态(1:审批中；2:已生效；3:审批拒绝)|-|
-|└─currencyKey|string|币种标识|-|
-|└─swiftCode|string|收款银行swift码|-|
-|└─bankCode|string|收款银行代号|-|
-|└─branchCode|string|收款银行分行code|-|
-|└─bankName|string|收款银行名称|-|
-|└─bankCountryCode|string|收款银行国家ISO code|-|
-|└─bankAddress|string|收款银行地址|-|
-|└─sortCode|string|Sort Code|-|
-|└─beneficiaryRoutingCode|string|Routing Code|-|
-|└─beneficiaryAccountNo|string|收款人银行账户号码/IBAN|-|
-|└─beneficiaryName|string|银行账号持有者姓名|-|
-|└─beneficiaryEntityType|string|收款人实体类型（individual：个人；company：公司；）|-|
-|└─beneficiaryCompanyName|string|收款人公司名|-|
-|└─beneficiaryFirstName|string|收款人first name|-|
-|└─beneficiaryLastName|string|收款人last name|-|
-|└─beneficiaryCountryCode|string|收款人国家ISO code|-|
-|└─beneficiaryStreet|string|收款人街道|-|
-|└─beneficiaryCity|string|收款人城市|-|
-|└─beneficiaryState|string|收款人州/省|-|
-|└─beneficiaryPostalCode|string|收款人邮编|-|
-|└─conetId|int64|conet收款方式对方conetId|-|
-|└─note|string|备注|-|
-|└─label|string|别称|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field | Type | Description                                              | Since |
+|-------|------|----------------------------------------------------------|-------|
+|code|int32| 响应码                                                      |-|
+|message|string| 响应描述                                                     |-|
+|data|object| 响应数据                                                     |-|
+|└─customerRefId|string| 调用方唯一业务id                                                |-|
+|└─recipientId|string| 收款方地址id                                                  |-|
+|└─channelKey|string| 法币-转账通道（swift;local;conet;）                              |-|
+|└─subChannelKey|string| 法币-转账子通道（fps;chats;ach;fedwire;sepa;faster_payment;eft;） |-|
+|└─status|int32| 收款人状态(1:审批中；2:已生效；3:审批拒绝)                                |-|
+|└─currencyKey|string| 币种标识                                                     |-|
+|└─swiftCode|string| 收款银行swift码                                               |-|
+|└─bankCode|string| 收款银行代号                                                   |-|
+|└─branchCode|string| 收款银行分行code                                               |-|
+|└─bankName|string| 收款银行名称                                                   |-|
+|└─bankCountryCode|string| 收款银行国家ISO code                                           |-|
+|└─bankAddress|string| 收款银行地址                                                   |-|
+|└─sortCode|string| Sort Code                                                |-|
+|└─beneficiaryRoutingCode|string| Routing Code                                             |-|
+|└─beneficiaryAccountNo|string| 收款人银行账户号码/IBAN                                           |-|
+|└─beneficiaryName|string| 银行账号持有者姓名                                                |-|
+|└─beneficiaryEntityType|string| 收款人实体类型（individual：个人；company：公司；）                       |-|
+|└─beneficiaryCompanyName|string| 收款人公司名                                                   |-|
+|└─beneficiaryFirstName|string| 收款人first name                                            |-|
+|└─beneficiaryLastName|string| 收款人last name                                             |-|
+|└─beneficiaryCountryCode|string| 收款人国家ISO code                                            |-|
+|└─beneficiaryStreet|string| 收款人街道                                                    |-|
+|└─beneficiaryCity|string| 收款人城市                                                    |-|
+|└─beneficiaryState|string| 收款人州/省                                                   |-|
+|└─beneficiaryPostalCode|string| 收款人邮编                                                    |-|
+|└─conetId|int64| conet收款方式对方conetId                                       |-|
+|└─note|string| 备注                                                       |-|
+|└─label|string| 别称                                                       |-|
+|timestamp|string| 时间戳毫秒                                                    |-|
+|key|string| 加密key                                                    |-|
+|sign|string| 签名                                                       |-|
 
 **Response-example:**
 ```
@@ -2659,36 +2659,36 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 
 **<div id="fiatRecipientDetail"> fiatRecipientDetail </div>**
 
-| Field                  | Type   | Description                                            | Since |
-|------------------------|--------|--------------------------------------------------------|-------|
-| customerRefId          | string | 调用方唯一业务id                                              | -     |
-| recipientId            | string | 收款方地址id                                                | -     |
-| channelKey             | string | 法币-转账通道（swift;local;conet;）                            | -     |
-| subChannelKey          | string | 法币-转账子通道（fps;chats;ach;fedwire;sepa;fast_payment;eft;） | -     |
-| status                 | int32  | 收款人状态(1:审批中；2:已生效；3:审批拒绝)                              | -     |
-| currencyKey            | string | 币种标识                                                   | -     |
-| swiftCode              | string | 收款银行swift码                                             | -     |
-| bankCode               | string | 收款银行代号                                                 | -     |
-| branchCode             | string | 收款银行分行code                                             | -     |
-| bankName               | string | 收款银行名称                                                 | -     |
-| bankCountryCode        | string | 收款银行国家ISO code                                         | -     |
-| bankAddress            | string | 收款银行地址                                                 | -     |
-| sortCode               | string | Sort Code                                              | -     |
-| beneficiaryRoutingCode | string | Routing Code                                           | -     |
-| beneficiaryAccountNo   | string | 收款人银行账户号码/IBAN                                         | -     |
-| beneficiaryName        | string | 银行账号持有者姓名                                              | -     |
-| beneficiaryEntityType  | string | 收款人实体类型（individual：个人；company：公司；）                     | -     |
-| beneficiaryCompanyName | string | 收款人公司名                                                 | -     |
-| beneficiaryFirstName   | string | 收款人first name                                          | -     |
-| beneficiaryLastName    | string | 收款人last name                                           | -     |
-| beneficiaryCountryCode | string | 收款人国家ISO code                                          | -     |
-| beneficiaryStreet      | string | 收款人街道                                                  | -     |
-| beneficiaryCity        | string | 收款人城市                                                  | -     |
-| beneficiaryState       | string | 收款人州/省                                                 | -     |
-| beneficiaryPostalCode  | string | 收款人邮编                                                  | -     |
-| conetId                | int64  | conet收款方式对方conetId                                     | -     |
-| note                   | string | 备注                                                     | -     |
-| label                  | string | 别称                                                     | -     |
+| Field                  | Type   | Description                                          | Since |
+|------------------------|--------|------------------------------------------------------|-------|
+| customerRefId          | string | 调用方唯一业务id                                            | -     |
+| recipientId            | string | 收款方地址id                                              | -     |
+| channelKey             | string | 法币-转账通道（swift;local;conet;）                          | -     |
+| subChannelKey          | string | 法币-转账子通道（fps;chats;ach;fedwire;sepa;faster_payment;eft;） | -     |
+| status                 | int32  | 收款人状态(1:审批中；2:已生效；3:审批拒绝)                            | -     |
+| currencyKey            | string | 币种标识                                                 | -     |
+| swiftCode              | string | 收款银行swift码                                           | -     |
+| bankCode               | string | 收款银行代号                                               | -     |
+| branchCode             | string | 收款银行分行code                                           | -     |
+| bankName               | string | 收款银行名称                                               | -     |
+| bankCountryCode        | string | 收款银行国家ISO code                                       | -     |
+| bankAddress            | string | 收款银行地址                                               | -     |
+| sortCode               | string | Sort Code                                            | -     |
+| beneficiaryRoutingCode | string | Routing Code                                         | -     |
+| beneficiaryAccountNo   | string | 收款人银行账户号码/IBAN                                       | -     |
+| beneficiaryName        | string | 银行账号持有者姓名                                            | -     |
+| beneficiaryEntityType  | string | 收款人实体类型（individual：个人；company：公司；）                   | -     |
+| beneficiaryCompanyName | string | 收款人公司名                                               | -     |
+| beneficiaryFirstName   | string | 收款人first name                                        | -     |
+| beneficiaryLastName    | string | 收款人last name                                         | -     |
+| beneficiaryCountryCode | string | 收款人国家ISO code                                        | -     |
+| beneficiaryStreet      | string | 收款人街道                                                | -     |
+| beneficiaryCity        | string | 收款人城市                                                | -     |
+| beneficiaryState       | string | 收款人州/省                                               | -     |
+| beneficiaryPostalCode  | string | 收款人邮编                                                | -     |
+| conetId                | int64  | conet收款方式对方conetId                                   | -     |
+| note                   | string | 备注                                                   | -     |
+| label                  | string | 别称                                                   | -     |
 
 **<div id="cryptoRecipientDetail"> cryptoRecipientDetail </div>**
 
