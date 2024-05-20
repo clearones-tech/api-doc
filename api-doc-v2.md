@@ -9,6 +9,7 @@
 | 2.0.4   | 2024-04-24 10:59:00 |modify|clearones| 添加交易凭证接口支持一次传递多个objectKey  
 | 2.0.5   | 2024-04-26 15:22:00 |modify|clearones| 1、/api/v2/recipient/fiat/create接口增加参数branchCode，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName. 2、/api/v2/recipient/fiat/list接口返回值新增branchCode，bankAddress，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName. 3、/api/v2/recipient/fiat/detail接口返回值新增branchCode，bankAddress，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName. 4、/api/v2/fund/account/currency/deposit接口返回值新增sortCode、routingCode.
 | 2.0.6   | 2024-04-28 15:41:00 |modify|clearones| 1、/api/v2/connect/transaction/list接口返回值增加customerRefId。2、/api/v2/connect/transaction/detail接口返回值增加customerRefId。3、webhook事件“CONNECT_TX_CREATED”和“CONNECT_TX_STATUS_CHANGED”的内容增加customerRefId。
+| 2.0.7   | 2024-05-13 11:36:00 |modify|clearones| 预估交易手续费接口（/api/v2/connect/transaction/estimated/fee），参数toAddress校验规则修改为：提币目标地址（当blockchainKey是solana时，必传，其他传了计算预估手续费会更精确）。
 
 ## 接入说明
 ### 请求统一参数
