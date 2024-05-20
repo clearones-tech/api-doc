@@ -2740,11 +2740,12 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 
 **<div id="currencyStatusDetail"> currencyStatusDetail </div>**
 
-| Field       | Type   | Description    | Since |
-|-------------|--------|----------------|-------|
-| clientId    | string | 客户的账户ID        | -     |
-| currencyKey | string | 币种key          | -     |
-| status      | int32  | 状态 1:未生效 2:已生效 | -     |
+| Field            | Type   | Description      | Since |
+|------------------|--------|------------------|-------|
+| clientId         | string | 客户的账户ID          | -     |
+| currencyCategory | int32  | 币种分类 1-数字货币 2-法币 | -     |
+| currencyKey      | string | 币种key            | -     |
+| status           | int32  | 状态 1:未生效 2:已生效   | -     |
 
 **<div id="depositAddressAddDetail"> depositAddressAddDetail </div>**
 
