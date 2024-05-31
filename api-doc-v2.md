@@ -10,6 +10,7 @@
 | 2.0.5   | 2024-04-26 15:22:00 |modify|clearones| 1、/api/v2/recipient/fiat/create接口增加参数branchCode，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName. 2、/api/v2/recipient/fiat/list接口返回值新增branchCode，bankAddress，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName. 3、/api/v2/recipient/fiat/detail接口返回值新增branchCode，bankAddress，sortCode，beneficiaryEntityType，beneficiaryCompanyName，beneficiaryFirstName，beneficiaryLastName. 4、/api/v2/fund/account/currency/deposit接口返回值新增sortCode、routingCode.
 | 2.0.6   | 2024-04-28 15:41:00 |modify|clearones| 1、/api/v2/connect/transaction/list接口返回值增加customerRefId。2、/api/v2/connect/transaction/detail接口返回值增加customerRefId。3、webhook事件“CONNECT_TX_CREATED”和“CONNECT_TX_STATUS_CHANGED”的内容增加customerRefId。
 | 2.0.7   | 2024-05-13 11:36:00 |modify|clearones| 预估交易手续费接口（/api/v2/connect/transaction/estimated/fee），参数toAddress校验规则修改为：提币目标地址（当blockchainKey是solana时，必传，其他传了计算预估手续费会更精确）。
+| 2.0.8   | 2024-05-31 18:50:00 |modify|clearones| 预估交易手续费接口（/api/v2/transaction/crypto/estimated/fee），增加参数address
 
 ## 接入说明
 ### 请求统一参数
@@ -1702,16 +1703,18 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/fee
 
 **Content-Type:** application/json
 
-**Description:** 查询加密货币交易预估手续费
+**Description:** 查询加密货币交易预估手续费,必须是用户账户已经存在的币种
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|clientId|string|true|客户的账户ID|-|
-|currencyKey|string|true|币种唯一标识|-|
-|amount|string|true|交易金额|-|
-|recipientId|string|true|收款方ID|-|
+| Parameter   | Type | Required | Description                    | Since |
+|-------------|------|----------|--------------------------------|-------|
+| clientId    |string| true     | 客户的账户ID                        |-|
+| currencyKey |string| true     | 币种唯一标识                         |-|
+| amount      |string| true     | 交易金额                           |-|
+| recipientId |string| false    | 收款方ID,和address任选其一,优先address   |-|
+| address     |string| false    | 收款地址,和recipientId任选其一,优先address |-|
+
 
 **Request-example:**
 ```
