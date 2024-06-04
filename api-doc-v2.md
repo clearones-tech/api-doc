@@ -11,6 +11,7 @@
 | 2.0.6   | 2024-04-28 15:41:00 |modify|clearones| 1、/api/v2/connect/transaction/list接口返回值增加customerRefId。2、/api/v2/connect/transaction/detail接口返回值增加customerRefId。3、webhook事件“CONNECT_TX_CREATED”和“CONNECT_TX_STATUS_CHANGED”的内容增加customerRefId。
 | 2.0.7   | 2024-05-13 11:36:00 |modify|clearones| 预估交易手续费接口（/api/v2/connect/transaction/estimated/fee），参数toAddress校验规则修改为：提币目标地址（当blockchainKey是solana时，必传，其他传了计算预估手续费会更精确）。
 | 2.0.8   | 2024-05-31 18:50:00 |modify|clearones| 预估交易手续费接口（/api/v2/transaction/crypto/estimated/fee），增加参数address
+| 2.0.9   | 2024-06-04 17:03:00 |modify|clearones| 新增webhook事件：SUPER_ORG_CRYPTO_RECIPIENT_CREATE（主机构数字货币收款人信息创建）、SUPER_ORG_FIAT_RECIPIENT_CREATE（主机构法币收款人信息创建）、SUPER_ORG_CRYPTO_RECIPIENT_STATUS_CHANGED（主机构数字货币收款人信息变更）、SUPER_ORG_FIAT_RECIPIENT_STATUS_CHANGED（主机构法币收款人信息变更）
 
 ## 接入说明
 ### 请求统一参数
@@ -2625,21 +2626,25 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 
 ### 事件类型
 
-| eventType                       | eventDetail                                               | Description  |
-|---------------------------------|-----------------------------------------------------------|--------------|
-| CLIENT_STATUS_CHANGED           | [clientDetail](#clientDetail)                             | 创建用户状态变更     |
-| FUND_ACCOUNT_CREATED            | [fundAccountCreated](#fundAccountCreated)                 | 资金账号已创建      |
-| CRYPTO_TX_CREATED               | [transactionDetail](#transactionDetail)                   | 数字货币交易创建     |
-| CRYPTO_TX_STATUS_CHANGED        | [transactionDetail](#transactionDetail)                   | 数字货币交易状态变更   |
-| FIAT_RECIPIENT_STATUS_CHANGED   | [fiatRecipientDetail](#fiatRecipientDetail)               | 法币收款人信息变更    |
-| CRYPTO_RECIPIENT_STATUS_CHANGED | [cryptoRecipientDetail](#cryptoRecipientDetail)           | 加密货币收款人信息变更  |
-| FIAT_TX_CREATED                 | [transactionDetail](#transactionDetail)                   | 法币创建交易       |
-| FIAT_TX_STATUS_CHANGED          | [transactionDetail](#transactionDetail)                   | 法币交易状态变更     |
-| CURRENCY_STATUS_CHANGED         | [currencyStatusDetail](#currencyStatusDetail)             | 账户币种状态变更     |
-| DEPOSIT_INFO_ADD                | [depositAddressAddDetail](#depositAddressAddDetail)       | 账户币种收款信息添加   |
-| DEPOSIT_INFO_CHANGED            | [depositAddressChangeDetail](#depositAddressChangeDetail) | 账户币种收款信息状态变更 |
-| CONNECT_TX_CREATED              | [connectTransactionDetail](#connectTransactionDetail)     | 连接账号交易创建     |
-| CONNECT_TX_STATUS_CHANGED       | [connectTransactionDetail](#connectTransactionDetail)     | 连接账号交易状态变更   |
+| eventType                                 | eventDetail                                                     | Description  |
+|-------------------------------------------|-----------------------------------------------------------------|--------------|
+| CLIENT_STATUS_CHANGED                     | [clientDetail](#clientDetail)                                   | 创建用户状态变更     |
+| FUND_ACCOUNT_CREATED                      | [fundAccountCreated](#fundAccountCreated)                       | 资金账号已创建      |
+| CRYPTO_TX_CREATED                         | [transactionDetail](#transactionDetail)                         | 数字货币交易创建     |
+| CRYPTO_TX_STATUS_CHANGED                  | [transactionDetail](#transactionDetail)                         | 数字货币交易状态变更   |
+| FIAT_RECIPIENT_STATUS_CHANGED             | [fiatRecipientDetail](#fiatRecipientDetail)                     | 法币收款人信息变更    |
+| CRYPTO_RECIPIENT_STATUS_CHANGED           | [cryptoRecipientDetail](#cryptoRecipientDetail)                 | 加密货币收款人信息变更  |
+| FIAT_TX_CREATED                           | [transactionDetail](#transactionDetail)                         | 法币创建交易       |
+| FIAT_TX_STATUS_CHANGED                    | [transactionDetail](#transactionDetail)                         | 法币交易状态变更     |
+| CURRENCY_STATUS_CHANGED                   | [currencyStatusDetail](#currencyStatusDetail)                   | 账户币种状态变更     |
+| DEPOSIT_INFO_ADD                          | [depositAddressAddDetail](#depositAddressAddDetail)             | 账户币种收款信息添加   |
+| DEPOSIT_INFO_CHANGED                      | [depositAddressChangeDetail](#depositAddressChangeDetail)       | 账户币种收款信息状态变更 |
+| CONNECT_TX_CREATED                        | [connectTransactionDetail](#connectTransactionDetail)           | 连接账号交易创建     |
+| CONNECT_TX_STATUS_CHANGED                 | [connectTransactionDetail](#connectTransactionDetail)           | 连接账号交易状态变更   |
+| SUPER_ORG_CRYPTO_RECIPIENT_CREATE         | [superOrgCryptoRecipientDetail](#superOrgCryptoRecipientDetail) | 主机构数字货币收款人信息创建   |
+| SUPER_ORG_FIAT_RECIPIENT_CREATE           | [superOrgFiatRecipientDetail](#superOrgFiatRecipientDetail)     | 主机构法币收款人信息创建   |
+| SUPER_ORG_CRYPTO_RECIPIENT_STATUS_CHANGED | [superOrgCryptoRecipientDetail](#superOrgCryptoRecipientDetail) | 主机构数字货币收款人信息变更   |
+| SUPER_ORG_FIAT_RECIPIENT_STATUS_CHANGED   | [superOrgFiatRecipientDetail](#superOrgFiatRecipientDetail)     | 主机构法币收款人信息变更   |
 
 ### 事件详情
 **<div id="clientDetail"> clientDetail </div>**
@@ -2822,8 +2827,40 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |txHash|string|交易hash|-|
 |txFee|string|交易手续费|-|
 
+**<div id="superOrgCryptoRecipientDetail"> superOrgCryptoRecipientDetail </div>**
 
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|array|响应数据|-|
+|└─recipientId|string|收款方地址id|-|
+|└─channelKey|string|转账通道key（crypto；conet；）|-|
+|└─currencyKey|string|币种标识|-|
+|└─status|int32|收款人状态（2：已生效；3：已删除；）|-|
+|└─conetId|int64|conet收款方式对方conetId|-|
+|└─address|string|加密货币地址|-|
+|└─label|string|别称|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
 
+**<div id="superOrgFiatRecipientDetail"> superOrgFiatRecipientDetail </div>**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|array|响应数据|-|
+|└─recipientId|string|收款方地址id|-|
+|└─channelKey|string|转账通道key（conet；）|-|
+|└─currencyKey|string|币种标识|-|
+|└─status|int32|收款人状态（2：已生效；3：已删除；）|-|
+|└─conetId|int64|conet收款方式对方conetId|-|
+|└─label|string|别称|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
 
 ## 错误码列表
 
