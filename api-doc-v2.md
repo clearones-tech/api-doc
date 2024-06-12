@@ -12,7 +12,7 @@
 | 2.0.7   | 2024-05-13 11:36:00 |modify|clearones| 预估交易手续费接口（/api/v2/connect/transaction/estimated/fee），参数toAddress校验规则修改为：提币目标地址（当blockchainKey是solana时，必传，其他传了计算预估手续费会更精确）。
 | 2.0.8   | 2024-05-31 18:50:00 |modify|clearones| 预估交易手续费接口（/api/v2/transaction/crypto/estimated/fee），增加参数address
 | 2.0.9   | 2024-06-04 17:03:00 |modify|clearones| 新增webhook事件：SUPER_ORG_CRYPTO_RECIPIENT_CREATE（主机构数字货币收款人信息创建）、SUPER_ORG_FIAT_RECIPIENT_CREATE（主机构法币收款人信息创建）、SUPER_ORG_CRYPTO_RECIPIENT_STATUS_CHANGED（主机构数字货币收款人信息变更）、SUPER_ORG_FIAT_RECIPIENT_STATUS_CHANGED（主机构法币收款人信息变更）
-| 1.0.10  | 2024-06-12 10:49:00 |modify|clearones|1、修改“授权验证”接口：/api/v2/authorization/verify，接口参数authorizationType取值范围新增：“6：otc创建交易”；2、新增“查询用户OTC交易对列表”接口：/api/v2/otc/client/pair/list；3、新增“查询OTC交易列表”接口：/api/v2/otc/transaction/list；4、新增“查询OTC交易详情”接口：/api/v2/otc/transaction/detail；5、新增“创建OTC交易”接口：/api/v2/otc/transaction/create；6、新增“OTC交易创建”事件：OTC_TX_CREATED；7、新增“OTC交易状态变更”事件：OTC_TX_STATUS_CHANGED|
+| 1.0.10  | 2024-06-12 10:49:00 |modify|clearones|1、修改“授权验证”接口：/api/v2/authorization/verify，接口参数authorizationType取值范围新增：“6：FX创建交易”；2、新增“查询用户FX交易对列表”接口：/api/v2/fx/client/pair/list；3、新增“查询FX交易列表”接口：/api/v2/fx/transaction/list；4、新增“查询FX交易详情”接口：/api/v2/fx/transaction/detail；5、新增“创建FX交易”接口：/api/v2/fx/transaction/create；6、新增“FX交易创建”事件：FX_TX_CREATED；7、新增“FX交易状态变更”事件：FX_TX_STATUS_CHANGED|
 
 ## 接入说明
 ### 请求统一参数
@@ -1817,14 +1817,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/proof/ad
 **Content-Type:** application/json
 
 **Description:** 对于创建交易和收款人的操作,Clearones会下发邮件验证码给用户,用户收到验证码后需要填写验证码才能继续后续的业务操作;
-授权验证接口就是在调用写操作接口(1:加密货币提币；2:法币转账；3:加密货币添加收款地址；4:法币添加收款人；5:连接账号提币；6:otc创建交易；)后续需要验证该操作并真正执行上述接口操作的接口
+授权验证接口就是在调用写操作接口(1:加密货币提币；2:法币转账；3:加密货币添加收款地址；4:法币添加收款人；5:连接账号提币；6:FX创建交易；)后续需要验证该操作并真正执行上述接口操作的接口
 
 **Body-parameters:**
 
 | Parameter | Type | Required | Description | Since |
 |-----------|------|----------|-------------|-------|
 |clientId|string|true|客户的账户ID|-|
-|authorizationType|int32|true|授权类型（1:加密货币提币；2:法币转账；3:加密货币添加收款地址；4:法币添加收款人；5:连接账号提币；6:otc创建交易；）|-|
+|authorizationType|int32|true|授权类型（1:加密货币提币；2:法币转账；3:加密货币添加收款地址；4:法币添加收款人；5:连接账号提币；6:FX创建交易；）|-|
 |operateId|string|true|操作记录ID|-|
 |verificationCode|string|true|验证码|-|
 
@@ -2584,16 +2584,16 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 }
 ```
 
-## conet-otc
-### 查询用户OTC交易对列表
-**URL:** /api/v2/otc/client/pair/list
+## FX兑换业务
+### 查询用户FX交易对列表
+**URL:** /api/v2/fx/client/pair/list
 
 **Type:** POST
 
 
 **Content-Type:** application/json
 
-**Description:** 查询用户OTC交易对列表
+**Description:** 查询用户FX交易对列表
 
 **Body-parameters:**
 
@@ -2603,7 +2603,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v2/otc/client/pair/list --data '{
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/client/pair/list --data '{
   "clientId": "1663027675055698121"
 }'
 ```
@@ -2654,15 +2654,15 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/otc/client/pair/list
 }
 ```
 
-### 查询OTC交易列表
-**URL:** /api/v2/otc/transaction/list
+### 查询FX交易列表
+**URL:** /api/v2/fx/transaction/list
 
 **Type:** POST
 
 
 **Content-Type:** application/json
 
-**Description:** 查询OTC交易列表
+**Description:** 查询FX交易列表
 
 **Body-parameters:**
 
@@ -2678,7 +2678,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/otc/client/pair/list
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v2/otc/transaction/list --data '{
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/list --data '{
   "clientId": "1663027675055698121",
   "fromNo": "1663027675055698130",
   "limit": 20,
@@ -2744,15 +2744,15 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/otc/transaction/list
 }
 ```
 
-### 查询OTC交易详情
-**URL:** /api/v2/otc/transaction/detail
+### 查询FX交易详情
+**URL:** /api/v2/fx/transaction/detail
 
 **Type:** POST
 
 
 **Content-Type:** application/json
 
-**Description:** 查询OTC交易详情
+**Description:** 查询FX交易详情
 
 **Body-parameters:**
 
@@ -2764,7 +2764,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/otc/transaction/list
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v2/otc/transaction/detail --data '{
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detail --data '{
   "clientId": "1663027675055698121",
   "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
   "transactionNo": "1663027675055698130"
@@ -2826,15 +2826,15 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/otc/transaction/deta
 }
 ```
 
-### 创建OTC交易
-**URL:** /api/v2/otc/transaction/create
+### 创建FX交易
+**URL:** /api/v2/fx/transaction/create
 
 **Type:** POST
 
 
 **Content-Type:** application/json
 
-**Description:** 创建OTC交易
+**Description:** 创建FX交易
 
 **Body-parameters:**
 
@@ -2849,7 +2849,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/otc/transaction/deta
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v2/otc/transaction/create --data '{
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/create --data '{
   "clientId": "1663027675055698121",
   "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
   "fromCurrencyKey": "USD",
@@ -2946,8 +2946,8 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | SUPER_ORG_FIAT_RECIPIENT_CREATE           | [superOrgFiatRecipientDetail](#superOrgFiatRecipientDetail)     | 主机构法币收款人信息创建   |
 | SUPER_ORG_CRYPTO_RECIPIENT_STATUS_CHANGED | [superOrgCryptoRecipientDetail](#superOrgCryptoRecipientDetail) | 主机构数字货币收款人信息变更   |
 | SUPER_ORG_FIAT_RECIPIENT_STATUS_CHANGED   | [superOrgFiatRecipientDetail](#superOrgFiatRecipientDetail)     | 主机构法币收款人信息变更   |
-| OTC_TX_CREATED                            | [otcTransactionDetail](#otcTransactionDetail)                   | OTC创建交易   |
-| OTC_TX_STATUS_CHANGED                     | [otcTransactionDetail](#otcTransactionDetail)                   | OTC交易状态变更   |
+| FX_TX_CREATED                             | [fxTransactionDetail](#fxTransactionDetail)                     | FX创建交易   |
+| FX_TX_STATUS_CHANGED                      | [fxTransactionDetail](#fxTransactionDetail)                     | FX交易状态变更   |
 
 ### 事件详情
 **<div id="clientDetail"> clientDetail </div>**
@@ -3147,7 +3147,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |conetId|int64|conet收款方式对方conetId|-|
 |label|string|别称|-|
 
-**<div id="otcTransactionDetail"> otcTransactionDetail </div>**
+**<div id="fxTransactionDetail"> fxTransactionDetail </div>**
 
 | Field | Type | Description | Since |
 |-------|------|-------------|-------|
