@@ -12,7 +12,7 @@
 | 2.0.7   | 2024-05-13 11:36:00 |modify|clearones| 预估交易手续费接口（/api/v2/connect/transaction/estimated/fee），参数toAddress校验规则修改为：提币目标地址（当blockchainKey是solana时，必传，其他传了计算预估手续费会更精确）。
 | 2.0.8   | 2024-05-31 18:50:00 |modify|clearones| 预估交易手续费接口（/api/v2/transaction/crypto/estimated/fee），增加参数address
 | 2.0.9   | 2024-06-04 17:03:00 |modify|clearones| 新增webhook事件：SUPER_ORG_CRYPTO_RECIPIENT_CREATE（主机构数字货币收款人信息创建）、SUPER_ORG_FIAT_RECIPIENT_CREATE（主机构法币收款人信息创建）、SUPER_ORG_CRYPTO_RECIPIENT_STATUS_CHANGED（主机构数字货币收款人信息变更）、SUPER_ORG_FIAT_RECIPIENT_STATUS_CHANGED（主机构法币收款人信息变更）
-| 1.0.10  | 2024-06-12 10:49:00 |modify|clearones|1、修改“授权验证”接口：/api/v2/authorization/verify，接口参数authorizationType取值范围新增：“6：FX创建交易”；2、新增“查询用户FX交易对列表”接口：/api/v2/fx/client/pair/list；3、新增“查询FX交易列表”接口：/api/v2/fx/transaction/list；4、新增“查询FX交易详情”接口：/api/v2/fx/transaction/detail；5、新增“创建FX交易”接口：/api/v2/fx/transaction/create；6、新增“FX交易创建”事件：FX_TX_CREATED；7、新增“FX交易状态变更”事件：FX_TX_STATUS_CHANGED|
+| 2.0.10  | 2024-06-12 10:49:00 |modify|clearones|1、修改“授权验证”接口：/api/v2/authorization/verify，接口参数authorizationType取值范围新增：“6：FX创建交易”；2、新增“查询用户FX交易对列表”接口：/api/v2/fx/client/pair/list；3、新增“查询FX交易列表”接口：/api/v2/fx/transaction/list；4、新增“查询FX交易详情”接口：/api/v2/fx/transaction/detail；5、新增“创建FX交易”接口：/api/v2/fx/transaction/create；6、新增“FX交易创建”事件：FX_TX_CREATED；7、新增“FX交易状态变更”事件：FX_TX_STATUS_CHANGED|
 
 ## 接入说明
 ### 请求统一参数
@@ -2615,14 +2615,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/client/pair/list 
 |message|string|响应描述|-|
 |data|array|响应数据|-|
 |└─clientId|int64|客户的账户ID|-|
-|└─weeklyLimitUsd|number|周交易限额（单位：USD）|-|
+|└─weeklyLimitUsd|number|周交易限额（单位：USD），统计范围：按照东八区本周周一至周日，toCurrencyKey兑换数量按照兑换时汇率折算为USD进行统计|-|
 |└─pairs|array|交易对列表|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─fromCurrencyKey|string|付款币种Key|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toCurrencyKey|string|收款币种Key|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─exchangeRate|number|兑换汇率|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─feeRate|number|手续费费率|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─minAmount|number|最小兑换数量|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─maxAmount|number|最大兑换数量|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─minAmount|number|最小兑换toCurrencyKey数量|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─maxAmount|number|最大兑换toCurrencyKey数量|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
