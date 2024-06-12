@@ -12,7 +12,7 @@
 | 2.0.7   | 2024-05-13 11:36:00 |modify|clearones| 预估交易手续费接口（/api/v2/connect/transaction/estimated/fee），参数toAddress校验规则修改为：提币目标地址（当blockchainKey是solana时，必传，其他传了计算预估手续费会更精确）。
 | 2.0.8   | 2024-05-31 18:50:00 |modify|clearones| 预估交易手续费接口（/api/v2/transaction/crypto/estimated/fee），增加参数address
 | 2.0.9   | 2024-06-04 17:03:00 |modify|clearones| 新增webhook事件：SUPER_ORG_CRYPTO_RECIPIENT_CREATE（主机构数字货币收款人信息创建）、SUPER_ORG_FIAT_RECIPIENT_CREATE（主机构法币收款人信息创建）、SUPER_ORG_CRYPTO_RECIPIENT_STATUS_CHANGED（主机构数字货币收款人信息变更）、SUPER_ORG_FIAT_RECIPIENT_STATUS_CHANGED（主机构法币收款人信息变更）
-|1.0.10   | 2024-06-12 10:49:00 |modify|clearones|1、修改“授权验证”接口：/api/v2/authorization/verify，接口参数authorizationType取值范围新增：“6：otc创建交易”；2、新增“查询用户OTC交易对列表”接口：/api/v2/otc/client/pair/list；3、新增“查询OTC交易列表”接口：/api/v2/otc/transaction/list；4、新增“查询OTC交易详情”接口：/api/v2/otc/transaction/detail；5、新增“创建OTC交易”接口：/api/v2/otc/transaction/create；6、新增“OTC交易创建”事件：OTC_TX_CREATED；7、新增“OTC交易状态变更”事件：OTC_TX_STATUS_CHANGED|
+| 1.0.10  | 2024-06-12 10:49:00 |modify|clearones|1、修改“授权验证”接口：/api/v2/authorization/verify，接口参数authorizationType取值范围新增：“6：otc创建交易”；2、新增“查询用户OTC交易对列表”接口：/api/v2/otc/client/pair/list；3、新增“查询OTC交易列表”接口：/api/v2/otc/transaction/list；4、新增“查询OTC交易详情”接口：/api/v2/otc/transaction/detail；5、新增“创建OTC交易”接口：/api/v2/otc/transaction/create；6、新增“OTC交易创建”事件：OTC_TX_CREATED；7、新增“OTC交易状态变更”事件：OTC_TX_STATUS_CHANGED|
 
 ## 接入说明
 ### 请求统一参数
