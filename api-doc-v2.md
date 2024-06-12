@@ -12,6 +12,13 @@
 | 2.0.7   | 2024-05-13 11:36:00 |modify|clearones| 预估交易手续费接口（/api/v2/connect/transaction/estimated/fee），参数toAddress校验规则修改为：提币目标地址（当blockchainKey是solana时，必传，其他传了计算预估手续费会更精确）。
 | 2.0.8   | 2024-05-31 18:50:00 |modify|clearones| 预估交易手续费接口（/api/v2/transaction/crypto/estimated/fee），增加参数address
 | 2.0.9   | 2024-06-04 17:03:00 |modify|clearones| 新增webhook事件：SUPER_ORG_CRYPTO_RECIPIENT_CREATE（主机构数字货币收款人信息创建）、SUPER_ORG_FIAT_RECIPIENT_CREATE（主机构法币收款人信息创建）、SUPER_ORG_CRYPTO_RECIPIENT_STATUS_CHANGED（主机构数字货币收款人信息变更）、SUPER_ORG_FIAT_RECIPIENT_STATUS_CHANGED（主机构法币收款人信息变更）
+|1.0.10   | 2024-06-12 10:49:00 |modify|clearones|1、修改“授权验证”接口：/api/v2/authorization/verify，接口参数authorizationType取值范围新增：“6：otc创建交易”
+2、新增“查询用户OTC交易对列表”接口：/api/v2/otc/client/pair/list
+3、新增“查询OTC交易列表”接口：/api/v2/otc/transaction/list
+4、新增“查询OTC交易详情”接口：/api/v2/otc/transaction/detail
+5、新增“创建OTC交易”接口：/api/v2/otc/transaction/create
+6、新增“OTC交易创建”事件：OTC_TX_CREATED
+7、新增“OTC交易状态变更”事件：OTC_TX_STATUS_CHANGED|
 
 ## 接入说明
 ### 请求统一参数
@@ -1816,14 +1823,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/proof/ad
 **Content-Type:** application/json
 
 **Description:** 对于创建交易和收款人的操作,Clearones会下发邮件验证码给用户,用户收到验证码后需要填写验证码才能继续后续的业务操作;
-授权验证接口就是在调用写操作接口(1:加密货币提币；2:法币转账；3:加密货币添加收款地址；4:法币添加收款人；5:连接账号提币；)后续需要验证该操作并真正执行上述接口操作的接口
+授权验证接口就是在调用写操作接口(1:加密货币提币；2:法币转账；3:加密货币添加收款地址；4:法币添加收款人；5:连接账号提币；6:otc创建交易；)后续需要验证该操作并真正执行上述接口操作的接口
 
 **Body-parameters:**
 
 | Parameter | Type | Required | Description | Since |
 |-----------|------|----------|-------------|-------|
 |clientId|string|true|客户的账户ID|-|
-|authorizationType|int32|true|授权类型（1:加密货币提币；2:法币转账；3:加密货币添加收款地址；4:法币添加收款人；5:连接账号提币；）|-|
+|authorizationType|int32|true|授权类型（1:加密货币提币；2:法币转账；3:加密货币添加收款地址；4:法币添加收款人；5:连接账号提币；6:otc创建交易；）|-|
 |operateId|string|true|操作记录ID|-|
 |verificationCode|string|true|验证码|-|
 
@@ -2583,6 +2590,306 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 }
 ```
 
+## conet-otc
+### 查询用户OTC交易对列表
+**URL:** /api/v2/otc/client/pair/list
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 查询用户OTC交易对列表
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/otc/client/pair/list --data '{
+  "clientId": "1663027675055698121"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|array|响应数据|-|
+|└─clientId|int64|客户的账户ID|-|
+|└─weeklyLimitUsd|number|周交易限额（单位：USD）|-|
+|└─pairs|array|交易对列表|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─fromCurrencyKey|string|付款币种Key|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toCurrencyKey|string|收款币种Key|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─exchangeRate|number|兑换汇率|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─feeRate|number|手续费费率|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─minAmount|number|最小兑换数量|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─maxAmount|number|最大兑换数量|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": [
+    {
+      "clientId": 1663027675055698121,
+      "weeklyLimitUsd": 5000,
+      "pairs": [
+        {
+          "fromCurrencyKey": "USD",
+          "toCurrencyKey": "USDT_TRC20",
+          "exchangeRate": 0.98,
+          "feeRate": 0.001,
+          "minAmount": 100,
+          "maxAmount": 100000
+        }
+      ]
+    }
+  ],
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 查询OTC交易列表
+**URL:** /api/v2/otc/transaction/list
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 查询OTC交易列表
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|false|客户的账户ID|-|
+|fromNo|string|false|查询开始transactionNo|-|
+|limit|int32|false|查询数量，默认20，最大100|-|
+|fromCurrencyKey|string|false|付款币种Key|-|
+|toCurrencyKey|string|false|收款币种Key|-|
+|createTimestampFrom|int64|false|创建时间开始时间戳，UNIX 时间戳毫秒数|-|
+|createTimestampTo|int64|false|创建时间结束时间戳，UNIX 时间戳毫秒数|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/otc/transaction/list --data '{
+  "clientId": "1663027675055698121",
+  "fromNo": "1663027675055698130",
+  "limit": 20,
+  "fromCurrencyKey": "USD",
+  "toCurrencyKey": "USDT_TRC20",
+  "createTimestampFrom": 1672056033898,
+  "createTimestampTo": 1672056033898
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|array|响应数据|-|
+|└─customerRefId|string|调用方唯一业务ID|-|
+|└─createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
+|└─transactionNo|string|交易号|-|
+|└─clientId|string|客户的账户ID|-|
+|└─transactionStatus|string|交易状态(SUBMITTED：审批中；PROCESSING：进行中；SUCCESS：成功；FAILED:失败；CANCELLED：取消；REJECTED：拒绝；)|-|
+|└─fromCurrencyKey|string|付款币种Key|-|
+|└─toCurrencyKey|string|收款币种Key|-|
+|└─exchangeRate|string|兑换汇率|-|
+|└─fromAmount|string|付款币种数量|-|
+|└─toAmount|string|收款币种数量|-|
+|└─feeRate|string|服务费费率|-|
+|└─fee|string|服务费|-|
+|└─feeCurrencyKey|string|服务费币种Key|-|
+|└─additionalFeeRate|string|附加服务费费率|-|
+|└─additionalFee|string|附加服务费|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": [
+    {
+      "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+      "createTimestamp": 1672056033898,
+      "transactionNo": "1663027675055698130",
+      "clientId": "1663027675055698121",
+      "transactionStatus": "SUCCESS",
+      "fromCurrencyKey": "USD",
+      "toCurrencyKey": "USDT_TRC20",
+      "exchangeRate": "0.98",
+      "fromAmount": "1000",
+      "toAmount": "978.04",
+      "feeRate": "0.001",
+      "fee": "2",
+      "feeCurrencyKey": "USD",
+      "additionalFeeRate": "0.001",
+      "additionalFee": "1"
+    }
+  ],
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 查询OTC交易详情
+**URL:** /api/v2/otc/transaction/detail
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 查询OTC交易详情
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|customerRefId|string|false|调用方唯一业务ID，与参数transactionNo二选一必填，如果两个都有值，将按照两个参数查询|-|
+|transactionNo|string|false|交易号，与参数customerRefId二选一必填，如果两个都有值，将按照两个参数查询|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/otc/transaction/detail --data '{
+  "clientId": "1663027675055698121",
+  "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+  "transactionNo": "1663027675055698130"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|array|响应数据|-|
+|└─customerRefId|string|调用方唯一业务ID|-|
+|└─createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
+|└─transactionNo|string|交易号|-|
+|└─clientId|string|客户的账户ID|-|
+|└─transactionStatus|string|交易状态(SUBMITTED：审批中；PROCESSING：进行中；SUCCESS：成功；FAILED:失败；CANCELLED：取消；REJECTED：拒绝；)|-|
+|└─fromCurrencyKey|string|付款币种Key|-|
+|└─toCurrencyKey|string|收款币种Key|-|
+|└─exchangeRate|string|兑换汇率|-|
+|└─fromAmount|string|付款币种数量|-|
+|└─toAmount|string|收款币种数量|-|
+|└─feeRate|string|服务费费率|-|
+|└─fee|string|服务费|-|
+|└─feeCurrencyKey|string|服务费币种Key|-|
+|└─additionalFeeRate|string|附加服务费费率|-|
+|└─additionalFee|string|附加服务费|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": [
+    {
+      "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+      "createTimestamp": 1672056033898,
+      "transactionNo": "1663027675055698130",
+      "clientId": "1663027675055698121",
+      "transactionStatus": "SUCCESS",
+      "fromCurrencyKey": "USD",
+      "toCurrencyKey": "USDT_TRC20",
+      "exchangeRate": "0.98",
+      "fromAmount": "1000",
+      "toAmount": "978.04",
+      "feeRate": "0.001",
+      "fee": "2",
+      "feeCurrencyKey": "USD",
+      "additionalFeeRate": "0.001",
+      "additionalFee": "1"
+    }
+  ],
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 创建OTC交易
+**URL:** /api/v2/otc/transaction/create
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 创建OTC交易
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|customerRefId|string|true|调用方唯一业务id，最长 100|-|
+|fromCurrencyKey|string|true|付款币种Key|-|
+|toCurrencyKey|string|true|收款币种Key|-|
+|fromAmount|string|true|付款币种数量|-|
+|additionalFeeRate|string|false|附加服务费费率|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/otc/transaction/create --data '{
+  "clientId": "1663027675055698121",
+  "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+  "fromCurrencyKey": "USD",
+  "toCurrencyKey": "USDT_TRC20",
+  "fromAmount": "1000",
+  "additionalFeeRate": "0.001"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─operateId|string|操作ID|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "operateId": "101"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
 ## Webhook
 ### 概述
 通过Webhook主动通知您账户下发生的一些事件，比如
@@ -2645,6 +2952,8 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | SUPER_ORG_FIAT_RECIPIENT_CREATE           | [superOrgFiatRecipientDetail](#superOrgFiatRecipientDetail)     | 主机构法币收款人信息创建   |
 | SUPER_ORG_CRYPTO_RECIPIENT_STATUS_CHANGED | [superOrgCryptoRecipientDetail](#superOrgCryptoRecipientDetail) | 主机构数字货币收款人信息变更   |
 | SUPER_ORG_FIAT_RECIPIENT_STATUS_CHANGED   | [superOrgFiatRecipientDetail](#superOrgFiatRecipientDetail)     | 主机构法币收款人信息变更   |
+| OTC_TX_CREATED                            | [otcTransactionDetail](#otcTransactionDetail)                   | OTC创建交易   |
+| OTC_TX_STATUS_CHANGED                     | [otcTransactionDetail](#otcTransactionDetail)                   | OTC交易状态变更   |
 
 ### 事件详情
 **<div id="clientDetail"> clientDetail </div>**
@@ -2703,18 +3012,12 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 
 | Field | Type | Description | Since |
 |-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|└─customerRefId|string|调用方唯一业务id|-|
-|└─recipientId|string|收款方地址id|-|
-|└─status|int32|收款人状态(1:审批中；2:已生效；3:审批拒绝)|-|
-|└─currencyKey|string|币种标识|-|
-|└─address|string|加密货币地址|-|
-|└─label|string|别称|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+|customerRefId|string|调用方唯一业务id|-|
+|recipientId|string|收款方地址id|-|
+|status|int32|收款人状态(1:审批中；2:已生效；3:审批拒绝)|-|
+|currencyKey|string|币种标识|-|
+|address|string|加密货币地址|-|
+|label|string|别称|-|
 
 **<div id="transactionDetail"> transactionDetail </div>**
 
@@ -2831,36 +3134,44 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 
 | Field | Type | Description | Since |
 |-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|array|响应数据|-|
-|└─recipientId|string|收款方地址id|-|
-|└─channelKey|string|转账通道key（crypto；conet；）|-|
-|└─currencyKey|string|币种标识|-|
-|└─status|int32|收款人状态（2：已生效；3：已删除；）|-|
-|└─conetId|int64|conet收款方式对方conetId|-|
-|└─address|string|加密货币地址|-|
-|└─label|string|别称|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+|recipientId|string|收款方地址id|-|
+|channelKey|string|转账通道key（crypto；conet；）|-|
+|currencyKey|string|币种标识|-|
+|status|int32|收款人状态（2：已生效；3：已删除；）|-|
+|conetId|int64|conet收款方式对方conetId|-|
+|address|string|加密货币地址|-|
+|label|string|别称|-|
 
 **<div id="superOrgFiatRecipientDetail"> superOrgFiatRecipientDetail </div>**
 
 | Field | Type | Description | Since |
 |-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|array|响应数据|-|
-|└─recipientId|string|收款方地址id|-|
-|└─channelKey|string|转账通道key（conet；）|-|
-|└─currencyKey|string|币种标识|-|
-|└─status|int32|收款人状态（2：已生效；3：已删除；）|-|
-|└─conetId|int64|conet收款方式对方conetId|-|
-|└─label|string|别称|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+|recipientId|string|收款方地址id|-|
+|channelKey|string|转账通道key（conet；）|-|
+|currencyKey|string|币种标识|-|
+|status|int32|收款人状态（2：已生效；3：已删除；）|-|
+|conetId|int64|conet收款方式对方conetId|-|
+|label|string|别称|-|
+
+**<div id="otcTransactionDetail"> otcTransactionDetail </div>**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|customerRefId|string|调用方唯一业务ID|-|
+|createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
+|transactionNo|string|交易号|-|
+|clientId|string|客户的账户ID|-|
+|transactionStatus|string|交易状态(SUBMITTED：审批中；PROCESSING：进行中；SUCCESS：成功；FAILED:失败；CANCELLED：取消；REJECTED：拒绝；)|-|
+|fromCurrencyKey|string|付款币种Key|-|
+|toCurrencyKey|string|收款币种Key|-|
+|exchangeRate|string|兑换汇率|-|
+|fromAmount|string|付款币种数量|-|
+|toAmount|string|收款币种数量|-|
+|feeRate|string|服务费费率|-|
+|fee|string|服务费|-|
+|feeCurrencyKey|string|服务费币种Key|-|
+|additionalFeeRate|string|附加服务费费率|-|
+|additionalFee|string|附加服务费|-|
 
 ## 错误码列表
 
@@ -2960,9 +3271,9 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |11407|交易数量小数精度不能超过{0}|
 |11408|交易数量超过限额|
 |11409|钱包资产余额不足，无法交易|
-|11410|预估网络费用不足，您需要向此钱包至少存入{0}来支付提币网络费用|
-|11411|兑换金额过大，请联系客服处理|
-|11412|单笔交易最低{0} {1}|
-|11413|单笔交易最大{0} {1}|
+|11410|兑换金额过大，请联系客服处理|
+|11411|单笔交易最低{0} {1}|
+|11412|单笔交易最大{0} {1}|
+|11413|Gas不足|
 |11501|汇率异常|
 
