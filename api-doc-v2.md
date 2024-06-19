@@ -13,6 +13,7 @@
 | 2.0.8   | 2024-05-31 18:50:00 |modify|clearones| 预估交易手续费接口（/api/v2/transaction/crypto/estimated/fee），增加参数address
 | 2.0.9   | 2024-06-04 17:03:00 |modify|clearones| 新增webhook事件：SUPER_ORG_CRYPTO_RECIPIENT_CREATE（主机构数字货币收款人信息创建）、SUPER_ORG_FIAT_RECIPIENT_CREATE（主机构法币收款人信息创建）、SUPER_ORG_CRYPTO_RECIPIENT_STATUS_CHANGED（主机构数字货币收款人信息变更）、SUPER_ORG_FIAT_RECIPIENT_STATUS_CHANGED（主机构法币收款人信息变更）
 | 2.0.10  | 2024-06-12 10:49:00 |modify|clearones|1、修改“授权验证”接口：/api/v2/authorization/verify，接口参数authorizationType取值范围新增：“6：FX创建交易”；2、新增“查询用户FX交易对列表”接口：/api/v2/fx/client/pair/list；3、新增“查询FX交易列表”接口：/api/v2/fx/transaction/list；4、新增“查询FX交易详情”接口：/api/v2/fx/transaction/detail；5、新增“创建FX交易”接口：/api/v2/fx/transaction/create；6、新增“FX交易创建”事件：FX_TX_CREATED；7、新增“FX交易状态变更”事件：FX_TX_STATUS_CHANGED；8、新增“FX交易对添加”事件：FX_PAIR_ADD；9、新增“FX交易对更新”事件：FX_PAIR_UPDATE；10、新增“FX交易对删除”事件：FX_PAIR_DELETE|
+| 2.0.11  | 2024-06-19 16:39:00 |modify|clearones|1、完善FX交易状态描述；2、FX交易记录查询接口返回新增转账交易号、收款交易号和退款交易号；|
 
 ## 接入说明
 ### 请求统一参数
@@ -2603,7 +2604,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/client/pair/list --data '1q45cd'
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/client/pair/list --data 'fkayvz'
 ```
 **Response-fields:**
 
@@ -2695,7 +2696,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/list 
 |└─createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
 |└─transactionNo|string|交易号|-|
 |└─clientId|string|客户的账户ID|-|
-|└─transactionStatus|string|交易状态(SUBMITTED：审批中；PROCESSING：进行中；SUCCESS：成功；FAILED:失败；CANCELLED：取消；REJECTED：拒绝；)|-|
+|└─transactionStatus|string|交易状态(SUBMITTED：已提交；PROCESSING：进行中；SUCCESS：成功；FAILED:失败；CANCELLED：取消；REJECTED：拒绝；)<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/>CANCELLED：取消，用户审批取消，web端适用<br/>REJECTED：拒绝，用户审批拒绝，web端适用<br/></pre>|-|
 |└─fromCurrencyKey|string|付款币种Key|-|
 |└─toCurrencyKey|string|收款币种Key|-|
 |└─exchangeRate|string|兑换汇率|-|
@@ -2706,6 +2707,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/list 
 |└─feeCurrencyKey|string|服务费币种Key|-|
 |└─additionalFeeRate|string|附加服务费费率|-|
 |└─additionalFee|string|附加服务费|-|
+|└─transferNo|string|转账交易号|-|
+|└─receiveNo|string|收款交易号|-|
+|└─refundNo|string|退款交易号|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -2731,7 +2735,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/list 
       "fee": "2",
       "feeCurrencyKey": "USD",
       "additionalFeeRate": "0.001",
-      "additionalFee": "1"
+      "additionalFee": "1",
+      "transferNo": "1803342430657843206",
+      "receiveNo": "1803342430657843207",
+      "refundNo": "1803342430657843208"
     }
   ],
   "timestamp": "1685343278618",
@@ -2777,7 +2784,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detai
 |└─createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
 |└─transactionNo|string|交易号|-|
 |└─clientId|string|客户的账户ID|-|
-|└─transactionStatus|string|交易状态(SUBMITTED：审批中；PROCESSING：进行中；SUCCESS：成功；FAILED:失败；CANCELLED：取消；REJECTED：拒绝；)|-|
+|└─transactionStatus|string|交易状态(SUBMITTED：已提交；PROCESSING：进行中；SUCCESS：成功；FAILED:失败；CANCELLED：取消；REJECTED：拒绝；)<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/>CANCELLED：取消，用户审批取消，web端适用<br/>REJECTED：拒绝，用户审批拒绝，web端适用<br/></pre>|-|
 |└─fromCurrencyKey|string|付款币种Key|-|
 |└─toCurrencyKey|string|收款币种Key|-|
 |└─exchangeRate|string|兑换汇率|-|
@@ -2788,6 +2795,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detai
 |└─feeCurrencyKey|string|服务费币种Key|-|
 |└─additionalFeeRate|string|附加服务费费率|-|
 |└─additionalFee|string|附加服务费|-|
+|└─transferNo|string|转账交易号|-|
+|└─receiveNo|string|收款交易号|-|
+|└─refundNo|string|退款交易号|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -2813,7 +2823,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detai
       "fee": "2",
       "feeCurrencyKey": "USD",
       "additionalFeeRate": "0.001",
-      "additionalFee": "1"
+      "additionalFee": "1",
+      "transferNo": "1803342430657843206",
+      "receiveNo": "1803342430657843207",
+      "refundNo": "1803342430657843208"
     }
   ],
   "timestamp": "1685343278618",
@@ -3166,7 +3179,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
 |transactionNo|string|交易号|-|
 |clientId|string|客户的账户ID|-|
-|transactionStatus|string|交易状态(SUBMITTED：审批中；PROCESSING：进行中；SUCCESS：成功；FAILED:失败；CANCELLED：取消；REJECTED：拒绝；)|-|
+|transactionStatus|string|交易状态(SUBMITTED：已提交；PROCESSING：进行中；SUCCESS：成功；FAILED:失败；CANCELLED：取消；REJECTED：拒绝；)<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/>CANCELLED：取消，用户审批取消，web端适用<br/>REJECTED：拒绝，用户审批拒绝，web端适用<br/></pre>|-|
 |fromCurrencyKey|string|付款币种Key|-|
 |toCurrencyKey|string|收款币种Key|-|
 |exchangeRate|string|兑换汇率|-|
@@ -3177,6 +3190,9 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |feeCurrencyKey|string|服务费币种Key|-|
 |additionalFeeRate|string|附加服务费费率|-|
 |additionalFee|string|附加服务费|-|
+|transferNo|string|转账交易号|-|
+|receiveNo|string|收款交易号|-|
+|refundNo|string|退款交易号|-|
 
 ## 错误码列表
 
