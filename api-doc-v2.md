@@ -2604,7 +2604,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/client/pair/list --data 'fkayvz'
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/client/pair/list --data '9m71jw'
 ```
 **Response-fields:**
 
@@ -2702,8 +2702,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/list 
 |└─exchangeRate|string|兑换汇率|-|
 |└─fromAmount|string|付款币种数量|-|
 |└─toAmount|string|收款币种数量|-|
-|└─feeRate|string|服务费费率|-|
-|└─fee|string|服务费|-|
+|└─feeRate|string|总服务费费率（平台服务费费率+附加服务费费率）|-|
+|└─fee|string|总服务费|-|
 |└─feeCurrencyKey|string|服务费币种Key|-|
 |└─additionalFeeRate|string|附加服务费费率|-|
 |└─additionalFee|string|附加服务费|-|
@@ -2790,8 +2790,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detai
 |└─exchangeRate|string|兑换汇率|-|
 |└─fromAmount|string|付款币种数量|-|
 |└─toAmount|string|收款币种数量|-|
-|└─feeRate|string|服务费费率|-|
-|└─fee|string|服务费|-|
+|└─feeRate|string|总服务费费率（平台服务费费率+附加服务费费率）|-|
+|└─fee|string|总服务费|-|
 |└─feeCurrencyKey|string|服务费币种Key|-|
 |└─additionalFeeRate|string|附加服务费费率|-|
 |└─additionalFee|string|附加服务费|-|
@@ -3185,8 +3185,8 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |exchangeRate|string|兑换汇率|-|
 |fromAmount|string|付款币种数量|-|
 |toAmount|string|收款币种数量|-|
-|feeRate|string|服务费费率|-|
-|fee|string|服务费|-|
+|feeRate|string|总服务费费率（平台服务费费率+附加服务费费率）|-|
+|fee|string|总服务费|-|
 |feeCurrencyKey|string|服务费币种Key|-|
 |additionalFeeRate|string|附加服务费费率|-|
 |additionalFee|string|附加服务费|-|
