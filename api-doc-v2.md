@@ -2604,7 +2604,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/client/pair/list --data '9m71jw'
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/client/pair/list --data '801hmr'
 ```
 **Response-fields:**
 
@@ -2696,7 +2696,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/list 
 |└─createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
 |└─transactionNo|string|交易号|-|
 |└─clientId|string|客户的账户ID|-|
-|└─transactionStatus|string|交易状态(SUBMITTED：已提交；PROCESSING：进行中；SUCCESS：成功；FAILED:失败；CANCELLED：取消；REJECTED：拒绝；)<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/>CANCELLED：取消，用户审批取消，web端适用<br/>REJECTED：拒绝，用户审批拒绝，web端适用<br/></pre>|-|
+|└─transactionStatus|string|交易状态<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/></pre>|-|
 |└─fromCurrencyKey|string|付款币种Key|-|
 |└─toCurrencyKey|string|收款币种Key|-|
 |└─exchangeRate|string|兑换汇率|-|
@@ -2784,7 +2784,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detai
 |└─createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
 |└─transactionNo|string|交易号|-|
 |└─clientId|string|客户的账户ID|-|
-|└─transactionStatus|string|交易状态(SUBMITTED：已提交；PROCESSING：进行中；SUCCESS：成功；FAILED:失败；CANCELLED：取消；REJECTED：拒绝；)<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/>CANCELLED：取消，用户审批取消，web端适用<br/>REJECTED：拒绝，用户审批拒绝，web端适用<br/></pre>|-|
+|└─transactionStatus|string|交易状态<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/></pre>|-|
 |└─fromCurrencyKey|string|付款币种Key|-|
 |└─toCurrencyKey|string|收款币种Key|-|
 |└─exchangeRate|string|兑换汇率|-|
@@ -3179,7 +3179,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
 |transactionNo|string|交易号|-|
 |clientId|string|客户的账户ID|-|
-|transactionStatus|string|交易状态(SUBMITTED：已提交；PROCESSING：进行中；SUCCESS：成功；FAILED:失败；CANCELLED：取消；REJECTED：拒绝；)<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/>CANCELLED：取消，用户审批取消，web端适用<br/>REJECTED：拒绝，用户审批拒绝，web端适用<br/></pre>|-|
+|transactionStatus|string|交易状态<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/></pre>|-|
 |fromCurrencyKey|string|付款币种Key|-|
 |toCurrencyKey|string|收款币种Key|-|
 |exchangeRate|string|兑换汇率|-|
