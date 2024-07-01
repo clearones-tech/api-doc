@@ -64,9 +64,14 @@ openssl rsa -in api_private.pem -out api_public.pem -pubout
 + local: 银行本地支持的转账方式,channelKey为local时,subChannelKey可分为以下子通道
   + chats: 香港的特快转账(RTGS/CHATS)
   + fps: 香港转数快
-  + ach: 美国的本地转账
+  + ach: 美国电子资金转账网络
+  + fedwire: 美国联邦储备银行运营的实时全额结算资金转账系统
+  + sepa: 欧盟推行的统一欧元支付区
+  + faster_payment: 实时支付系统
+  + eft: 电子资金转账
 + conet: Clearones的内部转账
 + crypto: 加密货币链上转账方式
++ china_mainland: 中国大陆转账方式
 
 ## 用户账号模块
 ### 为用户创建账户
@@ -541,7 +546,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/currenc
 |└─currencyCategory|int32|币种分类 1-数字货币 2-法币|-|
 |└─currencyKey|string|币种标识|-|
 |└─currencyName|string|币种名|-|
-|└─channelKey|string|币种-转账通道（crypto;swift;local;conet;）|-|
+|└─channelKey|string|币种-转账通道(#转账通道)|-|
 |└─subChannelKey|string|法币-转账子通道（fps;chats;ach;fedwire;）|-|
 |└─bankAccountType|int32|法币-银行账号类型 1-CA 2-VA|-|
 |└─bankCountry|string|法币-银行国家|-|
