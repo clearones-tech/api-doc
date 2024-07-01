@@ -58,7 +58,7 @@ openssl rsa -in api_private.pem -out api_public.pem -pubout
 在调用 ClearOnes API 时，只允许从您设置的 IP 白名单地址发起请求，您需要在创建 API Key 时设置调用发起的 IP 地址。
 
 ### 名词解释
-#### <div id="channelKey">转账通道(channelKey/subChannelKey)分为:</div>
+**<div id="channelKey">转账通道(channelKey/subChannelKey)分为:</div>**
 
 + swift: swift国际电汇转账方式，适用于法币
 + local: 银行本地支持的转账方式,channelKey为local时,subChannelKey可分为以下子通道，适用于法币
