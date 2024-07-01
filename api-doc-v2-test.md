@@ -546,7 +546,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/currenc
 |└─currencyCategory|int32|币种分类 1-数字货币 2-法币|-|
 |└─currencyKey|string|币种标识|-|
 |└─currencyName|string|币种名|-|
-|└─channelKey|string|币种-转账通道(#channelKey)|-|
+|└─channelKey|string|币种-[转账通道](#channelKey)|-|
 |└─subChannelKey|string|法币-转账子通道（fps;chats;ach;fedwire;）|-|
 |└─bankAccountType|int32|法币-银行账号类型 1-CA 2-VA|-|
 |└─bankCountry|string|法币-银行国家|-|
