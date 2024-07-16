@@ -2713,6 +2713,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/list 
 |data|array|响应数据|-|
 |└─customerRefId|string|调用方唯一业务ID|-|
 |└─createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
+|└─completedTimestamp|int64|完成时间，UNIX 时间戳毫秒数|-|
 |└─transactionNo|string|交易号|-|
 |└─clientId|string|客户的账户ID|-|
 |└─transactionStatus|string|交易状态<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/></pre>|-|
@@ -2801,6 +2802,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detai
 |data|array|响应数据|-|
 |└─customerRefId|string|调用方唯一业务ID|-|
 |└─createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
+|└─completedTimestamp|int64|完成时间，UNIX 时间戳毫秒数|-|
 |└─transactionNo|string|交易号|-|
 |└─clientId|string|客户的账户ID|-|
 |└─transactionStatus|string|交易状态<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/></pre>|-|
@@ -3198,6 +3200,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |-------|------|-------------|-------|
 |customerRefId|string|调用方唯一业务ID|-|
 |createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
+|completedTimestamp|int64|完成时间，UNIX 时间戳毫秒数|-|
 |transactionNo|string|交易号|-|
 |clientId|string|客户的账户ID|-|
 |transactionStatus|string|交易状态<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/></pre>|-|
