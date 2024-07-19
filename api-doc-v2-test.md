@@ -3245,12 +3245,12 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |pairs|array|交易对列表|-|
 |&nbsp;&nbsp;&nbsp;└─fromCurrencyKey|string|付款币种Key|-|
 |&nbsp;&nbsp;&nbsp;└─toCurrencyKey|string|收款币种Key|-|
-|&nbsp;&nbsp;&nbsp;└─exchangeRate|number|兑换汇率|-|
-|&nbsp;&nbsp;&nbsp;└─feeRate|number|手续费费率|-|
-|&nbsp;&nbsp;&nbsp;└─minAmount|number|最小兑换fromCurrencyKey数量|-|
-|&nbsp;&nbsp;&nbsp;└─maxAmount|number|最大兑换fromCurrencyKey数量|-|
-|&nbsp;&nbsp;&nbsp;└─thresholdAmount|number|高手续费阈值金额(fromAmount < thresholdAmount时，手续费率使用thresholdFeeRate)|-|
-|&nbsp;&nbsp;&nbsp;└─thresholdFeeRate|number|高手续费率|-|
+|&nbsp;&nbsp;&nbsp;└─exchangeRate|string|兑换汇率|-|
+|&nbsp;&nbsp;&nbsp;└─feeRate|string|手续费费率|-|
+|&nbsp;&nbsp;&nbsp;└─minAmount|string|最小兑换fromCurrencyKey数量|-|
+|&nbsp;&nbsp;&nbsp;└─maxAmount|string|最大兑换fromCurrencyKey数量|-|
+|&nbsp;&nbsp;&nbsp;└─thresholdAmount|string|高手续费阈值金额(fromAmount < thresholdAmount时，手续费率使用thresholdFeeRate)|-|
+|&nbsp;&nbsp;&nbsp;└─thresholdFeeRate|string|高手续费率|-|
 
 **<div id="fxTransactionDetail"> fxTransactionDetail </div>**
 
