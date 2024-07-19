@@ -2680,24 +2680,24 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/client/pair/list 
 ```
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|array|响应数据|-|
-|└─weeklyLimitUsd|number|周交易限额（单位：USD），统计范围：按照东八区本周周一至周日，toCurrencyKey兑换数量按照兑换时汇率折算为USD进行统计|-|
-|└─pairs|array|交易对列表|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─fromCurrencyKey|string|付款币种Key|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toCurrencyKey|string|收款币种Key|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─exchangeRate|number|兑换汇率|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─feeRate|number|手续费费率|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─minAmount|number|最小兑换fromCurrencyKey数量|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─maxAmount|number|最大兑换fromCurrencyKey数量|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─thresholdAmount|number|高手续费阈值金额(fromAmount < thresholdAmount时，手续费率使用thresholdFeeRate)|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─thresholdFeeRate|number|高手续费率|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field | Type   | Description | Since |
+|-------|--------|-------------|-------|
+|code| int32  |响应码|-|
+|message| string |响应描述|-|
+|data| object |响应数据|-|
+|└─weeklyLimitUsd| number |周交易限额（单位：USD），统计范围：按照东八区本周周一至周日，toCurrencyKey兑换数量按照兑换时汇率折算为USD进行统计|-|
+|└─pairs| array  |交易对列表|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─fromCurrencyKey| string |付款币种Key|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toCurrencyKey| string |收款币种Key|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─exchangeRate| string |兑换汇率|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─feeRate| string |手续费费率|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─minAmount| string |最小兑换fromCurrencyKey数量|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─maxAmount| string |最大兑换fromCurrencyKey数量|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─thresholdAmount| string |高手续费阈值金额(fromAmount < thresholdAmount时，手续费率使用thresholdFeeRate)|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─thresholdFeeRate| string |高手续费率|-|
+|timestamp| string |时间戳毫秒|-|
+|key| string |加密key|-|
+|sign| string |签名|-|
 
 **Response-example:**
 ```
