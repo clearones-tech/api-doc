@@ -17,6 +17,7 @@
 | 2.0.12  | 2024-06-27 12:26:00 |modify|clearones| 1. /api/v2/recipient/fiat/supportCreateChannel接口返回值channelKey的取值范围新增”china_mainland”付款方式。<br><br> 2. /api/v2/recipient/fiat/create接口参数变更：<br> （1）接口参数channelKey取值范围新增“china_mainland”（法币-中国大陆）。<br>（2）接口参数bankName修改为：当channelKey为swift、local、china_mainland时，必填。新增了当channelKey为china_mainland时必填规则。<br>（3）接口参数beneficiaryName修改为：银行账号持有者姓名，当channelKey为swift、local和china_mainland时，必填。新增了当channelKey为china_mainland时必填规则。<br>（4）接口参数beneficiaryAccountNo修改为：收款人银行账户号码/IBAN（当收款银行国家为欧盟成员时，填写IBAN），当channelKey为swift、local和china_mainland时，必填。新增了当channelKey为china_mainland时必填规则。<br>（5）接口参数新增beneficiaryIdNumber（收款人证件号）、beneficiaryPhoneNumber（收款人手机号），当channelKey为china_mainland时，必填。<br><br> 3. /api/v2/recipient/fiat/list接口修改：<br>（1）返回值channelKey的取值范围新增”china_mainland”付款方式。<br>（2）返回值新增beneficiaryIdNumber（收款人证件号）、beneficiaryPhoneNumber（收款人手机号）。<br><br> 4. /api/v2/recipient/fiat/detail接口修改，返回值新增beneficiaryIdNumber（收款人证件号）、beneficiaryPhoneNumber（收款人手机号）。<br><br> 5. webhook事件FIAT_RECIPIENT_STATUS_CHANGED通知内容新增beneficiaryIdNumber（收款人证件号）、beneficiaryPhoneNumber（收款人手机号）。<br><br> 6. /api/v2/transaction/fiat/fee接口参数channelKey的取值范围新增”china_mainland”付款方式。<br><br> 7. /api/v2/transaction/list接口返回值channelKey的取值范围新增”china_mainland”付款方式。<br><br> 8. /api/v2/transaction/detail接口返回值channelKey的取值范围新增”china_mainland”付款方式。 |
 | 2.0.13  | 2024-07-05 12:26:00 |modify|clearones| 添加获取转账凭证下载地址接口                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | 2.0.14  | 2024-07-19 10:50:00 |modify|clearones| 查询用户FX交易对列表增加 thresholdAmount、thresholdFeeRate两个字段，兑换金额低于thresholdAmount时费率使用thresholdFeeRate计算，webhook交易对同步增加上述两个字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| 2.0.15  | 2024-07-23 15:20:00 |modify|clearones| 交易记录查询增加hasTransferNotice(是否可下载转账凭证)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 
 
 ## 接入说明
@@ -1515,6 +1516,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/list --d
 |└─cryptoToAddress|string|数字货币交易目标地址|-|
 |└─cryptoTxHash|string|数字货币交易hash|-|
 |└─cryptoTxFee|string|数字货币链上手续费|-|
+|└─hasTransferNotice|boolean|是否可下载转账凭证|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -1551,7 +1553,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/list --d
       "cryptoFromAddress": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
       "cryptoToAddress": "0xfDb1FC3Ff8479bA88D4Ee44fF5Dbf8BB904a0E93",
       "cryptoTxHash": "0xf9eb33e7edae658035075e7b3dab09d15d7eb2ee20a4e84e0984a3f9d55ccc40",
-      "cryptoTxFee": "1.2"
+      "cryptoTxFee": "1.2",
+      "hasTransferNotice": true
     }
   ],
   "timestamp": "1685343278618",
@@ -1619,6 +1622,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/detail -
 |└─cryptoToAddress|string|数字货币交易目标地址|-|
 |└─cryptoTxHash|string|数字货币交易hash|-|
 |└─cryptoTxFee|string|数字货币链上手续费|-|
+|└─hasTransferNotice|boolean|是否可下载转账凭证|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -1654,7 +1658,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/detail -
     "cryptoFromAddress": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
     "cryptoToAddress": "0xfDb1FC3Ff8479bA88D4Ee44fF5Dbf8BB904a0E93",
     "cryptoTxHash": "0xf9eb33e7edae658035075e7b3dab09d15d7eb2ee20a4e84e0984a3f9d55ccc40",
-    "cryptoTxFee": "1.2"
+    "cryptoTxFee": "1.2",
+    "hasTransferNotice": true
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
