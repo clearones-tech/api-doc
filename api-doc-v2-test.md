@@ -2704,21 +2704,19 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/client/pair/list 
 {
   "code": 200,
   "message": "Success",
-  "data": [
-    {
-      "weeklyLimitUsd": 5000,
-      "pairs": [
-        {
-          "fromCurrencyKey": "USD",
-          "toCurrencyKey": "USDT_TRC20",
-          "exchangeRate": 0.98,
-          "feeRate": 0.001,
-          "minAmount": 100,
-          "maxAmount": 100000
-        }
-      ]
-    }
-  ],
+  "data": {
+    "weeklyLimitUsd": 5000,
+    "pairs": [
+      {
+        "fromCurrencyKey": "USD",
+        "toCurrencyKey": "USDT_TRC20",
+        "exchangeRate": 0.98,
+        "feeRate": 0.001,
+        "minAmount": 100,
+        "maxAmount": 100000
+      }
+    ]
+  },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
   "sign": "LwpZUp"
@@ -2883,28 +2881,26 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detai
 {
   "code": 200,
   "message": "Success",
-  "data": [
-    {
-      "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
-      "createTimestamp": 1672056033898,
-      "transactionNo": "1663027675055698130",
-      "clientId": "1663027675055698121",
-      "transactionStatus": "SUCCESS",
-      "fromCurrencyKey": "USD",
-      "toCurrencyKey": "USDT_TRC20",
-      "exchangeRate": "0.98",
-      "fromAmount": "1000",
-      "toAmount": "978.04",
-      "feeRate": "0.001",
-      "fee": "2",
-      "feeCurrencyKey": "USD",
-      "additionalFeeRate": "0.001",
-      "additionalFee": "1",
-      "transferNo": "1803342430657843206",
-      "receiveNo": "1803342430657843207",
-      "refundNo": "1803342430657843208"
-    }
-  ],
+  "data": {
+    "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+    "createTimestamp": 1672056033898,
+    "transactionNo": "1663027675055698130",
+    "clientId": "1663027675055698121",
+    "transactionStatus": "SUCCESS",
+    "fromCurrencyKey": "USD",
+    "toCurrencyKey": "USDT_TRC20",
+    "exchangeRate": "0.98",
+    "fromAmount": "1000",
+    "toAmount": "978.04",
+    "feeRate": "0.001",
+    "fee": "2",
+    "feeCurrencyKey": "USD",
+    "additionalFeeRate": "0.001",
+    "additionalFee": "1",
+    "transferNo": "1803342430657843206",
+    "receiveNo": "1803342430657843207",
+    "refundNo": "1803342430657843208"
+  },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
   "sign": "LwpZUp"
