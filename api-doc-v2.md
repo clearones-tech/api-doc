@@ -16,6 +16,8 @@
 | 2.0.11  | 2024-06-19 16:39:00 | modify | clearones | 1、完善FX交易状态描述；2、FX交易记录查询接口返回新增转账交易号、收款交易号和退款交易号；                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | 2.0.12  | 2024-06-27 12:26:00 | modify | clearones |1. /api/v2/recipient/fiat/supportCreateChannel接口返回值channelKey的取值范围新增”china_mainland”付款方式。<br><br> 2. /api/v2/recipient/fiat/create接口参数变更：<br> （1）接口参数channelKey取值范围新增“china_mainland”（法币-中国大陆）。<br>（2）接口参数bankName修改为：当channelKey为swift、local、china_mainland时，必填。新增了当channelKey为china_mainland时必填规则。<br>（3）接口参数beneficiaryName修改为：银行账号持有者姓名，当channelKey为swift、local和china_mainland时，必填。新增了当channelKey为china_mainland时必填规则。<br>（4）接口参数beneficiaryAccountNo修改为：收款人银行账户号码/IBAN（当收款银行国家为欧盟成员时，填写IBAN），当channelKey为swift、local和china_mainland时，必填。新增了当channelKey为china_mainland时必填规则。<br>（5）接口参数新增beneficiaryIdNumber（收款人证件号）、beneficiaryPhoneNumber（收款人手机号），当channelKey为china_mainland时，必填。<br><br> 3. /api/v2/recipient/fiat/list接口修改：<br>（1）返回值channelKey的取值范围新增”china_mainland”付款方式。<br>（2）返回值新增beneficiaryIdNumber（收款人证件号）、beneficiaryPhoneNumber（收款人手机号）。<br><br> 4. /api/v2/recipient/fiat/detail接口修改，返回值新增beneficiaryIdNumber（收款人证件号）、beneficiaryPhoneNumber（收款人手机号）。<br><br> 5. webhook事件FIAT_RECIPIENT_STATUS_CHANGED通知内容新增beneficiaryIdNumber（收款人证件号）、beneficiaryPhoneNumber（收款人手机号）。<br><br> 6. /api/v2/transaction/fiat/fee接口参数channelKey的取值范围新增”china_mainland”付款方式。<br><br> 7. /api/v2/transaction/list接口返回值channelKey的取值范围新增”china_mainland”付款方式。<br><br> 8. /api/v2/transaction/detail接口返回值channelKey的取值范围新增”china_mainland”付款方式。|
 | 2.0.13  | 2024-07-05 12:26:00 | modify | clearones | 添加获取转账凭证下载地址接口                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| 2.0.14  | 2024-07-19 10:50:00 |modify|clearones| 查询用户FX交易对列表增加 thresholdAmount、thresholdFeeRate两个字段，兑换金额低于thresholdAmount时费率使用thresholdFeeRate计算，webhook交易对同步增加上述两个字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| 2.0.15  | 2024-07-23 15:20:00 |modify|clearones| 交易记录查询增加hasTransferNotice(是否可下载转账凭证)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 
 ## 接入说明
 ### 请求统一参数
@@ -1513,6 +1515,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/list --d
 |└─cryptoToAddress|string|数字货币交易目标地址|-|
 |└─cryptoTxHash|string|数字货币交易hash|-|
 |└─cryptoTxFee|string|数字货币链上手续费|-|
+|└─hasTransferNotice|boolean|是否可下载转账凭证|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -1549,7 +1552,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/list --d
       "cryptoFromAddress": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
       "cryptoToAddress": "0xfDb1FC3Ff8479bA88D4Ee44fF5Dbf8BB904a0E93",
       "cryptoTxHash": "0xf9eb33e7edae658035075e7b3dab09d15d7eb2ee20a4e84e0984a3f9d55ccc40",
-      "cryptoTxFee": "1.2"
+      "cryptoTxFee": "1.2",
+      "hasTransferNotice": true
     }
   ],
   "timestamp": "1685343278618",
@@ -1617,6 +1621,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/detail -
 |└─cryptoToAddress|string|数字货币交易目标地址|-|
 |└─cryptoTxHash|string|数字货币交易hash|-|
 |└─cryptoTxFee|string|数字货币链上手续费|-|
+|└─hasTransferNotice|boolean|是否可下载转账凭证|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -1652,7 +1657,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/detail -
     "cryptoFromAddress": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
     "cryptoToAddress": "0xfDb1FC3Ff8479bA88D4Ee44fF5Dbf8BB904a0E93",
     "cryptoTxHash": "0xf9eb33e7edae658035075e7b3dab09d15d7eb2ee20a4e84e0984a3f9d55ccc40",
-    "cryptoTxFee": "1.2"
+    "cryptoTxFee": "1.2",
+    "hasTransferNotice": true
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
@@ -2677,43 +2683,43 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/client/pair/list 
 ```
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|array|响应数据|-|
-|└─weeklyLimitUsd|number|周交易限额（单位：USD），统计范围：按照东八区本周周一至周日，toCurrencyKey兑换数量按照兑换时汇率折算为USD进行统计|-|
-|└─pairs|array|交易对列表|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─fromCurrencyKey|string|付款币种Key|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toCurrencyKey|string|收款币种Key|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─exchangeRate|number|兑换汇率|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─feeRate|number|手续费费率|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─minAmount|number|最小兑换toCurrencyKey数量|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─maxAmount|number|最大兑换toCurrencyKey数量|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field | Type   | Description | Since |
+|-------|--------|-------------|-------|
+|code| int32  |响应码|-|
+|message| string |响应描述|-|
+|data| object |响应数据|-|
+|└─weeklyLimitUsd| number |周交易限额（单位：USD），统计范围：按照东八区本周周一至周日，toCurrencyKey兑换数量按照兑换时汇率折算为USD进行统计|-|
+|└─pairs| array  |交易对列表|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─fromCurrencyKey| string |付款币种Key|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toCurrencyKey| string |收款币种Key|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─exchangeRate| string |兑换汇率|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─feeRate| string |手续费费率|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─minAmount| string |最小兑换fromCurrencyKey数量|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─maxAmount| string |最大兑换fromCurrencyKey数量|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─thresholdAmount| string |高手续费阈值金额(fromAmount < thresholdAmount时，手续费率使用thresholdFeeRate)|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─thresholdFeeRate| string |高手续费率|-|
+|timestamp| string |时间戳毫秒|-|
+|key| string |加密key|-|
+|sign| string |签名|-|
 
 **Response-example:**
 ```
 {
   "code": 200,
   "message": "Success",
-  "data": [
-    {
-      "weeklyLimitUsd": 5000,
-      "pairs": [
-        {
-          "fromCurrencyKey": "USD",
-          "toCurrencyKey": "USDT_TRC20",
-          "exchangeRate": 0.98,
-          "feeRate": 0.001,
-          "minAmount": 100,
-          "maxAmount": 100000
-        }
-      ]
-    }
-  ],
+  "data": {
+    "weeklyLimitUsd": 5000,
+    "pairs": [
+      {
+        "fromCurrencyKey": "USD",
+        "toCurrencyKey": "USDT_TRC20",
+        "exchangeRate": 0.98,
+        "feeRate": 0.001,
+        "minAmount": 100,
+        "maxAmount": 100000
+      }
+    ]
+  },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
   "sign": "LwpZUp"
@@ -2845,61 +2851,59 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detai
 ```
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|array|响应数据|-|
-|└─customerRefId|string|调用方唯一业务ID|-|
-|└─createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
-|└─completedTimestamp|int64|完成时间，UNIX 时间戳毫秒数|-|
-|└─transactionNo|string|交易号|-|
-|└─clientId|string|客户的账户ID|-|
-|└─transactionStatus|string|交易状态<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/></pre>|-|
-|└─fromCurrencyKey|string|付款币种Key|-|
-|└─toCurrencyKey|string|收款币种Key|-|
-|└─exchangeRate|string|兑换汇率|-|
-|└─fromAmount|string|付款币种数量|-|
-|└─toAmount|string|收款币种数量|-|
-|└─feeRate|string|总服务费费率（平台服务费费率+附加服务费费率）|-|
-|└─fee|string|总服务费|-|
-|└─feeCurrencyKey|string|服务费币种Key|-|
-|└─additionalFeeRate|string|附加服务费费率|-|
-|└─additionalFee|string|附加服务费|-|
-|└─transferNo|string|转账交易号|-|
-|└─receiveNo|string|收款交易号|-|
-|└─refundNo|string|退款交易号|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field | Type   | Description | Since |
+|-------|--------|-------------|-------|
+|code| int32  |响应码|-|
+|message| string |响应描述|-|
+|data| objcet |响应数据|-|
+|└─customerRefId| string |调用方唯一业务ID|-|
+|└─createTimestamp| int64  |创建时间，UNIX 时间戳毫秒数|-|
+|└─completedTimestamp| int64  |完成时间，UNIX 时间戳毫秒数|-|
+|└─transactionNo| string |交易号|-|
+|└─clientId| string |客户的账户ID|-|
+|└─transactionStatus| string |交易状态<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/></pre>|-|
+|└─fromCurrencyKey| string |付款币种Key|-|
+|└─toCurrencyKey| string |收款币种Key|-|
+|└─exchangeRate| string |兑换汇率|-|
+|└─fromAmount| string |付款币种数量|-|
+|└─toAmount| string |收款币种数量|-|
+|└─feeRate| string |总服务费费率（平台服务费费率+附加服务费费率）|-|
+|└─fee| string |总服务费|-|
+|└─feeCurrencyKey| string |服务费币种Key|-|
+|└─additionalFeeRate| string |附加服务费费率|-|
+|└─additionalFee| string |附加服务费|-|
+|└─transferNo| string |转账交易号|-|
+|└─receiveNo| string |收款交易号|-|
+|└─refundNo| string |退款交易号|-|
+|timestamp| string |时间戳毫秒|-|
+|key| string |加密key|-|
+|sign| string |签名|-|
 
 **Response-example:**
 ```
 {
   "code": 200,
   "message": "Success",
-  "data": [
-    {
-      "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
-      "createTimestamp": 1672056033898,
-      "transactionNo": "1663027675055698130",
-      "clientId": "1663027675055698121",
-      "transactionStatus": "SUCCESS",
-      "fromCurrencyKey": "USD",
-      "toCurrencyKey": "USDT_TRC20",
-      "exchangeRate": "0.98",
-      "fromAmount": "1000",
-      "toAmount": "978.04",
-      "feeRate": "0.001",
-      "fee": "2",
-      "feeCurrencyKey": "USD",
-      "additionalFeeRate": "0.001",
-      "additionalFee": "1",
-      "transferNo": "1803342430657843206",
-      "receiveNo": "1803342430657843207",
-      "refundNo": "1803342430657843208"
-    }
-  ],
+  "data": {
+    "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+    "createTimestamp": 1672056033898,
+    "transactionNo": "1663027675055698130",
+    "clientId": "1663027675055698121",
+    "transactionStatus": "SUCCESS",
+    "fromCurrencyKey": "USD",
+    "toCurrencyKey": "USDT_TRC20",
+    "exchangeRate": "0.98",
+    "fromAmount": "1000",
+    "toAmount": "978.04",
+    "feeRate": "0.001",
+    "fee": "2",
+    "feeCurrencyKey": "USD",
+    "additionalFeeRate": "0.001",
+    "additionalFee": "1",
+    "transferNo": "1803342430657843206",
+    "receiveNo": "1803342430657843207",
+    "refundNo": "1803342430657843208"
+  },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
   "sign": "LwpZUp"
@@ -3233,6 +3237,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |label|string|别称|-|
 
 **<div id="fxPairDetail"> fxPairDetail </div>**
+
 | Field | Type | Description | Since |
 |-------|------|-------------|-------|
 |weeklyLimitUsd|number|周交易限额（单位：USD），统计范围：按照东八区本周周一至周日，toCurrencyKey兑换数量按照兑换时汇率折算为USD进行统计|-|
@@ -3243,6 +3248,8 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |&nbsp;&nbsp;&nbsp;└─feeRate|number|手续费费率|-|
 |&nbsp;&nbsp;&nbsp;└─minAmount|number|最小兑换toCurrencyKey数量|-|
 |&nbsp;&nbsp;&nbsp;└─maxAmount|number|最大兑换toCurrencyKey数量|-|
+|&nbsp;&nbsp;&nbsp;└─thresholdAmount| string |高手续费阈值金额(fromAmount < thresholdAmount时，手续费率使用thresholdFeeRate)|-|
+|&nbsp;&nbsp;&nbsp;└─thresholdFeeRate| string |高手续费率|-|
 
 **<div id="fxTransactionDetail"> fxTransactionDetail </div>**
 
