@@ -17,7 +17,8 @@
 | 2.0.12  | 2024-06-27 12:26:00 |modify|clearones| 1. /api/v2/recipient/fiat/supportCreateChannel接口返回值channelKey的取值范围新增”china_mainland”付款方式。<br><br> 2. /api/v2/recipient/fiat/create接口参数变更：<br> （1）接口参数channelKey取值范围新增“china_mainland”（法币-中国大陆）。<br>（2）接口参数bankName修改为：当channelKey为swift、local、china_mainland时，必填。新增了当channelKey为china_mainland时必填规则。<br>（3）接口参数beneficiaryName修改为：银行账号持有者姓名，当channelKey为swift、local和china_mainland时，必填。新增了当channelKey为china_mainland时必填规则。<br>（4）接口参数beneficiaryAccountNo修改为：收款人银行账户号码/IBAN（当收款银行国家为欧盟成员时，填写IBAN），当channelKey为swift、local和china_mainland时，必填。新增了当channelKey为china_mainland时必填规则。<br>（5）接口参数新增beneficiaryIdNumber（收款人证件号）、beneficiaryPhoneNumber（收款人手机号），当channelKey为china_mainland时，必填。<br><br> 3. /api/v2/recipient/fiat/list接口修改：<br>（1）返回值channelKey的取值范围新增”china_mainland”付款方式。<br>（2）返回值新增beneficiaryIdNumber（收款人证件号）、beneficiaryPhoneNumber（收款人手机号）。<br><br> 4. /api/v2/recipient/fiat/detail接口修改，返回值新增beneficiaryIdNumber（收款人证件号）、beneficiaryPhoneNumber（收款人手机号）。<br><br> 5. webhook事件FIAT_RECIPIENT_STATUS_CHANGED通知内容新增beneficiaryIdNumber（收款人证件号）、beneficiaryPhoneNumber（收款人手机号）。<br><br> 6. /api/v2/transaction/fiat/fee接口参数channelKey的取值范围新增”china_mainland”付款方式。<br><br> 7. /api/v2/transaction/list接口返回值channelKey的取值范围新增”china_mainland”付款方式。<br><br> 8. /api/v2/transaction/detail接口返回值channelKey的取值范围新增”china_mainland”付款方式。 |
 | 2.0.13  | 2024-07-05 12:26:00 |modify|clearones| 添加获取转账凭证下载地址接口                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | 2.0.14  | 2024-07-19 10:50:00 |modify|clearones| 查询用户FX交易对列表增加 thresholdAmount、thresholdFeeRate两个字段，兑换金额低于thresholdAmount时费率使用thresholdFeeRate计算，webhook交易对同步增加上述两个字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| 2.0.15  | 2024-07-23 15:20:00 |modify|clearones| 交易记录查询增加hasTransferNotice(是否可下载转账凭证)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| 2.0.15  | 2024-07-23 15:20:00 |modify|clearones| 交易记录查询增加hasTransferNotice(是否可下载转账凭证)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| 2.0.16  | 2024-08-23 15:20:00 |modify|clearones| 加密货币和法币收款人查询增加 superOrgRecipientId(收款人添加来源id)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 
 
 ## 接入说明
@@ -884,6 +885,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/list 
 |└─conetId|int64|conet收款方式对方conetId|-|
 |└─note|string|备注|-|
 |└─label|string|别称|-|
+|└─superOrgRecipientId|string|收款人来源id|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -923,6 +925,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/list 
       "beneficiaryIdNumber": "231010199707010101",
       "beneficiaryPhoneNumber": "15800001010",
       "conetId": 1009213,
+      "superOrgRecipientId": "45",
       "note": "小白",
       "label": "zhangsan"
     }
@@ -996,6 +999,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/detai
 |└─conetId|int64|conet收款方式对方conetId|-|
 |└─note|string|备注|-|
 |└─label|string|别称|-|
+|└─superOrgRecipientId|string|收款人来源id|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -1035,7 +1039,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/detai
     "beneficiaryPhoneNumber": "15800001010",
     "conetId": 1009213,
     "note": "小白",
-    "label": "zhangsan"
+    "label": "zhangsan",
+    "superOrgRecipientId": "45"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
@@ -1185,6 +1190,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/lis
 |└─currencyKey|string|币种标识|-|
 |└─address|string|加密货币地址|-|
 |└─label|string|别称|-|
+|└─superOrgRecipientId|string|收款人来源id|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -1200,7 +1206,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/lis
       "recipientId": "11",
       "currencyKey": "USD",
       "address": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
-      "label": "小红的地址"
+      "label": "小红的地址",
+      "superOrgRecipientId": "45",
     }
   ],
   "timestamp": "1685343278618",
@@ -1247,6 +1254,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/det
 |└─currencyKey|string|币种标识|-|
 |└─address|string|加密货币地址|-|
 |└─label|string|别称|-|
+|└─superOrgRecipientId|string|收款人来源id|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -1261,7 +1269,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/det
     "recipientId": "11",
     "currencyKey": "USD",
     "address": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
-    "label": "小红的地址"
+    "label": "小红的地址",
+    "superOrgRecipientId": "45",
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
