@@ -18,6 +18,7 @@
 | 2.0.13  | 2024-07-05 12:26:00 | modify | clearones | 添加获取转账凭证下载地址接口                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | 2.0.14  | 2024-07-19 10:50:00 |modify|clearones| 查询用户FX交易对列表增加 thresholdAmount、thresholdFeeRate两个字段，兑换金额低于thresholdAmount时费率使用thresholdFeeRate计算，webhook交易对同步增加上述两个字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | 2.0.15  | 2024-07-23 15:20:00 |modify|clearones| 交易记录查询增加hasTransferNotice(是否可下载转账凭证)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| 2.0.16  | 2024-11-18 18:07:00 | modify | clearones | 1. /api/v2/transaction/crypto/estimated/fee接口新增返回值：highFee（急速手续费）。<br> 2. /api/v2/connect/transaction/estimated/fee接口新增返回值：highFee（急速手续费）。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 
 ## 接入说明
 ### 请求统一参数
@@ -1763,6 +1764,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/e
 |data|object|响应数据|-|
 |└─feeCurrencyKey|string|手续费币种标识|-|
 |└─fee|string|手续费|-|
+|└─highFee|string|急速手续费|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -1774,7 +1776,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/e
   "message": "Success",
   "data": {
     "feeCurrencyKey": "ETH",
-    "fee": "0.0009"
+    "fee": "0.0009",
+    "highFee": "0.001"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
@@ -2405,6 +2408,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 |data|object|响应数据|-|
 |└─feeCurrencyKey|string|手续费币种标识|-|
 |└─fee|string|手续费|-|
+|└─highFee|string|急速手续费|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -2416,7 +2420,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
   "message": "Success",
   "data": {
     "feeCurrencyKey": "ETH",
-    "fee": "0.0009"
+    "fee": "0.0009",
+    "highFee": "0.001"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
