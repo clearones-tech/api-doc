@@ -3028,11 +3028,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/check
 |data|object|响应数据|-|
 |└─fromCurrencyKey|string|付款币种Key|-|
 |└─toCurrencyKey|string|收款币种Key|-|
-|└─fromAmount|number|from币种数量|-|
-|└─toAmount|number|to币种数量|-|
-|└─exchangeRate|number|交易汇率|-|
-|└─feeRate|number|手续费费率|-|
-|└─fee|number|手续费数量|-|
+|└─fromAmount|string|from币种数量|-|
+|└─toAmount|string|to币种数量|-|
+|└─exchangeRate|string|交易汇率|-|
+|└─feeRate|string|手续费费率|-|
+|└─fee|string|手续费数量|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
