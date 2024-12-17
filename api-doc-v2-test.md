@@ -3045,11 +3045,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/check
   "data": {
     "fromCurrencyKey": "USD",
     "toCurrencyKey": "HKD",
-    "fromAmount": 10000,
-    "toAmount": 77454.93,
-    "exchangeRate": 7.7688,
-    "feeRate": 0.003,
-    "fee": 30
+    "fromAmount": "10000",
+    "toAmount": "77454.93",
+    "exchangeRate": "7.7688",
+    "feeRate": "0.003",
+    "fee": "30"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
