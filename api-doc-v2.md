@@ -20,6 +20,7 @@
 | 2.0.15  | 2024-07-23 15:20:00 |modify|clearones| 交易记录查询增加hasTransferNotice(是否可下载转账凭证)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | 2.0.16  | 2024-11-18 18:07:00 | modify | clearones | 1. /api/v2/transaction/crypto/estimated/fee接口新增返回值：highFee（急速手续费）。<br> 2. /api/v2/connect/transaction/estimated/fee接口新增返回值：highFee（急速手续费）。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | 2.0.17  | 2024-11-21 11:20:00 |modify|clearones| 法币转出交易详情增加payBankName,payBankAddress,payAccountNo字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| 2.0.18  | 2024-12-17 11:20:00 |modify|clearones| 新增fx预算接口（/api/v2/fx/transaction/check），fx创建交易接口新增exchangeRate字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
 ## 接入说明
 ### 请求统一参数
@@ -2942,6 +2943,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detai
 |toCurrencyKey|string|true|收款币种Key|-|
 |fromAmount|string|true|付款币种数量|-|
 |additionalFeeRate|string|false|附加服务费费率|-|
+|exchangeRate|string|false|使用的汇率|-|
 
 **Request-example:**
 ```
@@ -2951,7 +2953,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/creat
   "fromCurrencyKey": "USD",
   "toCurrencyKey": "USDT_TRC20",
   "fromAmount": "1000",
-  "additionalFeeRate": "0.001"
+  "additionalFeeRate": "0.001",
+  "exchangeRate": "0.997"
 }'
 ```
 **Response-fields:**
@@ -2973,6 +2976,74 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/creat
   "message": "Success",
   "data": {
     "operateId": "101"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 预算FX交易
+**URL:** /api/v2/fx/transaction/check
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 预算FX交易
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|fromCurrencyKey|string|true|付款币种Key|-|
+|toCurrencyKey|string|true|收款币种Key|-|
+|fromAmount|string|true|付款币种数量|-|
+|additionalFeeRate|string|false|附加服务费费率|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/check --data '{
+  "clientId": "1663027675055698121",
+  "fromCurrencyKey": "USD",
+  "toCurrencyKey": "USDT_TRC20",
+  "fromAmount": "1000",
+  "additionalFeeRate": "0.001"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─fromCurrencyKey|string|付款币种Key|-|
+|└─toCurrencyKey|string|收款币种Key|-|
+|└─fromAmount|string|from币种数量|-|
+|└─toAmount|string|to币种数量|-|
+|└─exchangeRate|string|交易汇率|-|
+|└─feeRate|string|手续费费率|-|
+|└─fee|string|手续费数量|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "fromCurrencyKey": "USD",
+    "toCurrencyKey": "HKD",
+    "fromAmount": "10000",
+    "toAmount": "77454.93",
+    "exchangeRate": "7.7688",
+    "feeRate": "0.003",
+    "fee": "30"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
@@ -3290,7 +3361,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 ## 错误码列表
 
 | Error code | Description |
-|------------|-------------|
+|-----------|-------------|
 |401|未登录|
 |412|参数错误|
 |413|远程调用参数错误|
@@ -3389,5 +3460,8 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |11411|单笔交易最低{0} {1}|
 |11412|单笔交易最大{0} {1}|
 |11413|Gas不足|
+|11414|总服务费费率小于0|
+|11415|创建交易汇率失效|
+|11417|获取汇率异常|
 |11501|汇率异常|
 
