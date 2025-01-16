@@ -886,6 +886,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/list 
 |└─conetId|int64|conet收款方式对方conetId|-|
 |└─note|string|备注|-|
 |└─label|string|别称|-|
+|└─superOrgRecipientId|string|收款人来源id|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -925,6 +926,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/list 
       "beneficiaryIdNumber": "231010199707010101",
       "beneficiaryPhoneNumber": "15800001010",
       "conetId": 1009213,
+      "superOrgRecipientId": "45",
       "note": "小白",
       "label": "zhangsan"
     }
@@ -998,6 +1000,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/detai
 |└─conetId|int64|conet收款方式对方conetId|-|
 |└─note|string|备注|-|
 |└─label|string|别称|-|
+|└─superOrgRecipientId|string|收款人来源id|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -1037,7 +1040,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/detai
     "beneficiaryPhoneNumber": "15800001010",
     "conetId": 1009213,
     "note": "小白",
-    "label": "zhangsan"
+    "label": "zhangsan",
+    "superOrgRecipientId": "45"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
@@ -1187,6 +1191,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/lis
 |└─currencyKey|string|币种标识|-|
 |└─address|string|加密货币地址|-|
 |└─label|string|别称|-|
+|└─superOrgRecipientId|string|收款人来源id|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -1202,7 +1207,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/lis
       "recipientId": "11",
       "currencyKey": "USD",
       "address": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
-      "label": "小红的地址"
+      "label": "小红的地址",
+      "superOrgRecipientId": "45"
     }
   ],
   "timestamp": "1685343278618",
@@ -1249,6 +1255,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/det
 |└─currencyKey|string|币种标识|-|
 |└─address|string|加密货币地址|-|
 |└─label|string|别称|-|
+|└─superOrgRecipientId|string|收款人来源id|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -1263,7 +1270,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/det
     "recipientId": "11",
     "currencyKey": "USD",
     "address": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
-    "label": "小红的地址"
+    "label": "小红的地址",
+    "superOrgRecipientId": "45"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
