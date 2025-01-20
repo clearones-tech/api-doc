@@ -21,7 +21,7 @@
 | 2.0.16  | 2024-08-23 15:20:00 |modify|clearones| 加密货币和法币收款人查询增加 superOrgRecipientId(收款人添加来源id)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | 2.0.17  | 2024-11-21 11:20:00 |modify|clearones| 法币转出交易详情增加payBankName,payBankAddress,payAccountNo字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | 2.0.18  | 2024-12-17 11:20:00 |modify|clearones| 新增fx预算接口（/api/v2/fx/transaction/check），fx创建交易接口新增exchangeRate字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-
+| 2.0.19  | 2025-01-20 11:20:00 |modify|clearones| 1. 新增接口：连接账号交易-直接创建交易（/api/v2/connect/transaction/create/direct）<br> 2. 新增接口：FX兑换业务-直接创建FX交易（/api/v2/fx/transaction/create/direct）<br> 3. 新增接口：收款人管理模块-法币直接创建收款方请求（/api/v2/recipient/fiat/create/direct）<br> 4. 新增接口：收款人管理模块-加密货币直接创建收款方请求（/api/v2/recipient/crypto/create/direct）<br> 5. 新增接口：交易-直接创建交易加密交易（/api/v2/transaction/crypto/create/direct）<br> 6. 新增接口：交易-直接创建一个法币转账（/api/v2/transaction/fiat/create/direct）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 
 ## 接入说明
 ### 请求统一参数
@@ -720,7 +720,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/suppo
 }
 ```
 
-### 法币创建收款方请求
+### 法币创建收款方请求（需要用户授权）
 **URL:** /api/v2/recipient/fiat/create
 
 **Type:** POST
@@ -728,7 +728,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/suppo
 
 **Content-Type:** application/json
 
-**Description:** 法币创建收款方请求
+**Description:** 法币创建收款方请求（需要用户授权）
 
 **Body-parameters:**
 
@@ -817,6 +817,112 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/creat
   "message": "Success",
   "data": {
     "operateId": "101"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 法币直接创建收款方请求
+**URL:** /api/v2/recipient/fiat/create/direct
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 法币直接创建收款方请求
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|customerRefId|string|true|调用方唯一业务id|-|
+|channelKey|string|true|法币-[转账通道](#channelKey)|-|
+|subChannelKey|string|false|法币-[转账子通道](#channelKey),当channelKey为local时，必填。|-|
+|currencyKey|string|true|币种标识|-|
+|conetId|string|false|平台内部的收款账号id，当channelKey为conet时，必填。|-|
+|swiftCode|string|false|银行swift码，当channelKey为swift或local时，必填。|-|
+|bankCode|string|false|收款银行code, 当channelKey为local，subChannelKey为fps、chats时，必填。|-|
+|branchCode|string|false|收款银行分行code, 当channelKey为local，subChannelKey为fps、chats时，可选。|-|
+|bankName|string|false|收款银行名称，当channelKey为swift、local和china_mainland时，必填。|-|
+|bankCountryCode|string|false|收款银行国家ISO code，当channelKey为swift或local时，必填。|-|
+|bankAddress|string|false|收款银行地址|-|
+|sortCode|string|false|Sort Code, 当channelKey为local，subChannelKey为faster_payment时，必填|-|
+|beneficiaryRoutingCode|string|false|Routing Code, 当channelKey为local，subChannelKey为ach、fedwire、sepa、eft时，必填。|-|
+|beneficiaryAccountNo|string|false|收款人银行账户号码/IBAN（当收款银行国家为欧盟成员时，填写IBAN），当channelKey为swift、local和china_mainland时，必填。|-|
+|beneficiaryName|string|false|银行账号持有者姓名，当channelKey为swift、local和china_mainland时，必填。|-|
+|beneficiaryEntityType|string|false|收款人实体类型（individual：个人；company：公司；），当channelKey为swift或local时，必填。|-|
+|beneficiaryCompanyName|string|false|收款人公司名，当beneficiaryEntityType为company时，必填|-|
+|beneficiaryFirstName|string|false|收款人first name，当beneficiaryEntityType为individual时，必填|-|
+|beneficiaryLastName|string|false|收款人last name，当beneficiaryEntityType为individual时，必填|-|
+|beneficiaryCountryCode|string|false|收款人国家ISO code，当channelKey为swift或local时，必填。|-|
+|beneficiaryStreet|string|false|收款人街道，当channelKey为swift或local时，必填。|-|
+|beneficiaryCity|string|false|收款人城市，当channelKey为swift或local时，必填。|-|
+|beneficiaryState|string|false|收款人州/省，当收款人国家为美国（US）、加拿大（CA）、墨西哥（MX）时，必填|-|
+|beneficiaryPostalCode|string|false|收款人邮编，当收款人国家为美国（US）、加拿大（CA）、墨西哥（MX）时，必填|-|
+|beneficiaryIdNumber|string|false|收款人证件号，当channelKey为china_mainland时，必填。|-|
+|beneficiaryPhoneNumber|string|false|收款人手机号，当channelKey为china_mainland时，必填。|-|
+|note|string|false|备注|-|
+|label|string|false|标签别称|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/create/direct --data '{
+  "clientId": "1663027675055698121",
+  "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+  "channelKey": "local",
+  "subChannelKey": "fps",
+  "currencyKey": "USD",
+  "conetId": "1009131",
+  "swiftCode": "HSBCHKHHHKH",
+  "bankCode": "012",
+  "branchCode": "456",
+  "bankName": "China CITIC Bank International Limited",
+  "bankCountryCode": "HK",
+  "bankAddress": "8 Finance Street, Central, Hong Kong",
+  "sortCode": "123456",
+  "beneficiaryRoutingCode": "123123456",
+  "beneficiaryAccountNo": "123123456789",
+  "beneficiaryName": "XIAO HONG",
+  "beneficiaryEntityType": "individual",
+  "beneficiaryCompanyName": "Xiaohong Technology Co., Ltd.",
+  "beneficiaryFirstName": "XIAO",
+  "beneficiaryLastName": "HONG",
+  "beneficiaryCountryCode": "HK",
+  "beneficiaryStreet": "8 Finance Street",
+  "beneficiaryCity": "Central",
+  "beneficiaryState": "Hong Kong",
+  "beneficiaryPostalCode": "999077",
+  "beneficiaryIdNumber": "231010199707010101",
+  "beneficiaryPhoneNumber": "15800001010",
+  "note": "小白",
+  "label": "zhangsan"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─customerRefId|string|调用方唯一业务ID|-|
+|└─resultId|string|操作业务返回的ID，例如返回交易号、收款人ID等|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+    "resultId": "1663027675055698130"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
@@ -1100,7 +1206,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/delet
 }
 ```
 
-### 加密货币创建收款方请求
+### 加密货币创建收款方请求（需要用户授权）
 **URL:** /api/v2/recipient/crypto/create
 
 **Type:** POST
@@ -1108,7 +1214,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/delet
 
 **Content-Type:** application/json
 
-**Description:** 加密货币创建收款方请求
+**Description:** 加密货币创建收款方请求（需要用户授权）
 
 **Body-parameters:**
 
@@ -1149,6 +1255,64 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/cre
   "message": "Success",
   "data": {
     "operateId": "101"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 加密货币直接创建收款方请求
+**URL:** /api/v2/recipient/crypto/create/direct
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 加密货币直接创建收款方请求
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|customerRefId|string|true|调用方唯一业务id|-|
+|currencyKey|string|true|币种标识|-|
+|label|string|false|标签别称|-|
+|address|string|true|加密货币地址|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/create/direct --data '{
+  "clientId": "1663027675055698121",
+  "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+  "currencyKey": "ETH",
+  "label": "zhangsan",
+  "address": "0x2B2711eADBb960f99221BF795EDFdc036798822D"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─customerRefId|string|调用方唯一业务ID|-|
+|└─resultId|string|操作业务返回的ID，例如返回交易号、收款人ID等|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+    "resultId": "1663027675055698130"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
@@ -1331,7 +1495,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/del
 ```
 
 ## 交易
-### 创建交易加密交易
+### 创建交易加密交易（需要用户授权）
 **URL:** /api/v2/transaction/crypto/create
 
 **Type:** POST
@@ -1339,7 +1503,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/del
 
 **Content-Type:** application/json
 
-**Description:** 创建交易加密交易
+**Description:** 创建交易加密交易（需要用户授权）
 
 **Body-parameters:**
 
@@ -1389,7 +1553,67 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/c
 }
 ```
 
-### 创建一个法币转账
+### 直接创建交易加密交易
+**URL:** /api/v2/transaction/crypto/create/direct
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 直接创建交易加密交易
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|customerRefId|string|true|调用方唯一业务id，最长 100|-|
+|currencyKey|string|true|币种唯一标识|-|
+|amount|string|true|交易金额|-|
+|recipientId|string|true|收款方ID|-|
+|note|string|false|备注，最长100|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/create/direct --data '{
+  "clientId": "1663027675055698121",
+  "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+  "currencyKey": "BTC",
+  "amount": "1.2",
+  "recipientId": "11",
+  "note": "差旅费"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─customerRefId|string|调用方唯一业务ID|-|
+|└─resultId|string|操作业务返回的ID，例如返回交易号、收款人ID等|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+    "resultId": "1663027675055698130"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 创建一个法币转账（需要用户授权）
 **URL:** /api/v2/transaction/fiat/create
 
 **Type:** POST
@@ -1397,7 +1621,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/c
 
 **Content-Type:** application/json
 
-**Description:** 创建一个法币转账
+**Description:** 创建一个法币转账（需要用户授权）
 
 **Body-parameters:**
 
@@ -1428,10 +1652,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/cre
   "paymentReason": "利润结算",
   "contractList": [
     {
-      "objectKey": "my0sat"
+      "objectKey": "oqz8v7"
     }
   ],
-  "note": "3zanso"
+  "note": "jglye5"
 }'
 ```
 **Response-fields:**
@@ -1453,6 +1677,79 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/cre
   "message": "Success",
   "data": {
     "operateId": "101"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 直接创建一个法币转账
+**URL:** /api/v2/transaction/fiat/create/direct
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 直接创建一个法币转账
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|customerRefId|string|true|调用方唯一业务id|-|
+|transferCurrencyKey|string|true|转账币种唯一标识|-|
+|transferAmount|string|true|转账金额|-|
+|recipientId|string|true|收款方ID|-|
+|feeMethod|int32|false|手续费方式（1:支付本地银行服务费；2:支付本地银行服务费与收款行服务费；）<br/>收款人channelKey为swift/local时为必传|-|
+|paymentReasonType|int64|true|付款原因类型<br/> 1:同名账户汇款/Same-name Account Payment<br/> 2:业务支出/Business Expenses<br/> 3:派息或分红/Dividend or Distribution<br/> 4:捐赠/Donate<br/> 100:其他/Other|-|
+|paymentReason|string|false|付款原因，当paymentReasonType为其他时，必填|-|
+|contractList|array|false|交易合同文件列表|-|
+|└─objectKey|string|true|上传后的对象key|-|
+|note|string|false|备注|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/create/direct --data '{
+  "clientId": "1663027675055698121",
+  "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+  "transferCurrencyKey": "USD",
+  "transferAmount": "100",
+  "recipientId": "11",
+  "feeMethod": 1,
+  "paymentReasonType": 2,
+  "paymentReason": "利润结算",
+  "contractList": [
+    {
+      "objectKey": "k93uwk"
+    }
+  ],
+  "note": "cqn6bj"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─customerRefId|string|调用方唯一业务ID|-|
+|└─resultId|string|操作业务返回的ID，例如返回交易号、收款人ID等|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+    "resultId": "1663027675055698130"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
@@ -2443,7 +2740,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 }
 ```
 
-### 创建交易
+### 创建交易（需要用户授权）
 **URL:** /api/v2/connect/transaction/create
 
 **Type:** POST
@@ -2451,7 +2748,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 
 **Content-Type:** application/json
 
-**Description:** 创建交易
+**Description:** 创建交易（需要用户授权）
 
 **Body-parameters:**
 
@@ -2496,6 +2793,68 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
   "message": "Success",
   "data": {
     "operateId": "101"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 直接创建交易
+**URL:** /api/v2/connect/transaction/create/direct
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 直接创建交易
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|customerRefId|string|true|调用方唯一业务id，最长 100|-|
+|accountNo|string|true|账号编号|-|
+|currencyKey|string|true|币种唯一标识|-|
+|amount|string|true|交易金额|-|
+|toAddress|string|true|目标地址|-|
+|note|string|false|备注，最长100|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/create/direct --data '{
+  "clientId": "1663027675055698121",
+  "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+  "accountNo": "11063639",
+  "currencyKey": "ETH",
+  "amount": "1.2",
+  "toAddress": "0xfDb1FC3Ff8479bA88D4Ee44fF5Dbf8BB904a0E93",
+  "note": "差旅费"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─customerRefId|string|调用方唯一业务ID|-|
+|└─resultId|string|操作业务返回的ID，例如返回交易号、收款人ID等|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+    "resultId": "1663027675055698130"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
@@ -2929,7 +3288,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detai
 }
 ```
 
-### 创建FX交易
+### 创建FX交易（需要用户授权）
 **URL:** /api/v2/fx/transaction/create
 
 **Type:** POST
@@ -2937,7 +3296,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detai
 
 **Content-Type:** application/json
 
-**Description:** 创建FX交易
+**Description:** 创建FX交易（需要用户授权）
 
 **Body-parameters:**
 
@@ -2959,8 +3318,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/creat
   "fromCurrencyKey": "USD",
   "toCurrencyKey": "USDT_TRC20",
   "fromAmount": "1000",
-  "additionalFeeRate": "0.001"
-  "exchangeRate": "0.997"
+  "additionalFeeRate": "0.001",
+  "exchangeRate": "7.7832"
 }'
 ```
 **Response-fields:**
@@ -2982,6 +3341,68 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/creat
   "message": "Success",
   "data": {
     "operateId": "101"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 直接创建FX交易
+**URL:** /api/v2/fx/transaction/create/direct
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 直接创建FX交易
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|customerRefId|string|true|调用方唯一业务id，最长 100|-|
+|fromCurrencyKey|string|true|付款币种Key|-|
+|toCurrencyKey|string|true|收款币种Key|-|
+|fromAmount|string|true|付款币种数量|-|
+|additionalFeeRate|string|false|附加服务费费率|-|
+|exchangeRate|string|false|使用的汇率|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/create/direct --data '{
+  "clientId": "1663027675055698121",
+  "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+  "fromCurrencyKey": "USD",
+  "toCurrencyKey": "USDT_TRC20",
+  "fromAmount": "1000",
+  "additionalFeeRate": "0.001",
+  "exchangeRate": "7.7832"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─customerRefId|string|调用方唯一业务ID|-|
+|└─resultId|string|操作业务返回的ID，例如返回交易号、收款人ID等|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d",
+    "resultId": "1663027675055698130"
   },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
