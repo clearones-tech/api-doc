@@ -20,7 +20,8 @@
 | 2.0.15  | 2024-07-23 15:20:00 |modify|clearones| 交易记录查询增加hasTransferNotice(是否可下载转账凭证)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | 2.0.16  | 2024-08-23 15:20:00 |modify|clearones| 加密货币和法币收款人查询增加 superOrgRecipientId(收款人添加来源id)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | 2.0.17  | 2024-11-21 11:20:00 |modify|clearones| 法币转出交易详情增加payBankName,payBankAddress,payAccountNo字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| 2.0.18  | 2024-12-17 11:20:00 |modify|clearones| 新增fx预算接口（/api/v2/fx/transaction/check），fx创建交易接口新增exchangeRate字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| 2.0.18  | 2024-12-17 11:20:00 |modify|clearones| 新增fx预算接口（/api/v2/fx/transaction/check），fx创建交易接口新增exchangeRate字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| 2.0.19  | 2025-02-05 11:20:00 |modify|clearones| 增加卡业务相关接口                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 
 ## 接入说明
@@ -3051,6 +3052,2183 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/check
     "feeRate": "0.003",
     "fee": "30"
   },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+## 卡业务
+### 机构账户信息
+**URL:** /api/v2/build/card/merchant/info
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 机构账户信息
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|empty|string|false|No comments found.|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/info --data '7i1wjz'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─depositFee|number|充值手续费率|-|
+|└─cardAuthUrl|string|卡片消费认证回调接口|-|
+|└─assets|array|资金情况|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currencyKey|string|币种|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─availableBalance|number|可用余额|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─frozenBalance|number|冻结余额|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardCurrencyStatus|int32|卡币种状态 1-可用 2-停用|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "depositFee": 0.004,
+    "cardAuthUrl": "https://test.quantumtrust.com/card/callback",
+    "assets": [
+      {
+        "currencyKey": "USD",
+        "availableBalance": 8130.3,
+        "frozenBalance": 200.13,
+        "cardCurrencyStatus": 1
+      }
+    ]
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 机构账户充值
+**URL:** /api/v2/build/card/merchant/deposit
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 机构账户充值
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|currencyKey|string|true|交易号|-|
+|amount|number|true|交易号|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/deposit --data '{
+  "currencyKey": "USD",
+  "amount": 200.1
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─transactionNo|string|充值订单号|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "transactionNo": "1727595385687322624"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 机构账户充值记录
+**URL:** /api/v2/build/card/merchant/deposit/list
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 机构账户充值记录
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|fromNo|string|false|查询开始transactionNo|-|
+|currencyKey|string|false|币种|-|
+|limit|int32|false|查询数量，默认20，最大100|-|
+|createTimestampFrom|int64|false|创建时间开始时间戳|-|
+|createTimestampTo|int64|false|创建时间开始时间戳|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/deposit/list --data '{
+  "fromNo": "1663027675055698130",
+  "currencyKey": "USD",
+  "limit": 30,
+  "createTimestampFrom": 1672056033898,
+  "createTimestampTo": 1772056033898
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|array|响应数据|-|
+|└─transactionNo|string|充值订单号|-|
+|└─currencyKey|string|币种|-|
+|└─amount|number|充值金额(实际到账，扣减手续费后的)|-|
+|└─fee|number|手续费|-|
+|└─createTimestamp|int64|创建时间|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": [
+    {
+      "transactionNo": "1727595385687322624",
+      "currencyKey": "USD",
+      "amount": 490,
+      "fee": 10,
+      "createTimestamp": 1672056033898
+    }
+  ],
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 创建用户
+**URL:** /api/v2/build/card/user/create
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 创建用户
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|individual|object|false|个人信息|-|
+|└─gender|string|false|性别 Allowed: M|F|X|-|
+|└─address|object|true|地址信息|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─countryCode|string|true|国家ISO码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|true|地址所在州、省、县或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postalCode|string|true|邮政编码或邮政编码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|true|城市或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|true|地址第一行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|false|地址第二行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|false|地址第三行|-|
+|└─document|object|false|No comments found.|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|false|uid|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─issuer|string|false|证件发行国家ISO码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─nationality|string|false|文档国籍ISO码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─documentType|string|false|文档类型 Allowed: NONE┃PASSPORT┃DRIVERS_LICENSE┃NATIONAL_ID┃SOCIAL_SECURITY_NUMBER┃GREEN_CARD┃VISA┃MATRICULA_CONSULAR<br/>┃REGISTRO_FEDERAL_DE_CONTRIBUYENTES┃CREDENTIAL_DE_ELECTOR┃SOCIAL_INSURANCE_NUMBER┃CITIZENSHIP_PAPERS<br/>┃DRIVERS_LICENSE_CANADIAN┃EXISTING_CREDIT_CARD_DETAILS┃EMPLOYER_IDENTIFICATION_NUMBER┃INCORPORATION_NUMBER┃OTHERS|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─documentNumber|string|false|证件号码 2-128|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─issueDate|string|false|文件签发者日期，格式为 YYYY-MM-DD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─expirationDate|string|false|文档到期日期，格式为 YYYY-MM-DD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─documentAddress|string|false|文档地址|-|
+|└─taxes|array|false|No comments found.|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─tax|string|false|税号|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─countryCode|string|false|税国家ISO|-|
+|└─firstName|string|true|名|-|
+|└─lastName|string|true|姓|-|
+|└─middleName|string|false|No comments found.|-|
+|└─mobile|string|true|手机号码。最长为 30 个字符（包括国家代码）。电话号码必须采用国际区号 + '-' + 电话号码的格式。|-|
+|└─email|string|true|电子邮件，限制为 255 个字符|-|
+|└─dateOfBirth|string|true|出生日期，格式为 YYYY-MM-DD|-|
+|└─phoneNumber|string|false|电话|-|
+|└─locale|string|false|地区代码|-|
+|└─timezone|string|false|时区|-|
+|company|object|false|企业信息|-|
+|└─email|string|true|邮箱地址|-|
+|└─industry|string|false|企业所属行业 1-200字符|-|
+|└─address|object|true||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─countryCode|string|true|国家ISO码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|true|地址所在州、省、县或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postalCode|string|true|邮政编码或邮政编码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|true|城市或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|true|地址第一行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|false|地址第二行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|false|地址第三行|-|
+|└─contact|object|true||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|true|联系人的性别 Allowed: M|F|X|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName|string|true|名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName|string|true|姓|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─middleName|string|false|中间名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─mobile|string|true|手机号码。最长为 30 个字符（包括国家代码）。电话号码必须采用国际区号 + '-' + 电话号码的格式。|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─dateOfBirth|string|true|出生日期，格式为 YYYY-MM-DD|-|
+|└─website|string|true|公司网址|-|
+|└─companyName|string|true|公司名|-|
+|└─phoneNumber|string|true|公司电话号码|-|
+|└─locale|string|false|地区代码|-|
+|└─timezone|string|false|时区|-|
+|└─registrationNumber|string|true|公司注册编号|-|
+|metadata|map|false|以key-value形式存储用户元数据信息，Key长度必须小于等于50，Value长度必须小于等于50|-|
+|accountName|string|true|账户名 1-32长度|-|
+|userReference|string|true|用户参考码，防重|-|
+|legalEntityType|string|true|用户类型:INDIVIDUAL,COMPANY|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/create --data '{
+  "individual": {
+    "gender": "M",
+    "address": {
+      "countryCode": "US",
+      "state": "CA",
+      "postalCode": "100001",
+      "city": "Hollywood",
+      "addressLine1": "cheer Building",
+      "addressLine2": "Chifley Tower",
+      "addressLine3": "2 Square"
+    },
+    "document": {
+      "uid": "17818239123",
+      "issuer": "US",
+      "nationality": "US",
+      "documentType": "CREDENTIAL_DE_ELECTOR",
+      "documentNumber": "91923",
+      "issueDate": "2019-10-11",
+      "expirationDate": "2029-10-10",
+      "documentAddress": "1t-street"
+    },
+    "taxes": [
+      {
+        "tax": "123123",
+        "countryCode": "US"
+      }
+    ],
+    "firstName": "Mike",
+    "lastName": "Lee",
+    "middleName": "jose.jerde",
+    "mobile": "+61-414555555",
+    "email": "jet@test.com",
+    "dateOfBirth": "1971-09-21",
+    "phoneNumber": "+61-414555555",
+    "locale": "en-US",
+    "timezone": "America/New_York"
+  },
+  "company": {
+    "email": "jet@test.com",
+    "industry": "Computer",
+    "address": {
+      "countryCode": "US",
+      "state": "CA",
+      "postalCode": "100001",
+      "city": "Hollywood",
+      "addressLine1": "cheer Building",
+      "addressLine2": "Chifley Tower",
+      "addressLine3": "2 Square"
+    },
+    "contact": {
+      "gender": "M",
+      "firstName": "Mike",
+      "lastName": "Lee",
+      "middleName": "G",
+      "mobile": "+61-414555555",
+      "dateOfBirth": "1971-09-21"
+    },
+    "website": "www.clearones.com",
+    "companyName": "Quantum Trust",
+    "phoneNumber": "+61-414555555",
+    "locale": "en-US",
+    "timezone": "America/New_York",
+    "registrationNumber": "8819291923"
+  },
+  "metadata": {
+    "mapKey": "fu17mq"
+  },
+  "accountName": "qt trust",
+  "userReference": "1929391923",
+  "legalEntityType": "COMPANY"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─id|string|记录id|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "id": "ETLPzgGfSzDtuPNfeTMQqhonq"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 修改用户
+**URL:** /api/v2/build/card/user/update
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 修改用户
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|individual|object|false|个人信息|-|
+|└─gender|string|false|性别 Allowed: M|F|X|-|
+|└─address|object|true|地址信息|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─countryCode|string|true|国家ISO码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|true|地址所在州、省、县或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postalCode|string|true|邮政编码或邮政编码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|true|城市或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|true|地址第一行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|false|地址第二行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|false|地址第三行|-|
+|└─document|object|false|No comments found.|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|false|uid|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─issuer|string|false|证件发行国家ISO码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─nationality|string|false|文档国籍ISO码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─documentType|string|false|文档类型 Allowed: NONE┃PASSPORT┃DRIVERS_LICENSE┃NATIONAL_ID┃SOCIAL_SECURITY_NUMBER┃GREEN_CARD┃VISA┃MATRICULA_CONSULAR<br/>┃REGISTRO_FEDERAL_DE_CONTRIBUYENTES┃CREDENTIAL_DE_ELECTOR┃SOCIAL_INSURANCE_NUMBER┃CITIZENSHIP_PAPERS<br/>┃DRIVERS_LICENSE_CANADIAN┃EXISTING_CREDIT_CARD_DETAILS┃EMPLOYER_IDENTIFICATION_NUMBER┃INCORPORATION_NUMBER┃OTHERS|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─documentNumber|string|false|证件号码 2-128|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─issueDate|string|false|文件签发者日期，格式为 YYYY-MM-DD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─expirationDate|string|false|文档到期日期，格式为 YYYY-MM-DD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─documentAddress|string|false|文档地址|-|
+|└─taxes|array|false|No comments found.|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─tax|string|false|税号|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─countryCode|string|false|税国家ISO|-|
+|└─firstName|string|true|名|-|
+|└─lastName|string|true|姓|-|
+|└─middleName|string|false|No comments found.|-|
+|└─mobile|string|true|手机号码。最长为 30 个字符（包括国家代码）。电话号码必须采用国际区号 + '-' + 电话号码的格式。|-|
+|└─email|string|true|电子邮件，限制为 255 个字符|-|
+|└─dateOfBirth|string|true|出生日期，格式为 YYYY-MM-DD|-|
+|└─phoneNumber|string|false|电话|-|
+|└─locale|string|false|地区代码|-|
+|└─timezone|string|false|时区|-|
+|company|object|false|企业信息|-|
+|└─email|string|true|邮箱地址|-|
+|└─industry|string|false|企业所属行业 1-200字符|-|
+|└─address|object|true||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─countryCode|string|true|国家ISO码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|true|地址所在州、省、县或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postalCode|string|true|邮政编码或邮政编码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|true|城市或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|true|地址第一行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|false|地址第二行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|false|地址第三行|-|
+|└─contact|object|true||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|true|联系人的性别 Allowed: M|F|X|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName|string|true|名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName|string|true|姓|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─middleName|string|false|中间名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─mobile|string|true|手机号码。最长为 30 个字符（包括国家代码）。电话号码必须采用国际区号 + '-' + 电话号码的格式。|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─dateOfBirth|string|true|出生日期，格式为 YYYY-MM-DD|-|
+|└─website|string|true|公司网址|-|
+|└─companyName|string|true|公司名|-|
+|└─phoneNumber|string|true|公司电话号码|-|
+|└─locale|string|false|地区代码|-|
+|└─timezone|string|false|时区|-|
+|└─registrationNumber|string|true|公司注册编号|-|
+|metadata|map|false|以key-value形式存储用户元数据信息，Key长度必须小于等于50，Value长度必须小于等于50|-|
+|accountName|string|true|账户名 1-32长度|-|
+|userReference|string|true|用户参考码，防重|-|
+|legalEntityType|string|true|用户类型:INDIVIDUAL,COMPANY|-|
+|id|string|true|用户id|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/update --data '{
+  "individual": {
+    "gender": "M",
+    "address": {
+      "countryCode": "US",
+      "state": "CA",
+      "postalCode": "100001",
+      "city": "Hollywood",
+      "addressLine1": "cheer Building",
+      "addressLine2": "Chifley Tower",
+      "addressLine3": "2 Square"
+    },
+    "document": {
+      "uid": "17818239123",
+      "issuer": "US",
+      "nationality": "US",
+      "documentType": "CREDENTIAL_DE_ELECTOR",
+      "documentNumber": "91923",
+      "issueDate": "2019-10-11",
+      "expirationDate": "2029-10-10",
+      "documentAddress": "1t-street"
+    },
+    "taxes": [
+      {
+        "tax": "123123",
+        "countryCode": "US"
+      }
+    ],
+    "firstName": "Mike",
+    "lastName": "Lee",
+    "middleName": "jose.jerde",
+    "mobile": "+61-414555555",
+    "email": "jet@test.com",
+    "dateOfBirth": "1971-09-21",
+    "phoneNumber": "+81-8918321",
+    "locale": "en-US",
+    "timezone": "America/New_York"
+  },
+  "company": {
+    "email": "jet@test.com",
+    "industry": "E-Tech",
+    "address": {
+      "countryCode": "US",
+      "state": "CA",
+      "postalCode": "100001",
+      "city": "Hollywood",
+      "addressLine1": "cheer Building",
+      "addressLine2": "Chifley Tower",
+      "addressLine3": "2 Square"
+    },
+    "contact": {
+      "gender": "M",
+      "firstName": "Mike",
+      "lastName": "Lee",
+      "middleName": "G",
+      "mobile": "+61-414555555",
+      "dateOfBirth": "1971-09-21"
+    },
+    "website": "https://www.clearones.com",
+    "companyName": "Quantum Trust",
+    "phoneNumber": "+71-87123123",
+    "locale": "en-US",
+    "timezone": "America/New_York",
+    "registrationNumber": "8819291923"
+  },
+  "metadata": {
+    "mapKey": "sf49u4"
+  },
+  "accountName": "qt trust",
+  "userReference": "1929391923",
+  "legalEntityType": "COMPANY",
+  "id": "18719918238131"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─id|string|记录id|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "id": "ETLPzgGfSzDtuPNfeTMQqhonq"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 用户列表
+**URL:** /api/v2/build/card/user/list
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 用户列表
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|pageNo|int64|false|No comments found.|-|
+|pageSize|int64|false|No comments found.|-|
+|firstName|string|false|名|-|
+|lastName|string|false|姓|-|
+|type|string|false|类型INDIVIDUAL:个人 COMPANY:公司|-|
+|status|string|false|用户状态 SUBMITTED|ENABLED|DISABLED|FROZEN|CLOSED|UNKNOWN|-|
+|createTimestampFrom|int64|false|创建时间开始时间戳|-|
+|createTimestampTo|int64|false|创建时间开始时间戳|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/list --data '{
+  "pageNo": 977,
+  "pageSize": 540,
+  "firstName": "Bob",
+  "lastName": "Johnson",
+  "type": "INDIVIDUAL",
+  "status": "ENABLED",
+  "createTimestampFrom": 1672056033898,
+  "createTimestampTo": 1772056033898
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─totalCount|int64|Total record count|-|
+|└─pageSize|int64|Page size|-|
+|└─totalPage|int64|Total pages|-|
+|└─pageNo|int64|Current page|-|
+|└─data|array|data records|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─id|string|build关联的用户uid|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName|string|姓|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName|string|名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─accountName|string|账号名称|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─email|string|邮箱地址|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|类型INDIVIDUAL:个人 COMPANY:公司|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reference|string|客户唯一标识|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─status|string|用户状态 SUBMITTED|ENABLED|DISABLED|FROZEN|CLOSED|UNKNOWN|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createTimestamp|int64|创建时间戳|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "totalCount": 840,
+    "pageSize": 727,
+    "totalPage": 602,
+    "pageNo": 663,
+    "data": [
+      {
+        "id": "18182731231",
+        "firstName": "Bob",
+        "lastName": "Johnson",
+        "accountName": "Bob Kevin",
+        "email": "test@example.com",
+        "type": "INDIVIDUAL",
+        "reference": "mdaeriqfadf",
+        "status": "ENABLED",
+        "createTimestamp": 1672056033898
+      }
+    ]
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 用户详情
+**URL:** /api/v2/build/card/user/detail
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 用户详情
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|id|string|true|记录id|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/detail --data '{
+  "id": "81823"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─individual|object|个人信息|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|性别 Allowed: M|F|X|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─address|object|地址信息|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─countryCode|string|国家ISO码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|地址所在州、省、县或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postalCode|string|邮政编码或邮政编码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|地址第一行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|地址第二行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|地址第三行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─document|object|No comments found.|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|uid|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─issuer|string|证件发行国家ISO码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─nationality|string|文档国籍ISO码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─documentType|string|文档类型 Allowed: NONE┃PASSPORT┃DRIVERS_LICENSE┃NATIONAL_ID┃SOCIAL_SECURITY_NUMBER┃GREEN_CARD┃VISA┃MATRICULA_CONSULAR<br/>┃REGISTRO_FEDERAL_DE_CONTRIBUYENTES┃CREDENTIAL_DE_ELECTOR┃SOCIAL_INSURANCE_NUMBER┃CITIZENSHIP_PAPERS<br/>┃DRIVERS_LICENSE_CANADIAN┃EXISTING_CREDIT_CARD_DETAILS┃EMPLOYER_IDENTIFICATION_NUMBER┃INCORPORATION_NUMBER┃OTHERS|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─documentNumber|string|证件号码 2-128|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─issueDate|string|文件签发者日期，格式为 YYYY-MM-DD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─expirationDate|string|文档到期日期，格式为 YYYY-MM-DD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─documentAddress|string|文档地址|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─taxes|array|No comments found.|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─tax|string|税号|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─countryCode|string|税国家ISO|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName|string|名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName|string|姓|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─middleName|string|No comments found.|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─mobile|string|手机号码。最长为 30 个字符（包括国家代码）。电话号码必须采用国际区号 + '-' + 电话号码的格式。|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─email|string|电子邮件，限制为 255 个字符|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─dateOfBirth|string|出生日期，格式为 YYYY-MM-DD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneNumber|string|电话|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─locale|string|地区代码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─timezone|string|时区|-|
+|└─company|object|企业信息|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─email|string|邮箱地址|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─industry|string|企业所属行业 1-200字符|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─address|object||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─countryCode|string|国家ISO码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|地址所在州、省、县或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postalCode|string|邮政编码或邮政编码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|地址第一行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|地址第二行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|地址第三行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─contact|object||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|联系人的性别 Allowed: M|F|X|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName|string|名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName|string|姓|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─middleName|string|中间名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─mobile|string|手机号码。最长为 30 个字符（包括国家代码）。电话号码必须采用国际区号 + '-' + 电话号码的格式。|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─dateOfBirth|string|出生日期，格式为 YYYY-MM-DD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─website|string|公司网址|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─companyName|string|公司名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneNumber|string|公司电话号码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─locale|string|地区代码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─timezone|string|时区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─registrationNumber|string|公司注册编号|-|
+|└─metadata|map|以key-value形式存储用户元数据信息，Key长度必须小于等于50，Value长度必须小于等于50|-|
+|└─accountName|string|账户名 1-32长度|-|
+|└─userReference|string|用户参考码，防重|-|
+|└─legalEntityType|string|用户类型:INDIVIDUAL,COMPANY|-|
+|└─id|string|用户id|-|
+|└─shortReference|string|用户参考编号|-|
+|└─status|string|用户状态 ENABLED┃DISABLED┃FROZEN┃CLOSED┃UNKNOWN|-|
+|└─createdAt|string|创建时间|-|
+|└─updatedAt|string|更新时间|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "individual": {
+      "gender": "M",
+      "address": {
+        "countryCode": "US",
+        "state": "CA",
+        "postalCode": "100001",
+        "city": "Hollywood",
+        "addressLine1": "cheer Building",
+        "addressLine2": "Chifley Tower",
+        "addressLine3": "2 Square"
+      },
+      "document": {
+        "uid": "17818239123",
+        "issuer": "US",
+        "nationality": "US",
+        "documentType": "CREDENTIAL_DE_ELECTOR",
+        "documentNumber": "91923",
+        "issueDate": "2019-10-11",
+        "expirationDate": "2029-10-10",
+        "documentAddress": "1t-street"
+      },
+      "taxes": [
+        {
+          "tax": "123123",
+          "countryCode": "US"
+        }
+      ],
+      "firstName": "Mike",
+      "lastName": "Lee",
+      "middleName": "jose.jerde",
+      "mobile": "+61-414555555",
+      "email": "jet@test.com",
+      "dateOfBirth": "1971-09-21",
+      "phoneNumber": "+61-414555555",
+      "locale": "en-US",
+      "timezone": "America/New_York"
+    },
+    "company": {
+      "email": "jet@test.com",
+      "industry": "Computer",
+      "address": {
+        "countryCode": "US",
+        "state": "CA",
+        "postalCode": "100001",
+        "city": "Hollywood",
+        "addressLine1": "cheer Building",
+        "addressLine2": "Chifley Tower",
+        "addressLine3": "2 Square"
+      },
+      "contact": {
+        "gender": "M",
+        "firstName": "Mike",
+        "lastName": "Lee",
+        "middleName": "G",
+        "mobile": "+61-414555555",
+        "dateOfBirth": "1971-09-21"
+      },
+      "website": "www.clearones.com",
+      "companyName": "Quantum Trust",
+      "phoneNumber": "+61-414555555",
+      "locale": "en-US",
+      "timezone": "America/New_York",
+      "registrationNumber": "8819291923"
+    },
+    "metadata": {
+      "mapKey": "4d6r9d"
+    },
+    "accountName": "qt trust",
+    "userReference": "1929391923",
+    "legalEntityType": "COMPANY",
+    "id": "1238123123",
+    "shortReference": "1231123123",
+    "status": "ENABLED",
+    "createdAt": "1688439539546",
+    "updatedAt": "1688439539546"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 创建卡
+**URL:** /api/v2/build/card/create
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 创建卡
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|uid|string|true|用户id|-|
+|reference|string|false|唯一标识防重|-|
+|firstName|string|true|名|-|
+|midName|string|false|中间名|-|
+|lastName|string|true|姓|-|
+|birthday|string|true|出生日期，格式为YYYY-MM-DD|-|
+|phoneNo|string|true|电话号码，格式：{countryCode,0 ... 4 个字符}-{phoneNumber,0 ... 33 个字符}|-|
+|email|string|true|邮箱地址|-|
+|gender|string|true|性别Allowed: MALE┃FEMALE|-|
+|userAddress|object|false|用户地址|-|
+|└─country|string|true|国家IOS码|-|
+|└─city|string|true|城市或地区|-|
+|└─neighborhood|string|false|最近的建築物|-|
+|└─state|string|true|地址所在州、省、县或地区|-|
+|└─addressLine1|string|true|地址第一行|-|
+|└─addressLine2|string|false|地址第二行|-|
+|└─addressLine3|string|false|地址第三行|-|
+|└─phoneticLine1|string|false||-|
+|└─phoneticLine2|string|false||-|
+|└─phoneticLine3|string|false||-|
+|└─postcode|string|true|邮政编码或邮政编码|-|
+|cardBillingAddress|object|false|邮寄账单地址|-|
+|└─country|string|true|国家IOS码|-|
+|└─city|string|true|城市或地区|-|
+|└─neighborhood|string|false|最近的建築物|-|
+|└─state|string|true|地址所在州、省、县或地区|-|
+|└─addressLine1|string|true|地址第一行|-|
+|└─addressLine2|string|false|地址第二行|-|
+|└─addressLine3|string|false|地址第三行|-|
+|└─phoneticLine1|string|false||-|
+|└─phoneticLine2|string|false||-|
+|└─phoneticLine3|string|false||-|
+|└─postcode|string|true|邮政编码或邮政编码|-|
+|cardPostAddress|object|false|卡片寄送地址|-|
+|└─country|string|true|国家IOS码|-|
+|└─city|string|true|城市或地区|-|
+|└─neighborhood|string|false|最近的建築物|-|
+|└─state|string|true|地址所在州、省、县或地区|-|
+|└─addressLine1|string|true|地址第一行|-|
+|└─addressLine2|string|false|地址第二行|-|
+|└─addressLine3|string|false|地址第三行|-|
+|└─phoneticLine1|string|false||-|
+|└─phoneticLine2|string|false||-|
+|└─phoneticLine3|string|false||-|
+|└─postcode|string|true|邮政编码或邮政编码|-|
+|cardType|string|true|卡类型 Allowed: VIRTUAL|PHY|-|
+|cardNetwork|string|false|卡片网络|-|
+|category|string|false|卡类别 Allowed: DEBIT_CARD|PREPAID_CARD|CREDIT_CARD|-|
+|profile|string|false|申请卡简介|-|
+|program|object|false|卡的配置|-|
+|└─fee|string|false|卡的费用|-|
+|└─segment|string|false|卡号范围|-|
+|└─currency|string|true|卡的交易币种|-|
+|└─material|string|false|卡片材质|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/create --data '{
+  "uid": "18812391293",
+  "reference": "812931023123",
+  "firstName": "Bob",
+  "midName": "D",
+  "lastName": "Josh",
+  "birthday": "1970-10-11",
+  "phoneNo": "+61-123456789",
+  "email": "contactMe@gmail.com",
+  "gender": "MALE",
+  "userAddress": {
+    "country": "US",
+    "city": "Hollywood",
+    "neighborhood": "The neighborhood",
+    "state": "CA",
+    "addressLine1": "cheer Building",
+    "addressLine2": "Chifley Tower",
+    "addressLine3": "2 Square",
+    "phoneticLine1": "phoneticLine1",
+    "phoneticLine2": "phoneticLine2",
+    "phoneticLine3": "phoneticLine3",
+    "postcode": "100001"
+  },
+  "cardBillingAddress": {
+    "country": "US",
+    "city": "Hollywood",
+    "neighborhood": "The neighborhood",
+    "state": "CA",
+    "addressLine1": "cheer Building",
+    "addressLine2": "Chifley Tower",
+    "addressLine3": "2 Square",
+    "phoneticLine1": "phoneticLine1",
+    "phoneticLine2": "phoneticLine2",
+    "phoneticLine3": "phoneticLine3",
+    "postcode": "100001"
+  },
+  "cardPostAddress": {
+    "country": "US",
+    "city": "Hollywood",
+    "neighborhood": "The neighborhood",
+    "state": "CA",
+    "addressLine1": "cheer Building",
+    "addressLine2": "Chifley Tower",
+    "addressLine3": "2 Square",
+    "phoneticLine1": "phoneticLine1",
+    "phoneticLine2": "phoneticLine2",
+    "phoneticLine3": "phoneticLine3",
+    "postcode": "100001"
+  },
+  "cardType": "VIRTUAL",
+  "cardNetwork": "string",
+  "category": "CREDIT_CARD",
+  "profile": "test profile",
+  "program": {
+    "fee": "dfor2i",
+    "segment": "iyryci",
+    "currency": "USD",
+    "material": "h5eeh4"
+  }
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─applicationId|string|申请id|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "applicationId": "ETLPzgGfSzDtuPNfeTMQqhonq-"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 卡申请列表
+**URL:** /api/v2/build/card/application/list
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 卡申请列表
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|pageNo|int64|false|No comments found.|-|
+|pageSize|int64|false|No comments found.|-|
+|firstName|string|false|名|-|
+|lastName|string|false|姓|-|
+|cardType|string|false|卡类型 PHY|VIRTUAL|-|
+|category|string|false|卡分类 GIFT_CARD┃DEBIT_CARD┃PREPAID_CARD┃CREDIT_CARD|-|
+|currency|string|false|币种|-|
+|applicationStatus|string|false|申请状态|-|
+|reference|string|false|唯一标识|-|
+|createTimestampFrom|int64|false|创建时间开始时间戳|-|
+|createTimestampTo|int64|false|创建时间开始时间戳|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/application/list --data '{
+  "pageNo": 436,
+  "pageSize": 689,
+  "firstName": "Bob",
+  "lastName": "Josh",
+  "cardType": "PHY",
+  "category": "CREDIT_CARD",
+  "currency": "USD",
+  "applicationStatus": "PENDING",
+  "reference": "182931923123",
+  "createTimestampFrom": 1672056033898,
+  "createTimestampTo": 1772056033898
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─totalCount|int64|Total record count|-|
+|└─pageSize|int64|Page size|-|
+|└─totalPage|int64|Total pages|-|
+|└─pageNo|int64|Current page|-|
+|└─data|array|data records|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|用户uid|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName|string|名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName|string|姓|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType|string|卡类型 PHY|VIRTUAL|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡分类 GIFT_CARD┃DEBIT_CARD┃PREPAID_CARD┃CREDIT_CARD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency|string|币种|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneNo|string|手机号|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─email|string|邮箱|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|性别 MALE|FEMALE|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardId|string|卡id|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reference|string|唯一标识|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─applicationId|string|申请记录id|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─applicationStatus|string|申请状态|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createTimestamp|int64|创建时间|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "totalCount": 821,
+    "pageSize": 131,
+    "totalPage": 752,
+    "pageNo": 500,
+    "data": [
+      {
+        "uid": "18277382199312",
+        "firstName": "Bob",
+        "lastName": "Josh",
+        "cardType": "PHY",
+        "category": "CREDIT_CARD",
+        "currency": "USD",
+        "phoneNo": "+87-192939123",
+        "email": "test@example.com",
+        "gender": "MALE",
+        "cardId": "ETLPzgGfSzgmhqs",
+        "reference": "18238192313",
+        "applicationId": "ETLPzgGfSzDtuPNfeTMQqhonq-",
+        "applicationStatus": "PENDING",
+        "createTimestamp": 1672056033898
+      }
+    ]
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 审核卡
+**URL:** /api/v2/build/card/review
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 审核卡
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|applicationId|string|true|申请记录id|-|
+|reviewStatus|string|true|审核 Allowed: APPROVED|REJECTED|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/review --data '{
+  "applicationId": "ETLPzgGfSzDtuPNfeTMQqhonq-",
+  "reviewStatus": "APPROVED"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─applicationId|string|申请记录id|-|
+|└─cardId|string|卡id|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "applicationId": "ETLPzgGfSzDtuPNfeTMQqhonq-",
+    "cardId": "ETLPzgGfSzgmhqs"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 实体卡签发卡
+**URL:** /api/v2/build/card/issuePhyCard
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 实体卡签发卡
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|applicationId|string|true|申请记录id|-|
+|pan|string|true|卡号|-|
+|activationCode|string|true|激活码|-|
+|expiry|string|true|有效期|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/issuePhyCard --data '{
+  "applicationId": "ETLPzgGfSzDtuPNfeTMQqhonq-",
+  "pan": "08912",
+  "activationCode": "4085428279146910725",
+  "expiry": "203009"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 卡片列表
+**URL:** /api/v2/build/card/list
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 卡片列表
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|pageNo|int64|false|No comments found.|-|
+|pageSize|int64|false|No comments found.|-|
+|cardHolderName|string|false|卡持有人名|-|
+|cardType|string|false|卡类型 PHY|VIRTUAL|-|
+|category|string|false|卡分类 DEBIT_CARD|PREPAID_CARD|CREDIT_CARD|-|
+|currency|string|false|结算币种|-|
+|cardStatus|string|false|卡状态|-|
+|createTimestampFrom|int64|false|创建时间开始时间戳|-|
+|createTimestampTo|int64|false|创建时间开始时间戳|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/list --data '{
+  "pageNo": 526,
+  "pageSize": 194,
+  "cardHolderName": "Mike Joe",
+  "cardType": "PHY",
+  "category": "CREDIT_CARD",
+  "currency": "USD",
+  "cardStatus": "ACTIVE",
+  "createTimestampFrom": 1672056033898,
+  "createTimestampTo": 1772056033898
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─totalCount|int64|Total record count|-|
+|└─pageSize|int64|Page size|-|
+|└─totalPage|int64|Total pages|-|
+|└─pageNo|int64|Current page|-|
+|└─data|array|data records|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|用户uid|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardId|string|卡id|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cvv2|string|cvv2|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─expiry|string|有效期|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency|string|结算币种|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType|string|卡类型 PHYSICAL|VIRTUAL|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡分类 DEBIT_CARD|PREPAID_CARD|CREDIT_CARD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardHolderName|string|卡持有人名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─pan|string|卡号|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panFirst6|string|卡号前6位|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panLast4|string|卡号后4位|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardStatus|string|卡状态|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createTimestamp|int64|创建时间|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "totalCount": 598,
+    "pageSize": 279,
+    "totalPage": 769,
+    "pageNo": 233,
+    "data": [
+      {
+        "uid": "178129391923",
+        "cardId": "ETLPzgGfSzgmhqs",
+        "cvv2": "716",
+        "expiry": "203009",
+        "currency": "USD",
+        "cardType": "PHYSICAL",
+        "category": "CREDIT_CARD",
+        "cardHolderName": "Mike Jeo",
+        "pan": "5185453411223010229",
+        "panFirst6": "518545",
+        "panLast4": "0229",
+        "cardStatus": "ACTIVE",
+        "createTimestamp": 1672056033898
+      }
+    ]
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 卡详情
+**URL:** /api/v2/build/card/detail
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 卡详情
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|id|string|true|记录id|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/detail --data '{
+  "id": "81823"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─card|object|卡信息|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─id|string|卡id|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─customerId|string|卡业务类型|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─pan|string|卡号|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panFirst6|string|卡号前6位|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panLast4|string|卡号后4位|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|用户uid|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cvv2|string|cvv2|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─expiry|string|有效期|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType|string|卡类型 PHYSICAL|VIRTUAL|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡分类 DEBIT_CARD|PREPAID_CARD|CREDIT_CARD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─status|string|卡状态|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createdAt|int64|创建时间|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─updatedAt|int64|修改时间|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardHolderName|string|卡持有人名|-|
+|└─cardProfile|object|卡片简介|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─logo|string|logo|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardNoRange|string|卡号范围|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─pinFailCount|int32|密码错误次数|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reissue|int32|补发次数|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─embossedName|string|图案名称|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─upstreamSeqNum|int32|上游序列号|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─billingAddress|object|No comments found.|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST|USER|BILLING|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|地址所在州、省、县或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|地址第一行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|地址第二行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|地址第三行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postAddress|object|No comments found.|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST|USER|BILLING|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|地址所在州、省、县或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|地址第一行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|地址第二行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|地址第三行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createdAt|int64|创建时间|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─updatedAt|int64|修改时间|-|
+|└─cardApplication|object|卡申请信息|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─id|string|申请记录id|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|用户id|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reference|string|唯一标识防重|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName|string|名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─midName|string|中间名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName|string|姓|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─birthday|string|出生日期，格式为YYYY-MM-DD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneNo|string|电话号码，格式：{countryCode,0 ... 4 个字符}-{phoneNumber,0 ... 33 个字符}|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─email|string|邮箱地址|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|性别Allowed: MALE┃FEMALE|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─name|string|名字|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─userAddr|object|No comments found.|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST|USER|BILLING|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|地址所在州、省、县或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|地址第一行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|地址第二行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|地址第三行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardBillingAddress|object|No comments found.|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST|USER|BILLING|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|地址所在州、省、县或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|地址第一行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|地址第二行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|地址第三行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardPostAddress|object|No comments found.|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST|USER|BILLING|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|地址所在州、省、县或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|地址第一行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|地址第二行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|地址第三行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType|string|卡类型 Allowed: VIRTUAL|PHY|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡类别 Allowed: DEBIT_CARD|PREPAID_CARD|CREDIT_CARD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─profile|string|申请卡简介|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardId|string|卡id|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─status|string|卡状态|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createdAt|int64|创建时间|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─updatedAt|int64|修改时间|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─limitAmount|string|消费限额|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─limitCurrency|string|限额币种|-|
+|└─cardLimit|object|卡消费限额|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─limit|int64|消费限额|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency|string|限额币种|-|
+|└─cardDesign|object|卡片设计信息|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─picFrontUrl|string|卡正面图|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─picBackUrl|string|卡别面图|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─name|string|卡名字|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "card": {
+      "id": "ETLPzgGfSzgmhqs",
+      "customerId": "ENTERPRISE",
+      "pan": "5185453411223010229",
+      "panFirst6": "518545",
+      "panLast4": "0229",
+      "uid": "178129391923",
+      "cvv2": "716",
+      "expiry": "203009",
+      "cardType": "PHYSICAL",
+      "category": "CREDIT_CARD",
+      "status": "ACTIVE",
+      "createdAt": 1694161491593,
+      "updatedAt": 1694161491593,
+      "cardHolderName": "Mike Jeo"
+    },
+    "cardProfile": {
+      "logo": "https://www.ulec.com.cn/wp-content/uploads/2010/08/1.png",
+      "cardNoRange": "string",
+      "pinFailCount": 0,
+      "reissue": 0,
+      "embossedName": "qt",
+      "upstreamSeqNum": 0,
+      "billingAddress": {
+        "type": "POST",
+        "country": "US",
+        "city": "Hollywood",
+        "neighborhood": "The neighborhood",
+        "state": "CA",
+        "addressLine1": "cheer Building",
+        "addressLine2": "Chifley Tower",
+        "addressLine3": "2 Square",
+        "phoneticLine1": "phoneticLine1",
+        "phoneticLine2": "phoneticLine2",
+        "phoneticLine3": "phoneticLine3",
+        "postcode": "100001"
+      },
+      "postAddress": {
+        "type": "POST",
+        "country": "US",
+        "city": "Hollywood",
+        "neighborhood": "The neighborhood",
+        "state": "CA",
+        "addressLine1": "cheer Building",
+        "addressLine2": "Chifley Tower",
+        "addressLine3": "2 Square",
+        "phoneticLine1": "phoneticLine1",
+        "phoneticLine2": "phoneticLine2",
+        "phoneticLine3": "phoneticLine3",
+        "postcode": "100001"
+      },
+      "createdAt": 1694161491593,
+      "updatedAt": 1694161491593
+    },
+    "cardApplication": {
+      "id": "Emadae13dsfa.z",
+      "uid": "18812391293",
+      "reference": "812931023123",
+      "firstName": "Bob",
+      "midName": "D",
+      "lastName": "Josh",
+      "birthday": "1970-10-11",
+      "phoneNo": "+61-123456789",
+      "email": "contactMe@gmail.com",
+      "gender": "MALE",
+      "name": "Mike Joe",
+      "userAddr": {
+        "type": "POST",
+        "country": "US",
+        "city": "Hollywood",
+        "neighborhood": "The neighborhood",
+        "state": "CA",
+        "addressLine1": "cheer Building",
+        "addressLine2": "Chifley Tower",
+        "addressLine3": "2 Square",
+        "phoneticLine1": "phoneticLine1",
+        "phoneticLine2": "phoneticLine2",
+        "phoneticLine3": "phoneticLine3",
+        "postcode": "100001"
+      },
+      "cardBillingAddress": {
+        "type": "POST",
+        "country": "US",
+        "city": "Hollywood",
+        "neighborhood": "The neighborhood",
+        "state": "CA",
+        "addressLine1": "cheer Building",
+        "addressLine2": "Chifley Tower",
+        "addressLine3": "2 Square",
+        "phoneticLine1": "phoneticLine1",
+        "phoneticLine2": "phoneticLine2",
+        "phoneticLine3": "phoneticLine3",
+        "postcode": "100001"
+      },
+      "cardPostAddress": {
+        "type": "POST",
+        "country": "US",
+        "city": "Hollywood",
+        "neighborhood": "The neighborhood",
+        "state": "CA",
+        "addressLine1": "cheer Building",
+        "addressLine2": "Chifley Tower",
+        "addressLine3": "2 Square",
+        "phoneticLine1": "phoneticLine1",
+        "phoneticLine2": "phoneticLine2",
+        "phoneticLine3": "phoneticLine3",
+        "postcode": "100001"
+      },
+      "cardType": "VIRTUAL",
+      "category": "CREDIT_CARD",
+      "profile": "test profile",
+      "cardId": "ETLPzgGfSzgmhqs",
+      "status": "ACTIVE",
+      "createdAt": 1694161491593,
+      "updatedAt": 1694161491593,
+      "limitAmount": "500",
+      "limitCurrency": "USD"
+    },
+    "cardLimit": {
+      "limit": 500,
+      "currency": "USD"
+    },
+    "cardDesign": {
+      "picFrontUrl": "https://test.pic.com/1.png",
+      "picBackUrl": "https://test.pic.com/2.png",
+      "name": "qt"
+    }
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 卡订单列表
+**URL:** /api/v2/build/card/order/list
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 卡订单列表
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|pageNo|int64|false|No comments found.|-|
+|pageSize|int64|false|No comments found.|-|
+|holderName|string|false|持卡人名字|-|
+|cardId|string|false|卡id|-|
+|uid|string|false|用户uid|-|
+|amountStart|number|false|金额from|-|
+|amountEnd|number|false|金额to|-|
+|orderStatus|string|false|订单状态 PENDING,WAITING FOR REVIEW,COMPLETED,CANCELLED,FAILED|-|
+|createTimestampFrom|int64|false|创建时间开始时间戳|-|
+|createTimestampTo|int64|false|创建时间开始时间戳|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/list --data '{
+  "pageNo": 701,
+  "pageSize": 841,
+  "holderName": "Mike",
+  "cardId": "ETLPzgGfSzgmhqs",
+  "uid": "1879000304432582656",
+  "amountStart": 40,
+  "amountEnd": 500,
+  "orderStatus": "COMPLETED",
+  "createTimestampFrom": 1672056033898,
+  "createTimestampTo": 1772056033898
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─totalCount|int64|Total record count|-|
+|└─pageSize|int64|Page size|-|
+|└─totalPage|int64|Total pages|-|
+|└─pageNo|int64|Current page|-|
+|└─data|array|data records|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|用户uid|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderNo|string|订单编号|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardId|string|卡id|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency|string|币种|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─holderName|string|持卡人名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderAmount|number|订单金额|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─settleAmount|number|结算金额|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reversalAmount|number|退款金额|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─transactionType|string|交易类型 PURCHASE|REFUND|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─merchantName|string|商户名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createTime|int64|用户uid|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderType|string|订单类型|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─transactionAmount|number|交易金额|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─transactionCurrency|string|交易币种|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardPresent|int32|是否有卡 1-有 0-没|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家ISO|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─mcc|string|交易mcc|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─relatedOrderNo|string|关联订单号用逗号分隔|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderStatus|string|订单状态 PENDING,WAITING FOR REVIEW,COMPLETED,CANCELLED,FAILED|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "totalCount": 182,
+    "pageSize": 746,
+    "totalPage": 881,
+    "pageNo": 709,
+    "data": [
+      {
+        "uid": "1879000304432582656",
+        "orderNo": "1834499556319834112",
+        "cardId": "ETLPzgGfSzg-ef",
+        "currency": "USD",
+        "holderName": "Mike Jeo",
+        "orderAmount": 50,
+        "settleAmount": 50,
+        "reversalAmount": 0,
+        "transactionType": "PURCHASE",
+        "merchantName": "PELICANA",
+        "createTime": 1724785053024,
+        "orderType": "Standard Order",
+        "transactionAmount": 600,
+        "transactionCurrency": "HKD",
+        "cardPresent": 0,
+        "country": "US",
+        "city": "Perth",
+        "mcc": "5876",
+        "relatedOrderNo": "1830279551182712835,1830635075516903428",
+        "orderStatus": "PENDING"
+      }
+    ]
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 卡订单详情
+**URL:** /api/v2/build/card/order/detail
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 卡订单详情
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|orderNo|string|false|订单号|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/detail --data '{
+  "orderNo": "1834499556319834112"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─uid|string|用户uid|-|
+|└─orderNo|string|订单编号|-|
+|└─cardId|string|卡id|-|
+|└─currency|string|币种|-|
+|└─holderName|string|持卡人名|-|
+|└─orderAmount|number|订单金额|-|
+|└─settleAmount|number|结算金额|-|
+|└─reversalAmount|number|退款金额|-|
+|└─transactionType|string|交易类型 PURCHASE|REFUND|-|
+|└─merchantName|string|商户名|-|
+|└─createTime|int64|用户uid|-|
+|└─orderType|string|订单类型|-|
+|└─transactionAmount|number|交易金额|-|
+|└─transactionCurrency|string|交易币种|-|
+|└─cardPresent|int32|是否有卡 1-有 0-没|-|
+|└─country|string|国家ISO|-|
+|└─city|string|城市|-|
+|└─mcc|string|交易mcc|-|
+|└─relatedOrderNo|string|关联订单号用逗号分隔|-|
+|└─orderStatus|string|订单状态 PENDING,WAITING FOR REVIEW,COMPLETED,CANCELLED,FAILED|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "uid": "1879000304432582656",
+    "orderNo": "1834499556319834112",
+    "cardId": "ETLPzgGfSzg-ef",
+    "currency": "USD",
+    "holderName": "Mike Jeo",
+    "orderAmount": 50,
+    "settleAmount": 50,
+    "reversalAmount": 0,
+    "transactionType": "PURCHASE",
+    "merchantName": "PELICANA",
+    "createTime": 1724785053024,
+    "orderType": "Standard Order",
+    "transactionAmount": 600,
+    "transactionCurrency": "HKD",
+    "cardPresent": 0,
+    "country": "US",
+    "city": "Perth",
+    "mcc": "5876",
+    "relatedOrderNo": "1830279551182712835,1830635075516903428",
+    "orderStatus": "PENDING"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 更新卡pin
+**URL:** /api/v2/build/card/updateCardPin
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 更新卡pin
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|uid|string|false|用户uid|-|
+|cardId|string|false|卡id|-|
+|pin|string|false|卡密码|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/updateCardPin --data '{
+  "uid": "18781278312312",
+  "cardId": "ETLPzgGfSzgmno",
+  "pin": "1234"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 解禁临时禁用卡
+**URL:** /api/v2/build/card/releaseBlock
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 解禁临时禁用卡
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|cardId|string|false|卡id|-|
+|memo|string|false|memo|-|
+|startTime|int64|false|开始时间|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/releaseBlock --data '{
+  "cardId": "ETLPzgGfSzgmno",
+  "memo": "memo here",
+  "startTime": 0
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 失效卡
+**URL:** /api/v2/build/card/cancel
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 失效卡
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|cardId|string|false|卡id|-|
+|memo|string|false|memo|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/cancel --data '{
+  "cardId": "ETLPzgGfSzgmno",
+  "memo": "memo here"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 临时禁用卡
+**URL:** /api/v2/build/card/block
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 临时禁用卡
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|cardId|string|false|卡id|-|
+|memo|string|false|memo|-|
+|reason|string|false|原因 REPORTED_LOST_OR_STOLEN|TEMPORARY_SUSPENSION|FRAUD_PREVENTION|SYSTEM_RELATED|ACTIVATION_RELATED|DEACTIVATION|-|
+|startTime|int64|false|开始时间|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/block --data '{
+  "cardId": "ETLPzgGfSzgmno",
+  "memo": "memo here",
+  "reason": "REPORTED_LOST_OR_STOLEN",
+  "startTime": 0
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 激活实体卡
+**URL:** /api/v2/build/card/activePhy
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 激活实体卡
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|activationCode|string|false|激活码|-|
+|expiry|string|false|有效期|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/activePhy --data '{
+  "activationCode": "6675798267016130852",
+  "expiry": "203009"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+## 卡业务模拟
+### 模拟卡消费退款
+**URL:** /api/v2/build/card/simulate/reversal
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 模拟卡消费退款
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|cardId|string|true|卡id|-|
+|acceptorName|string|false|接收者名字|-|
+|transactionSource|string|false|交易来源|-|
+|originalAuthorizationId|string|false|原始验证id|-|
+|originalTransactionId|string|false|原始交易id|-|
+|partial|int32|false|partial|-|
+|amount|number|false|金额|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/reversal --data '{
+  "cardId": "ETLPzgGfSzgmn_",
+  "acceptorName": "AcceptorName#2",
+  "transactionSource": "online",
+  "originalAuthorizationId": "ETLPzgGfSzDTTLQuKEvVlssjqc_",
+  "originalTransactionId": "ETLPzgGfSzWQftUdvTMQqhokk9",
+  "partial": 0,
+  "amount": 10
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 模拟卡消费结算
+**URL:** /api/v2/build/card/simulate/transaction
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 模拟卡消费结算
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|cardId|string|true|卡id|-|
+|acceptorName|string|false||-|
+|transactionSource|string|false||-|
+|currency|string|true|币种|-|
+|amount|number|true|金额|-|
+|authorizationId|string|false|验证id|-|
+|type|string|false|交易类型 PURCHASE|REFUND|-|
+|partnerTransactionType|string|false|合作方交易类型 LOAD|WITHDRAW|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/transaction --data '{
+  "cardId": "ETLPzgGfSzgmn_",
+  "acceptorName": "AcceptorName",
+  "transactionSource": "online",
+  "currency": "USD",
+  "amount": 20,
+  "authorizationId": "ETLPzgGfSzDHHLQuKEvVlssjo-gn",
+  "type": "PURCHASE",
+  "partnerTransactionType": "LOAD"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 模拟卡消费发起验证
+**URL:** /api/v2/build/card/simulate/authorization
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 模拟卡消费发起验证
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|cardId|string|true|卡id|-|
+|originalAuthId|string|false|如果 original_auth_id 不为空，则为增量冻结资金|-|
+|currency|string|true|币种|-|
+|amount|number|true|金额|-|
+|acceptorName|string|false||-|
+|transactionSource|string|false||-|
+|type|string|false|交易类型 PURCHASE|REFUND|-|
+|partnerTransactionType|string|false|合作方交易类型 LOAD|WITHDRAW|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/authorization --data '{
+  "cardId": "ETLPzgGfSzgmn_",
+  "originalAuthId": "ETLPzgGfSzDHHLQuKEvVlssjo-gn",
+  "currency": "USD",
+  "amount": 20,
+  "acceptorName": "AcceptorName",
+  "transactionSource": "online",
+  "type": "PURCHASE",
+  "partnerTransactionType": "LOAD"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
   "sign": "LwpZUp"
