@@ -3498,7 +3498,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/check
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/info --data '7i1wjz'
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/info --data '5uc7bs'
 ```
 **Response-fields:**
 
@@ -3672,7 +3672,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/
 | Parameter | Type | Required | Description | Since |
 |-----------|------|----------|-------------|-------|
 |individual|object|false|个人信息|-|
-|└─gender|string|false|性别 Allowed: M|F|X|-|
+|└─gender|string|false|性别 Allowed: M,F,X|-|
 |└─address|object|true|地址信息|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─countryCode|string|true|国家ISO码|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|true|地址所在州、省、县或地区|-|
@@ -3685,7 +3685,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|false|uid|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─issuer|string|false|证件发行国家ISO码|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─nationality|string|false|文档国籍ISO码|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─documentType|string|false|文档类型 Allowed: NONE┃PASSPORT┃DRIVERS_LICENSE┃NATIONAL_ID┃SOCIAL_SECURITY_NUMBER┃GREEN_CARD┃VISA┃MATRICULA_CONSULAR<br/>┃REGISTRO_FEDERAL_DE_CONTRIBUYENTES┃CREDENTIAL_DE_ELECTOR┃SOCIAL_INSURANCE_NUMBER┃CITIZENSHIP_PAPERS<br/>┃DRIVERS_LICENSE_CANADIAN┃EXISTING_CREDIT_CARD_DETAILS┃EMPLOYER_IDENTIFICATION_NUMBER┃INCORPORATION_NUMBER┃OTHERS|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─documentType|string|false|文档类型 Allowed: NONE,PASSPORT,DRIVERS_LICENSE,NATIONAL_ID,SOCIAL_SECURITY_NUMBER,GREEN_CARD,VISA,MATRICULA_CONSULAR,<br/>REGISTRO_FEDERAL_DE_CONTRIBUYENTES,CREDENTIAL_DE_ELECTOR,SOCIAL_INSURANCE_NUMBER,CITIZENSHIP_PAPERS,<br/>DRIVERS_LICENSE_CANADIAN,EXISTING_CREDIT_CARD_DETAILS,EMPLOYER_IDENTIFICATION_NUMBER,INCORPORATION_NUMBER,OTHERS|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─documentNumber|string|false|证件号码 2-128|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─issueDate|string|false|文件签发者日期，格式为 YYYY-MM-DD|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─expirationDate|string|false|文档到期日期，格式为 YYYY-MM-DD|-|
@@ -3714,7 +3714,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|false|地址第二行|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|false|地址第三行|-|
 |└─contact|object|true||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|true|联系人的性别 Allowed: M|F|X|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|true|联系人的性别 Allowed: M,F,X|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName|string|true|名|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName|string|true|姓|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─middleName|string|false|中间名|-|
@@ -3763,7 +3763,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/crea
     ],
     "firstName": "Mike",
     "lastName": "Lee",
-    "middleName": "jose.jerde",
+    "middleName": "arlene.wiegand",
     "mobile": "+61-414555555",
     "email": "jet@test.com",
     "dateOfBirth": "1971-09-21",
@@ -3799,7 +3799,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/crea
     "registrationNumber": "8819291923"
   },
   "metadata": {
-    "mapKey": "fu17mq"
+    "mapKey": "e2n4ef"
   },
   "accountName": "qt trust",
   "userReference": "1929391923",
@@ -3847,7 +3847,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/crea
 | Parameter | Type | Required | Description | Since |
 |-----------|------|----------|-------------|-------|
 |individual|object|false|个人信息|-|
-|└─gender|string|false|性别 Allowed: M|F|X|-|
+|└─gender|string|false|性别 Allowed: M,F,X|-|
 |└─address|object|true|地址信息|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─countryCode|string|true|国家ISO码|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|true|地址所在州、省、县或地区|-|
@@ -3889,7 +3889,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/crea
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|false|地址第二行|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|false|地址第三行|-|
 |└─contact|object|true||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|true|联系人的性别 Allowed: M|F|X|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|true|联系人的性别 Allowed: M,F,X|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName|string|true|名|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName|string|true|姓|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─middleName|string|false|中间名|-|
@@ -3939,7 +3939,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/upda
     ],
     "firstName": "Mike",
     "lastName": "Lee",
-    "middleName": "jose.jerde",
+    "middleName": "arlene.wiegand",
     "mobile": "+61-414555555",
     "email": "jet@test.com",
     "dateOfBirth": "1971-09-21",
@@ -3975,7 +3975,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/upda
     "registrationNumber": "8819291923"
   },
   "metadata": {
-    "mapKey": "sf49u4"
+    "mapKey": "t7qxqb"
   },
   "accountName": "qt trust",
   "userReference": "1929391923",
@@ -4028,15 +4028,15 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/upda
 |firstName|string|false|名|-|
 |lastName|string|false|姓|-|
 |type|string|false|类型INDIVIDUAL:个人 COMPANY:公司|-|
-|status|string|false|用户状态 SUBMITTED|ENABLED|DISABLED|FROZEN|CLOSED|UNKNOWN|-|
+|status|string|false|用户状态 SUBMITTED,ENABLED,DISABLED,FROZEN,CLOSED,UNKNOWN|-|
 |createTimestampFrom|int64|false|创建时间开始时间戳|-|
 |createTimestampTo|int64|false|创建时间开始时间戳|-|
 
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/list --data '{
-  "pageNo": 977,
-  "pageSize": 540,
+  "pageNo": 211,
+  "pageSize": 130,
   "firstName": "Bob",
   "lastName": "Johnson",
   "type": "INDIVIDUAL",
@@ -4064,7 +4064,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/list
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─email|string|邮箱地址|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|类型INDIVIDUAL:个人 COMPANY:公司|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reference|string|客户唯一标识|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─status|string|用户状态 SUBMITTED|ENABLED|DISABLED|FROZEN|CLOSED|UNKNOWN|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─status|string|用户状态 SUBMITTED,ENABLED,DISABLED,FROZEN,CLOSED,UNKNOWN|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createTimestamp|int64|创建时间戳|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
@@ -4076,10 +4076,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/list
   "code": 200,
   "message": "Success",
   "data": {
-    "totalCount": 840,
-    "pageSize": 727,
-    "totalPage": 602,
-    "pageNo": 663,
+    "totalCount": 291,
+    "pageSize": 144,
+    "totalPage": 491,
+    "pageNo": 475,
     "data": [
       {
         "id": "18182731231",
@@ -4130,7 +4130,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/deta
 |message|string|响应描述|-|
 |data|object|响应数据|-|
 |└─individual|object|个人信息|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|性别 Allowed: M|F|X|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|性别 Allowed: M,F,X|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─address|object|地址信息|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─countryCode|string|国家ISO码|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|地址所在州、省、县或地区|-|
@@ -4143,7 +4143,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/deta
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|uid|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─issuer|string|证件发行国家ISO码|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─nationality|string|文档国籍ISO码|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─documentType|string|文档类型 Allowed: NONE┃PASSPORT┃DRIVERS_LICENSE┃NATIONAL_ID┃SOCIAL_SECURITY_NUMBER┃GREEN_CARD┃VISA┃MATRICULA_CONSULAR<br/>┃REGISTRO_FEDERAL_DE_CONTRIBUYENTES┃CREDENTIAL_DE_ELECTOR┃SOCIAL_INSURANCE_NUMBER┃CITIZENSHIP_PAPERS<br/>┃DRIVERS_LICENSE_CANADIAN┃EXISTING_CREDIT_CARD_DETAILS┃EMPLOYER_IDENTIFICATION_NUMBER┃INCORPORATION_NUMBER┃OTHERS|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─documentType|string|文档类型 Allowed: NONE,PASSPORT,DRIVERS_LICENSE,NATIONAL_ID,SOCIAL_SECURITY_NUMBER,GREEN_CARD,VISA,MATRICULA_CONSULAR,<br/>REGISTRO_FEDERAL_DE_CONTRIBUYENTES,CREDENTIAL_DE_ELECTOR,SOCIAL_INSURANCE_NUMBER,CITIZENSHIP_PAPERS,<br/>DRIVERS_LICENSE_CANADIAN,EXISTING_CREDIT_CARD_DETAILS,EMPLOYER_IDENTIFICATION_NUMBER,INCORPORATION_NUMBER,OTHERS|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─documentNumber|string|证件号码 2-128|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─issueDate|string|文件签发者日期，格式为 YYYY-MM-DD|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─expirationDate|string|文档到期日期，格式为 YYYY-MM-DD|-|
@@ -4172,7 +4172,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/deta
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|地址第二行|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|地址第三行|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─contact|object||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|联系人的性别 Allowed: M|F|X|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|联系人的性别 Allowed: M,F,X|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName|string|名|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName|string|姓|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─middleName|string|中间名|-|
@@ -4190,7 +4190,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/deta
 |└─legalEntityType|string|用户类型:INDIVIDUAL,COMPANY|-|
 |└─id|string|用户id|-|
 |└─shortReference|string|用户参考编号|-|
-|└─status|string|用户状态 ENABLED┃DISABLED┃FROZEN┃CLOSED┃UNKNOWN|-|
+|└─status|string|用户状态 ENABLED,DISABLED,FROZEN,CLOSED,UNKNOWN|-|
 |└─createdAt|string|创建时间|-|
 |└─updatedAt|string|更新时间|-|
 |timestamp|string|时间戳毫秒|-|
@@ -4232,7 +4232,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/deta
       ],
       "firstName": "Mike",
       "lastName": "Lee",
-      "middleName": "jose.jerde",
+      "middleName": "arlene.wiegand",
       "mobile": "+61-414555555",
       "email": "jet@test.com",
       "dateOfBirth": "1971-09-21",
@@ -4268,7 +4268,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/deta
       "registrationNumber": "8819291923"
     },
     "metadata": {
-      "mapKey": "4d6r9d"
+      "mapKey": "ubjvpv"
     },
     "accountName": "qt trust",
     "userReference": "1929391923",
@@ -4344,9 +4344,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/deta
 |└─phoneticLine2|string|false||-|
 |└─phoneticLine3|string|false||-|
 |└─postcode|string|true|邮政编码或邮政编码|-|
-|cardType|string|true|卡类型 Allowed: VIRTUAL|PHY|-|
+|cardType|string|true|卡类型 Allowed: VIRTUAL,PHY|-|
 |cardNetwork|string|false|卡片网络|-|
-|category|string|false|卡类别 Allowed: DEBIT_CARD|PREPAID_CARD|CREDIT_CARD|-|
+|category|string|false|卡类别 Allowed: DEBIT_CARD,PREPAID_CARD,CREDIT_CARD|-|
 |profile|string|false|申请卡简介|-|
 |program|object|false|卡的配置|-|
 |└─fee|string|false|卡的费用|-|
@@ -4410,10 +4410,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/create --
   "category": "CREDIT_CARD",
   "profile": "test profile",
   "program": {
-    "fee": "dfor2i",
-    "segment": "iyryci",
+    "fee": "8dqpxs",
+    "segment": "05eb1r",
     "currency": "USD",
-    "material": "h5eeh4"
+    "material": "52qvmb"
   }
 }'
 ```
@@ -4462,7 +4462,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/create --
 |firstName|string|false|名|-|
 |lastName|string|false|姓|-|
 |cardType|string|false|卡类型 PHY|VIRTUAL|-|
-|category|string|false|卡分类 GIFT_CARD┃DEBIT_CARD┃PREPAID_CARD┃CREDIT_CARD|-|
+|category|string|false|卡分类 GIFT_CARD,DEBIT_CARD,PREPAID_CARD,CREDIT_CARD|-|
 |currency|string|false|币种|-|
 |applicationStatus|string|false|申请状态|-|
 |reference|string|false|唯一标识|-|
@@ -4472,8 +4472,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/create --
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/application/list --data '{
-  "pageNo": 436,
-  "pageSize": 689,
+  "pageNo": 297,
+  "pageSize": 853,
   "firstName": "Bob",
   "lastName": "Josh",
   "cardType": "PHY",
@@ -4501,7 +4501,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/applicati
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName|string|名|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName|string|姓|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType|string|卡类型 PHY|VIRTUAL|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡分类 GIFT_CARD┃DEBIT_CARD┃PREPAID_CARD┃CREDIT_CARD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡分类 GIFT_CARD|DEBIT_CARD|PREPAID_CARD|CREDIT_CARD|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency|string|币种|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneNo|string|手机号|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─email|string|邮箱|-|
@@ -4509,7 +4509,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/applicati
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardId|string|卡id|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reference|string|唯一标识|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─applicationId|string|申请记录id|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─applicationStatus|string|申请状态|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─applicationStatus|string|申请状态 PENDING_INITIALIZATION, UNDER_REVIEW, REJECTED, APPROVED, SUCCESS, FAILED|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createTimestamp|int64|创建时间|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
@@ -4521,10 +4521,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/applicati
   "code": 200,
   "message": "Success",
   "data": {
-    "totalCount": 821,
-    "pageSize": 131,
-    "totalPage": 752,
-    "pageNo": 500,
+    "totalCount": 158,
+    "pageSize": 985,
+    "totalPage": 79,
+    "pageNo": 17,
     "data": [
       {
         "uid": "18277382199312",
@@ -4539,7 +4539,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/applicati
         "cardId": "ETLPzgGfSzgmhqs",
         "reference": "18238192313",
         "applicationId": "ETLPzgGfSzDtuPNfeTMQqhonq-",
-        "applicationStatus": "PENDING",
+        "applicationStatus": "PENDING_INITIALIZATION",
         "createTimestamp": 1672056033898
       }
     ]
@@ -4669,8 +4669,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/issuePhyC
 |pageNo|int64|false|No comments found.|-|
 |pageSize|int64|false|No comments found.|-|
 |cardHolderName|string|false|卡持有人名|-|
-|cardType|string|false|卡类型 PHY|VIRTUAL|-|
-|category|string|false|卡分类 DEBIT_CARD|PREPAID_CARD|CREDIT_CARD|-|
+|cardType|string|false|卡类型 PHY,VIRTUAL|-|
+|category|string|false|卡分类 DEBIT_CARD,PREPAID_CARD,CREDIT_CARD|-|
 |currency|string|false|结算币种|-|
 |cardStatus|string|false|卡状态|-|
 |createTimestampFrom|int64|false|创建时间开始时间戳|-|
@@ -4679,8 +4679,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/issuePhyC
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/list --data '{
-  "pageNo": 526,
-  "pageSize": 194,
+  "pageNo": 75,
+  "pageSize": 807,
   "cardHolderName": "Mike Joe",
   "cardType": "PHY",
   "category": "CREDIT_CARD",
@@ -4707,13 +4707,13 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/list --da
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cvv2|string|cvv2|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─expiry|string|有效期|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency|string|结算币种|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType|string|卡类型 PHYSICAL|VIRTUAL|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡分类 DEBIT_CARD|PREPAID_CARD|CREDIT_CARD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType|string|卡类型 PHYSICAL,VIRTUAL|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡分类 DEBIT_CARD,PREPAID_CARD,CREDIT_CARD|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardHolderName|string|卡持有人名|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─pan|string|卡号|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panFirst6|string|卡号前6位|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panLast4|string|卡号后4位|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardStatus|string|卡状态|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardStatus|string|卡状态 NEW, CREATED, PRE_ACTIVATION, DISPATCHED, INVALID, ACTIVE, TEMP_BLOCKED, PERM_BLOCKED, REJECTED|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createTimestamp|int64|创建时间|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
@@ -4725,10 +4725,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/list --da
   "code": 200,
   "message": "Success",
   "data": {
-    "totalCount": 598,
-    "pageSize": 279,
-    "totalPage": 769,
-    "pageNo": 233,
+    "totalCount": 666,
+    "pageSize": 116,
+    "totalPage": 12,
+    "pageNo": 342,
     "data": [
       {
         "uid": "178129391923",
@@ -4791,8 +4791,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/detail --
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|用户uid|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cvv2|string|cvv2|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─expiry|string|有效期|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType|string|卡类型 PHYSICAL|VIRTUAL|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡分类 DEBIT_CARD|PREPAID_CARD|CREDIT_CARD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType|string|卡类型 PHYSICAL,VIRTUAL|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡分类 DEBIT_CARD,PREPAID_CARD,CREDIT_CARD|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─status|string|卡状态|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createdAt|int64|创建时间|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─updatedAt|int64|修改时间|-|
@@ -4805,7 +4805,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/detail --
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─embossedName|string|图案名称|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─upstreamSeqNum|int32|上游序列号|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─billingAddress|object|No comments found.|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST|USER|BILLING|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST,USER,BILLING|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
@@ -4818,7 +4818,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/detail --
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postAddress|object|No comments found.|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST|USER|BILLING|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST,USER,BILLING|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
@@ -4845,7 +4845,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/detail --
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|性别Allowed: MALE┃FEMALE|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─name|string|名字|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─userAddr|object|No comments found.|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST|USER|BILLING|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST,USER,BILLING|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
@@ -4858,7 +4858,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/detail --
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardBillingAddress|object|No comments found.|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST|USER|BILLING|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST,USER,BILLING|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
@@ -4871,7 +4871,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/detail --
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardPostAddress|object|No comments found.|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST|USER|BILLING|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST,USER,BILLING|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
@@ -4883,8 +4883,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/detail --
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2|string||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType|string|卡类型 Allowed: VIRTUAL|PHY|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡类别 Allowed: DEBIT_CARD|PREPAID_CARD|CREDIT_CARD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType|string|卡类型 Allowed: VIRTUAL,PHY|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡类别 Allowed: DEBIT_CARD,PREPAID_CARD,CREDIT_CARD|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─profile|string|申请卡简介|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardId|string|卡id|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─status|string|卡状态|-|
@@ -5071,8 +5071,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/detail --
 **Request-example:**
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/list --data '{
-  "pageNo": 701,
-  "pageSize": 841,
+  "pageNo": 520,
+  "pageSize": 521,
   "holderName": "Mike",
   "cardId": "ETLPzgGfSzgmhqs",
   "uid": "1879000304432582656",
@@ -5125,10 +5125,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/lis
   "code": 200,
   "message": "Success",
   "data": {
-    "totalCount": 182,
-    "pageSize": 746,
-    "totalPage": 881,
-    "pageNo": 709,
+    "totalCount": 11,
+    "pageSize": 994,
+    "totalPage": 405,
+    "pageNo": 162,
     "data": [
       {
         "uid": "1879000304432582656",
@@ -5404,7 +5404,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/cancel --
 |-----------|------|----------|-------------|-------|
 |cardId|string|false|卡id|-|
 |memo|string|false|memo|-|
-|reason|string|false|原因 REPORTED_LOST_OR_STOLEN|TEMPORARY_SUSPENSION|FRAUD_PREVENTION|SYSTEM_RELATED|ACTIVATION_RELATED|DEACTIVATION|-|
+|reason|string|false|原因 REPORTED_LOST_OR_STOLENTEMPORARY_SUSPENSION,FRAUD_PREVENTION,SYSTEM_RELATED,ACTIVATION_RELATED,DEACTIVATION|-|
 |startTime|int64|false|开始时间|-|
 
 **Request-example:**
@@ -5561,8 +5561,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 |currency|string|true|币种|-|
 |amount|number|true|金额|-|
 |authorizationId|string|false|验证id|-|
-|type|string|false|交易类型 PURCHASE|REFUND|-|
-|partnerTransactionType|string|false|合作方交易类型 LOAD|WITHDRAW|-|
+|type|string|false|交易类型 PURCHASE,REFUND|-|
+|partnerTransactionType|string|false|合作方交易类型 LOAD,WITHDRAW|-|
 
 **Request-example:**
 ```
@@ -5619,8 +5619,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 |amount|number|true|金额|-|
 |acceptorName|string|false||-|
 |transactionSource|string|false||-|
-|type|string|false|交易类型 PURCHASE|REFUND|-|
-|partnerTransactionType|string|false|合作方交易类型 LOAD|WITHDRAW|-|
+|type|string|false|交易类型 PURCHASE,REFUND|-|
+|partnerTransactionType|string|false|合作方交易类型 LOAD,WITHDRAW|-|
 
 **Request-example:**
 ```
