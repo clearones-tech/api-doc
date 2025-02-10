@@ -5700,30 +5700,34 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 
 ### 事件类型
 
-| eventType                                 | eventDetail                                                     | Description  |
-|-------------------------------------------|-----------------------------------------------------------------|--------------|
-| CLIENT_STATUS_CHANGED                     | [clientDetail](#clientDetail)                                   | 创建用户状态变更     |
-| FUND_ACCOUNT_CREATED                      | [fundAccountCreated](#fundAccountCreated)                       | 资金账号已创建      |
-| CRYPTO_TX_CREATED                         | [transactionDetail](#transactionDetail)                         | 数字货币交易创建     |
-| CRYPTO_TX_STATUS_CHANGED                  | [transactionDetail](#transactionDetail)                         | 数字货币交易状态变更   |
-| FIAT_RECIPIENT_STATUS_CHANGED             | [fiatRecipientDetail](#fiatRecipientDetail)                     | 法币收款人信息变更    |
-| CRYPTO_RECIPIENT_STATUS_CHANGED           | [cryptoRecipientDetail](#cryptoRecipientDetail)                 | 加密货币收款人信息变更  |
-| FIAT_TX_CREATED                           | [transactionDetail](#transactionDetail)                         | 法币创建交易       |
-| FIAT_TX_STATUS_CHANGED                    | [transactionDetail](#transactionDetail)                         | 法币交易状态变更     |
-| CURRENCY_STATUS_CHANGED                   | [currencyStatusDetail](#currencyStatusDetail)                   | 账户币种状态变更     |
-| DEPOSIT_INFO_ADD                          | [depositAddressAddDetail](#depositAddressAddDetail)             | 账户币种收款信息添加   |
-| DEPOSIT_INFO_CHANGED                      | [depositAddressChangeDetail](#depositAddressChangeDetail)       | 账户币种收款信息状态变更 |
-| CONNECT_TX_CREATED                        | [connectTransactionDetail](#connectTransactionDetail)           | 连接账号交易创建     |
-| CONNECT_TX_STATUS_CHANGED                 | [connectTransactionDetail](#connectTransactionDetail)           | 连接账号交易状态变更   |
-| SUPER_ORG_CRYPTO_RECIPIENT_CREATE         | [superOrgCryptoRecipientDetail](#superOrgCryptoRecipientDetail) | 主机构数字货币收款人信息创建   |
+| eventType                                 | eventDetail                                                     | Description    |
+|-------------------------------------------|-----------------------------------------------------------------|----------------|
+| CLIENT_STATUS_CHANGED                     | [clientDetail](#clientDetail)                                   | 创建用户状态变更       |
+| FUND_ACCOUNT_CREATED                      | [fundAccountCreated](#fundAccountCreated)                       | 资金账号已创建        |
+| CRYPTO_TX_CREATED                         | [transactionDetail](#transactionDetail)                         | 数字货币交易创建       |
+| CRYPTO_TX_STATUS_CHANGED                  | [transactionDetail](#transactionDetail)                         | 数字货币交易状态变更     |
+| FIAT_RECIPIENT_STATUS_CHANGED             | [fiatRecipientDetail](#fiatRecipientDetail)                     | 法币收款人信息变更      |
+| CRYPTO_RECIPIENT_STATUS_CHANGED           | [cryptoRecipientDetail](#cryptoRecipientDetail)                 | 加密货币收款人信息变更    |
+| FIAT_TX_CREATED                           | [transactionDetail](#transactionDetail)                         | 法币创建交易         |
+| FIAT_TX_STATUS_CHANGED                    | [transactionDetail](#transactionDetail)                         | 法币交易状态变更       |
+| CURRENCY_STATUS_CHANGED                   | [currencyStatusDetail](#currencyStatusDetail)                   | 账户币种状态变更       |
+| DEPOSIT_INFO_ADD                          | [depositAddressAddDetail](#depositAddressAddDetail)             | 账户币种收款信息添加     |
+| DEPOSIT_INFO_CHANGED                      | [depositAddressChangeDetail](#depositAddressChangeDetail)       | 账户币种收款信息状态变更   |
+| CONNECT_TX_CREATED                        | [connectTransactionDetail](#connectTransactionDetail)           | 连接账号交易创建       |
+| CONNECT_TX_STATUS_CHANGED                 | [connectTransactionDetail](#connectTransactionDetail)           | 连接账号交易状态变更     |
+| SUPER_ORG_CRYPTO_RECIPIENT_CREATE         | [superOrgCryptoRecipientDetail](#superOrgCryptoRecipientDetail) | 主机构数字货币收款人信息创建 |
 | SUPER_ORG_FIAT_RECIPIENT_CREATE           | [superOrgFiatRecipientDetail](#superOrgFiatRecipientDetail)     | 主机构法币收款人信息创建   |
-| SUPER_ORG_CRYPTO_RECIPIENT_STATUS_CHANGED | [superOrgCryptoRecipientDetail](#superOrgCryptoRecipientDetail) | 主机构数字货币收款人信息变更   |
+| SUPER_ORG_CRYPTO_RECIPIENT_STATUS_CHANGED | [superOrgCryptoRecipientDetail](#superOrgCryptoRecipientDetail) | 主机构数字货币收款人信息变更 |
 | SUPER_ORG_FIAT_RECIPIENT_STATUS_CHANGED   | [superOrgFiatRecipientDetail](#superOrgFiatRecipientDetail)     | 主机构法币收款人信息变更   |
-| FX_PAIR_ADD                               | [fxPairDetail](#fxPairDetail)                                   | FX交易对添加   |
-| FX_PAIR_UPDATE                            | [fxPairDetail](#fxPairDetail)                                   | FX交易对更新   |
-| FX_PAIR_DELETE                            | [fxPairDetail](#fxPairDetail)                                   | FX交易对删除   |
-| FX_TX_CREATED                             | [fxTransactionDetail](#fxTransactionDetail)                     | FX创建交易   |
-| FX_TX_STATUS_CHANGED                      | [fxTransactionDetail](#fxTransactionDetail)                     | FX交易状态变更   |
+| FX_PAIR_ADD                               | [fxPairDetail](#fxPairDetail)                                   | FX交易对添加        |
+| FX_PAIR_UPDATE                            | [fxPairDetail](#fxPairDetail)                                   | FX交易对更新        |
+| FX_PAIR_DELETE                            | [fxPairDetail](#fxPairDetail)                                   | FX交易对删除        |
+| FX_TX_CREATED                             | [fxTransactionDetail](#fxTransactionDetail)                     | FX创建交易         |
+| FX_TX_STATUS_CHANGED                      | [fxTransactionDetail](#fxTransactionDetail)                     | FX交易状态变更       |
+| BUILD_CARD_ORDER                          | [buildCardOrder](#buildCardOrder)                               | 卡订单消息          |
+| BUILD_CARD_APPLICATION_STATE              | [buildCardApplicationState](#buildCardApplicationState)         | 卡申请状态变更        |
+| BUILD_CARD_STATE                          | [buildCardState](#buildCardState)                               | 卡状态变更          |
+| BUILD_CARD_ACTIVATION_CODE                | [buildCardActivationCode](#buildCardActivationCode)             | 卡激活码消息         |
 
 ### 事件详情
 **<div id="clientDetail"> clientDetail </div>**
@@ -5963,6 +5967,57 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |transferNo|string|转账交易号|-|
 |receiveNo|string|收款交易号|-|
 |refundNo|string|退款交易号|-|
+
+**<div id="buildCardOrder"> buildCardOrder </div>**
+
+| Field               | Type    | Description | Since |
+|---------------------|---------|-------------|-------|
+| id                  | string  | 消息id        | -     |
+| orderNo             | string  | 订单id        | -     |
+| uid                 | string  | 用户id        | -     |
+| cardId              | string  | 卡id         | -     |
+| orderAmount         | string  | 订单金额        | -     |
+| settleAmount        | string  | 结算金额        | -     |
+| reversalAmount      | string  | 退款金额        | -     |
+| orderStatus         | string  | 订单状态        | -     |
+| transactionType     | string  | 交易类型        | -     |
+| merchantName        | string  | 卡支付商户名称     | -     |
+| createTime          | long    | 创建时间        | -     |
+| updateTime          | long    | 修改时间        | -     |
+| orderType           | string  | 订单类型        | -     |
+| transactionAmount   | string  | 交易金额        | -     |
+| transactionCurrency | string  | 交易币种        | -     |
+| cardPresent         | boolean | 是否有卡        | -     |
+| country             | string  | 交易国家        | -     |
+| city                | string  | 交易城市        | -     |
+| mcc                 | string  | 交易mcc       | -     |
+| relatedOrderNo      | string  | 关联的订单id     | -     |
+
+**<div id="buildCardApplicationState"> buildCardApplicationState </div>**
+
+| Field         | Type   | Description                                                                  | Since |
+|---------------|--------|------------------------------------------------------------------------------|-------|
+| applicationId | string | 申请id                                                                         | -     |
+| status        | string | 状态,PENDING_INITIALIZATION, UNDER_REVIEW, REJECTED, APPROVED, SUCCESS, FAILED | -     |
+| timestamp     | string | 时间戳                                                                          | -     |
+
+**<div id="buildCardState"> buildCardState </div>**
+
+| Field         | Type   | Description                                                                                        | Since |
+|---------------|--------|----------------------------------------------------------------------------------------------------|-------|
+| cardId        | string | 卡id                                                                                                | -     |
+| applicationId | string | 申请id                                                                                               | -     |
+| status        | string | 状态,NEW, CREATED, PRE_ACTIVATION, DISPATCHED, INVALID, ACTIVE, TEMP_BLOCKED, PERM_BLOCKED, REJECTED | -     |
+| timestamp     | string | 时间戳                                                                                                | -     |
+
+**<div id="buildCardActivationCode"> buildCardActivationCode </div>**
+
+| Field            | Type   | Description    | Since |
+|------------------|--------|----------------|-------|
+| cardId           | string | 卡id            | -     |
+| activationCode   | string | 激活码            | -     |
+| activationMethod | string | 激活方式,SMS,EMAIL | -     |
+| expirationTime   | long   | 失效时间           | -     |
 
 ## 错误码列表
 
