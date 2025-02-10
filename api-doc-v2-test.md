@@ -4562,10 +4562,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/applicati
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|applicationId|string|true|申请记录id|-|
-|reviewStatus|string|true|审核 Allowed: APPROVED|REJECTED|-|
+| Parameter | Type | Required | Description                   | Since |
+|-----------|------|----------|-------------------------------|-------|
+|applicationId|string|true| 申请记录id                        |-|
+|reviewStatus|string|true| 审核 Allowed: APPROVED,REJECTED |-|
 
 **Request-example:**
 ```
@@ -5174,7 +5174,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/lis
 
 | Parameter | Type | Required | Description | Since |
 |-----------|------|----------|-------------|-------|
-|orderNo|string|false|订单号|-|
+|orderNo|string| true     |订单号|-|
 
 **Request-example:**
 ```
@@ -5260,9 +5260,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/det
 
 | Parameter | Type | Required | Description | Since |
 |-----------|------|----------|-------------|-------|
-|uid|string|false|用户uid|-|
-|cardId|string|false|卡id|-|
-|pin|string|false|卡密码|-|
+|uid|string| true     |用户uid|-|
+|cardId|string| true     |卡id|-|
+|pin|string| true     |卡密码|-|
 
 **Request-example:**
 ```
@@ -5308,9 +5308,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/updateCar
 
 | Parameter | Type | Required | Description | Since |
 |-----------|------|----------|-------------|-------|
-|cardId|string|false|卡id|-|
-|memo|string|false|memo|-|
-|startTime|int64|false|开始时间|-|
+|cardId|string| true       |卡id|-|
+|memo|string| false    |memo|-|
+|startTime|int64| false    |开始时间|-|
 
 **Request-example:**
 ```
@@ -5318,52 +5318,6 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/releaseBl
   "cardId": "ETLPzgGfSzgmno",
   "memo": "memo here",
   "startTime": 0
-}'
-```
-**Response-fields:**
-
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
-
-**Response-example:**
-```
-{
-  "code": 200,
-  "message": "Success",
-  "timestamp": "1685343278618",
-  "key": "tvJ1Um",
-  "sign": "LwpZUp"
-}
-```
-
-### 失效卡
-**URL:** /api/v2/build/card/cancel
-
-**Type:** POST
-
-
-**Content-Type:** application/json
-
-**Description:** 失效卡
-
-**Body-parameters:**
-
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|cardId|string|false|卡id|-|
-|memo|string|false|memo|-|
-
-**Request-example:**
-```
-curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/cancel --data '{
-  "cardId": "ETLPzgGfSzgmno",
-  "memo": "memo here"
 }'
 ```
 **Response-fields:**
@@ -5400,12 +5354,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/cancel --
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|cardId|string|false|卡id|-|
-|memo|string|false|memo|-|
-|reason|string|false|原因 REPORTED_LOST_OR_STOLENTEMPORARY_SUSPENSION,FRAUD_PREVENTION,SYSTEM_RELATED,ACTIVATION_RELATED,DEACTIVATION|-|
-|startTime|int64|false|开始时间|-|
+| Parameter | Type | Required | Description                                                                                                     | Since |
+|-----------|------|----------|-----------------------------------------------------------------------------------------------------------------|-------|
+|cardId|string| true     | 卡id                                                                                                             |-|
+|memo|string| false    | memo                                                                                                            |-|
+|reason|string| true     | 原因 REPORTED_LOST_OR_STOLEN,TEMPORARY_SUSPENSION,FRAUD_PREVENTION,SYSTEM_RELATED,ACTIVATION_RELATED,DEACTIVATION |-|
+|startTime|int64| false    | 开始时间                                                                                                            |-|
 
 **Request-example:**
 ```
@@ -5452,8 +5406,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/block --d
 
 | Parameter | Type | Required | Description | Since |
 |-----------|------|----------|-------------|-------|
-|activationCode|string|false|激活码|-|
-|expiry|string|false|有效期|-|
+|activationCode|string| true     |激活码|-|
+|expiry|string| false    |有效期|-|
 
 **Request-example:**
 ```
