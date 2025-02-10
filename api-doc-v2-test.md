@@ -5480,6 +5480,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 |code|int32|响应码|-|
 |message|string|响应描述|-|
 |data|object|响应数据|-|
+|└─id|string|id|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -5489,6 +5490,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 {
   "code": 200,
   "message": "Success",
+  "data": {
+    "id": "ETLPzgGfSzDTTLQuKEvVlssjp_-e"
+  },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
   "sign": "LwpZUp"
@@ -5538,6 +5542,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 |code|int32|响应码|-|
 |message|string|响应描述|-|
 |data|object|响应数据|-|
+|└─transactionId|string|交易记录id|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -5547,6 +5552,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 {
   "code": 200,
   "message": "Success",
+  "data": {
+    "transactionId": "189192931823"
+  },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
   "sign": "LwpZUp"
@@ -5596,6 +5604,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 |code|int32|响应码|-|
 |message|string|响应描述|-|
 |data|object|响应数据|-|
+|└─authorizationId|string|授权记录id|-|
+|└─message|string|message|-|
 |timestamp|string|时间戳毫秒|-|
 |key|string|加密key|-|
 |sign|string|签名|-|
@@ -5605,6 +5615,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 {
   "code": 200,
   "message": "Success",
+  "data": {
+    "authorizationId": "ETLPzgGfSzDTTLQuKEvVlssjp_-e",
+    "message": "success"
+  },
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
   "sign": "LwpZUp"
