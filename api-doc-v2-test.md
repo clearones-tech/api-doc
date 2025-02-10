@@ -4455,19 +4455,19 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/create --
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|pageNo|int64|false|No comments found.|-|
-|pageSize|int64|false|No comments found.|-|
-|firstName|string|false|名|-|
-|lastName|string|false|姓|-|
-|cardType|string|false|卡类型 PHY|VIRTUAL|-|
-|category|string|false|卡分类 GIFT_CARD,DEBIT_CARD,PREPAID_CARD,CREDIT_CARD|-|
-|currency|string|false|币种|-|
-|applicationStatus|string|false|申请状态|-|
-|reference|string|false|唯一标识|-|
-|createTimestampFrom|int64|false|创建时间开始时间戳|-|
-|createTimestampTo|int64|false|创建时间开始时间戳|-|
+| Parameter           | Type   | Required | Description                                       | Since |
+|---------------------|--------|----------|---------------------------------------------------|-------|
+| pageNo              | int64  | false    | No comments found.                                | -     |
+| pageSize            | int64  | false    | No comments found.                                | -     |
+| firstName           | string | false    | 名                                                 | -     |
+| lastName            | string | false    | 姓                                                 | -     |
+| cardType            | string | false    | 卡类型 PHY,VIRTUAL                                   | -     |
+| category            | string | false    | 卡分类 GIFT_CARD,DEBIT_CARD,PREPAID_CARD,CREDIT_CARD | -     |
+| currency            | string | false    | 币种                                                | -     |
+| applicationStatus   | string | false    | 申请状态                                              | -     |
+| reference           | string | false    | 唯一标识                                              | -     |
+| createTimestampFrom | int64  | false    | 创建时间开始时间戳                                         | -     |
+| createTimestampTo   | int64  | false    | 创建时间开始时间戳                                         | -     |
 
 **Request-example:**
 ```
@@ -4487,33 +4487,33 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/applicati
 ```
 **Response-fields:**
 
-| Field                                             | Type   | Description                                                                    | Since  |
-|---------------------------------------------------|--------|--------------------------------------------------------------------------------|--------|
-| code                                              | int32  | 响应码                                                                            | -      |
-| message                                           | string | 响应描述                                                                           | -      |
-| data                                              | object | 响应数据                                                                           | -      |
-| └─totalCount                                      | int64  | Total record count                                                             | -      |
-| └─pageSize                                        | int64  | Page size                                                                      | -      |
-| └─totalPage                                       | int64  | Total pages                                                                    | -      |
-| └─pageNo                                          | int64  | Current page                                                                   | -      |
-| └─data                                            | array  | data records                                                                   | -      |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid               | string | 用户uid                                                                          | -      |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName         | string | 名                                                                              | -      |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName          | string | 姓                                                                              | -      |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType          | string | 卡类型 PHY,VIRTUAL                                                                | -      |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category          | string | 卡分类 GIFT_CARD,DEBIT_CARD,PREPAID_CARD,CREDIT_CARD                              | -      |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency          | string | 币种                                                                             | -      |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneNo           | string | 手机号                                                                            | -      |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─email             | string | 邮箱                                                                             | -      |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender            | string | 性别 MALE                                                                        | FEMALE |-|
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardId            | string | 卡id                                                                            | -      |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reference         | string | 唯一标识                                                                           | -      |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─applicationId     | string | 申请记录id                                                                         | -      |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─applicationStatus | string | 申请状态 PENDING_INITIALIZATION, UNDER_REVIEW, REJECTED, APPROVED, SUCCESS, FAILED | -      |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createTimestamp   | int64  | 创建时间                                                                           | -      |
-| timestamp                                         | string | 时间戳毫秒                                                                          | -      |
-| key                                               | string | 加密key                                                                          | -      |
-| sign                                              | string | 签名                                                                             | -      |
+| Field                                             | Type   | Description                                                                    | Since |
+|---------------------------------------------------|--------|--------------------------------------------------------------------------------|-------|
+| code                                              | int32  | 响应码                                                                            | -     |
+| message                                           | string | 响应描述                                                                           | -     |
+| data                                              | object | 响应数据                                                                           | -     |
+| └─totalCount                                      | int64  | Total record count                                                             | -     |
+| └─pageSize                                        | int64  | Page size                                                                      | -     |
+| └─totalPage                                       | int64  | Total pages                                                                    | -     |
+| └─pageNo                                          | int64  | Current page                                                                   | -     |
+| └─data                                            | array  | data records                                                                   | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid               | string | 用户uid                                                                          | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName         | string | 名                                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName          | string | 姓                                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType          | string | 卡类型 PHY,VIRTUAL                                                                | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category          | string | 卡分类 GIFT_CARD,DEBIT_CARD,PREPAID_CARD,CREDIT_CARD                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency          | string | 币种                                                                             | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneNo           | string | 手机号                                                                            | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─email             | string | 邮箱                                                                             | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender            | string | 性别 MALE,FEMALE                                                                 | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardId            | string | 卡id                                                                            | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reference         | string | 唯一标识                                                                           | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─applicationId     | string | 申请记录id                                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─applicationStatus | string | 申请状态 PENDING_INITIALIZATION, UNDER_REVIEW, REJECTED, APPROVED, SUCCESS, FAILED | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createTimestamp   | int64  | 创建时间                                                                           | -     |
+| timestamp                                         | string | 时间戳毫秒                                                                          | -     |
+| key                                               | string | 加密key                                                                          | -     |
+| sign                                              | string | 签名                                                                             | -     |
 
 **Response-example:**
 ```
