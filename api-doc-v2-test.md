@@ -5245,6 +5245,311 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/det
   "sign": "LwpZUp"
 }
 ```
+### 更新持卡人手机
+**URL:** /api/v2/build/card/holder/updatePhone
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 更新持卡人手机
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|phoneNumber|string|true|手机号|-|
+|countryCode|string|true|国家号|-|
+|uid|string|true|用户id|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/updatePhone --data '{
+  "phoneNumber": "123456",
+  "countryCode": "+61",
+  "uid": "1881937643756720128"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 更个新持卡人邮箱地址
+**URL:** /api/v2/build/card/holder/updateEmail
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 更个新持卡人邮箱地址
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|email|string|true|邮箱地址|-|
+|uid|string|true|用户id|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/updateEmail --data '{
+  "email": "somewhere@gmail.com",
+  "uid": "1881937643756720128"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 更新持卡人信息
+**URL:** /api/v2/build/card/holder/updateCardHolder
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 更新持卡人信息
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|uid|string|true|用户id|-|
+|firstName|string|false|名|-|
+|midName|string|false|中间名|-|
+|lastName|string|false|姓|-|
+|birthday|string|false|生日|-|
+|gender|string|false|性别 MALE,FEMALE|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/updateCardHolder --data '{
+  "uid": "1881937643756720128",
+  "firstName": "Jame",
+  "midName": "D",
+  "lastName": "Joe",
+  "birthday": "2000-02-01",
+  "gender": "MALE"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 更新持卡人账单地址
+**URL:** /api/v2/build/card/holder/updateBillingAddress
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 更新持卡人账单地址
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|cardId|string|true|卡id|-|
+|country|string|true|国家IOS码|-|
+|city|string|true|城市或地区|-|
+|neighborhood|string|false|最近的建築物|-|
+|state|string|true|地址所在州、省、县或地区|-|
+|addressLine1|string|true|地址第一行|-|
+|addressLine2|string|false|地址第二行|-|
+|addressLine3|string|false|地址第三行|-|
+|phoneticLine1|string|false||-|
+|phoneticLine2|string|false||-|
+|phoneticLine3|string|false||-|
+|postcode|string|true|邮政编码或邮政编码|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/updateBillingAddress --data '{
+  "cardId": "ETLPzgGfSzgnqqi",
+  "country": "US",
+  "city": "Hollywood",
+  "neighborhood": "The neighborhood",
+  "state": "CA",
+  "addressLine1": "cheer Building",
+  "addressLine2": "Chifley Tower",
+  "addressLine3": "2 Square",
+  "phoneticLine1": "phoneticLine1",
+  "phoneticLine2": "phoneticLine2",
+  "phoneticLine3": "phoneticLine3",
+  "postcode": "100001"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 查询持卡人详情
+**URL:** /api/v2/build/card/holder/detail
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 查询持卡人详情
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|id|string|true|记录id|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/detail --data '{
+  "id": "81823"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─id|string|持卡人id|-|
+|└─uid|string|持卡人用户id|-|
+|└─name|string|持卡人全名|-|
+|└─firstName|string|持卡人名|-|
+|└─midName|string|持卡人中间名|-|
+|└─lastName|string|持卡人姓|-|
+|└─birthday|string|持卡人生日|-|
+|└─phoneNo|string|持卡人手机|-|
+|└─email|string|持卡人邮箱|-|
+|└─gender|string|持卡人性别|-|
+|└─addr|object|地址|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|地址所在州、省、县或地区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|地址第一行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|地址第二行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|地址第三行|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "id": "181823123",
+    "uid": "1698974509547507713",
+    "name": "Tommy.Ernest.Emmanuel",
+    "firstName": "Tommy",
+    "midName": "Ernest",
+    "lastName": "Emmanuel",
+    "birthday": "1990-01-01",
+    "phoneNo": "+61-123456789",
+    "email": "contactMe@gmail.com",
+    "gender": "MALE",
+    "addr": {
+      "country": "US",
+      "city": "Hollywood",
+      "neighborhood": "The neighborhood",
+      "state": "CA",
+      "addressLine1": "cheer Building",
+      "addressLine2": "Chifley Tower",
+      "addressLine3": "2 Square",
+      "phoneticLine1": "phoneticLine1",
+      "phoneticLine2": "phoneticLine2",
+      "phoneticLine3": "phoneticLine3",
+      "postcode": "100001"
+    }
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
 
 ### 更新卡pin
 **URL:** /api/v2/build/card/updateCardPin
@@ -5454,12 +5759,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/activePhy
 | Parameter | Type | Required | Description | Since |
 |-----------|------|----------|-------------|-------|
 |cardId|string|true|卡id|-|
-|acceptorName|string|false|接收者名字|-|
-|transactionSource|string|false|交易来源|-|
+|acceptorName|string|true|接收者名字|-|
+|transactionSource|string|true|交易来源|-|
 |originalAuthorizationId|string|false|原始验证id|-|
 |originalTransactionId|string|false|原始交易id|-|
-|partial|int32|false|partial|-|
-|amount|number|false|金额|-|
+|partial|int32|true|partial|-|
+|amount|number|true|金额|-|
 
 **Request-example:**
 ```
@@ -5519,8 +5824,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 |currency|string|true|币种|-|
 |amount|number|true|金额|-|
 |authorizationId|string|false|验证id|-|
-|type|string|false|交易类型 PURCHASE,REFUND|-|
-|partnerTransactionType|string|false|合作方交易类型 LOAD,WITHDRAW|-|
+|type|string|true|交易类型 PURCHASE,REFUND|-|
+|partnerTransactionType|string|true|合作方交易类型 LOAD,WITHDRAW|-|
 
 **Request-example:**
 ```
@@ -5580,9 +5885,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 |currency|string|true|币种|-|
 |amount|number|true|金额|-|
 |acceptorName|string|false||-|
-|transactionSource|string|false||-|
-|type|string|false|交易类型 PURCHASE,REFUND|-|
-|partnerTransactionType|string|false|合作方交易类型 LOAD,WITHDRAW|-|
+|transactionSource|string|true||-|
+|type|string|true|交易类型 PURCHASE,REFUND|-|
+|partnerTransactionType|string|true|合作方交易类型 LOAD,WITHDRAW|-|
 
 **Request-example:**
 ```
@@ -5619,6 +5924,207 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
     "authorizationId": "ETLPzgGfSzDTTLQuKEvVlssjp_-e",
     "message": "success"
   },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 模拟卡绑定电子钱包时验证码发送
+**URL:** /api/v2/build/card/simulate/behavior/activationCode
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 模拟卡绑定电子钱包时验证码发送
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|activationCode|string|true|激活码|-|
+|activationMethod|string|true|激活码方式,SMS,EMAIL|-|
+|cardId|string|true|卡id|-|
+|expirationTime|int64|true|失效时间戳|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/behavior/activationCode --data '{
+  "activationCode": "555666",
+  "activationMethod": "SMS",
+  "cardId": "ETLPzgGfSzg5-ih",
+  "expirationTime": 1737525034246
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 模拟发送OTP消息
+**URL:** /api/v2/build/card/simulate/behavior/sendOtp
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 模拟发送OTP消息
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|uid|string|false|用户id|-|
+|cardId|string|false|卡id|-|
+|option|string|false|方式，SMS,EMAIL|-|
+|otp|string|false|一次性验证码|-|
+|remark|object|false|备注信息|-|
+|└─amount|string|false|金额|-|
+|└─currency|string|false|币种|-|
+|└─merchantName|string|false|商户名|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/behavior/sendOtp --data '{
+  "uid": "1870731091074093056",
+  "cardId": "ETLPzgGfSzgmhhj",
+  "option": "EMAIL",
+  "otp": "881723",
+  "remark": {
+    "amount": "18.4",
+    "currency": "USD",
+    "merchantName": "apple"
+  }
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 模拟发送验证方式选择消息
+**URL:** /api/v2/build/card/simulate/behavior/verificationChoose
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 模拟发送验证方式选择消息
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|uid|string|false|用户id|-|
+|cardId|string|false|卡id|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/behavior/verificationChoose --data '{
+  "uid": "1870731091074093056",
+  "cardId": "ETLPzgGfSzgmhhj"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 模拟OBB验证
+**URL:** /api/v2/build/card/simulate/behavior/obbValidate
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 模拟OBB验证
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|uid|string|false|用户id|-|
+|cardId|string|false|卡id|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/behavior/obbValidate --data '{
+  "uid": "1870731091074093056",
+  "cardId": "ETLPzgGfSzgmhhj"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
   "timestamp": "1685343278618",
   "key": "tvJ1Um",
   "sign": "LwpZUp"
