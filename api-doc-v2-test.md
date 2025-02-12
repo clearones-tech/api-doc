@@ -24,9 +24,10 @@
 | 2.0.19  | 2025-01-20 11:20:00 |modify|clearones| 1. 新增接口：连接账号交易-直接创建交易（/api/v2/connect/transaction/create/direct）<br> 2. 新增接口：FX兑换业务-直接创建FX交易（/api/v2/fx/transaction/create/direct）<br> 3. 新增接口：收款人管理模块-法币直接创建收款方请求（/api/v2/recipient/fiat/create/direct）<br> 4. 新增接口：收款人管理模块-加密货币直接创建收款方请求（/api/v2/recipient/crypto/create/direct）<br> 5. 新增接口：交易-直接创建交易加密交易（/api/v2/transaction/crypto/create/direct）<br> 6. 新增接口：交易-直接创建一个法币转账（/api/v2/transaction/fiat/create/direct）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | 2.0.20  | 2025-02-05 11:20:00 |modify|clearones| 增加卡业务相关接口                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
-
 ## 接入说明
+
 ### 请求统一参数
+
 | Parameter | Type   | Required | Description  | Since |
 |-----------|--------|----------|--------------|-------|
 |apiKey| string |false| apiKey       |-|
@@ -34,8 +35,11 @@
 |bizContent| string |false| 请求业务参数加密后的内容 |-|
 |key| string |false| 加密key        |-|
 |sign| string |false| 签名           |-|
+
 ### API鉴权
-ClearOnes 所有的 API 接口在请求时，采用了对称密钥加密和非对称公钥加密的混合加密方案，并且使用非对称私钥对请求参数进行签名。对称加密算法采用 AES-256 算法，非对称加密和签名算法采用 RSA-4096 算法，具体流程如下：
+
+ClearOnes 所有的 API 接口在请求时，采用了对称密钥加密和非对称公钥加密的混合加密方案，并且使用非对称私钥对请求参数进行签名。对称加密算法采用
+AES-256 算法，非对称加密和签名算法采用 RSA-4096 算法，具体流程如下：
 
 + 将业务请求参数序列化为 JSON 字符串，**随机生成 32 字节 AES Key 和 16 字节初始化向量 IV**
 + 使用 AES Key 和 IV 对该 JSON 字符串进行加密，加密结果 base64 编码后作为请求参数中的 `bizContent` 字段
@@ -54,7 +58,9 @@ ClearOnes 会使用同样的流程对接口响应业务参数进行加密和签�
 ```shell
 openssl genpkey -out api_private.pem -algorithm RSA -pkeyopt rsa_keygen_bits:4096
 ```
+
 使用 OpenSSL 生成 RSA 私钥对应的公钥（`api_public.pem` 为您的 API RSA 公钥）：
+
 ```shell
 openssl rsa -in api_private.pem -out api_public.pem -pubout
 ```
@@ -64,30 +70,33 @@ openssl rsa -in api_private.pem -out api_public.pem -pubout
 + 您只需要在 ClearOnes 控制台中设置您的 API RSA 公钥，请妥善保管您的 API RSA 私钥，避免泄漏带来安全隐患
 
 ### IP白名单
+
 在调用 ClearOnes API 时，只允许从您设置的 IP 白名单地址发起请求，您需要在创建 API Key 时设置调用发起的 IP 地址。
 
 ### 名词解释
+
 **<div id="channelKey">转账通道(channelKey/subChannelKey)分为:</div>**
 
 + swift: swift国际电汇转账方式，适用于法币
 + local: 银行本地支持的转账方式,channelKey为local时,subChannelKey可分为以下子通道，适用于法币
-  + chats: 香港的特快转账(RTGS/CHATS)
-  + fps: 香港转数快
-  + ach: 美国电子资金转账网络
-  + fedwire: 美国联邦储备银行运营的实时全额结算资金转账系统
-  + sepa: 欧盟推行的统一欧元支付区
-  + faster_payment: 实时支付系统
-  + eft: 电子资金转账
+    + chats: 香港的特快转账(RTGS/CHATS)
+    + fps: 香港转数快
+    + ach: 美国电子资金转账网络
+    + fedwire: 美国联邦储备银行运营的实时全额结算资金转账系统
+    + sepa: 欧盟推行的统一欧元支付区
+    + faster_payment: 实时支付系统
+    + eft: 电子资金转账
 + conet: Clearones的内部转账，适用于法币和加密货币
 + crypto: 加密货币链上转账方式，适用于加密货币
 + china_mainland: 中国大陆转账方式，适用于法币
 
 ## 用户账号模块
+
 ### 为用户创建账户
+
 **URL:** /api/v2/client/create
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -114,6 +123,7 @@ openssl rsa -in api_private.pem -out api_public.pem -pubout
 |contactNumber|string|false|电话|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/client/create --data '{
   "type": 1,
@@ -135,6 +145,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/client/create --data
   "contactNumber": "100-19231923"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -148,6 +159,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/client/create --data
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -162,10 +174,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/client/create --data
 ```
 
 ### 查询用户账户详情
+
 **URL:** /api/v2/client/detail
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -179,12 +191,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/client/create --data
 |customerRefId|string|false|调用方唯一业务id|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/client/detail --data '{
   "clientId": "1663027675055698121",
   "customerRefId": "53d73bed-0a15-4ef6-95f6-9e73304e6d7d"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -203,6 +217,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/client/detail --data
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -222,10 +237,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/client/detail --data
 ```
 
 ### 查询用户账户列表
+
 **URL:** /api/v2/client/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -240,6 +255,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/client/detail --data
 |status|int32|false|状态 1-审核中 2-已生效 3-审核拒绝|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/client/list --data '{
   "fromClientId": "1663027675055698121",
@@ -247,6 +263,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/client/list --data '
   "status": 2
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -265,6 +282,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/client/list --data '
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -286,11 +304,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/client/list --data '
 ```
 
 ## 国家
+
 ### 查询国家列表
+
 **URL:** /api/v2/country/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -303,9 +322,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/client/list --data '
 |empty|string|false|原始参数使用空串|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/country/list --data 'f5jyk5'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -321,6 +342,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/country/list --data 
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -339,11 +361,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/country/list --data 
 ```
 
 ## 币种
+
 ### 查询币种列表
+
 **URL:** /api/v2/currency/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -356,9 +379,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/country/list --data 
 |empty|string|false|原始参数使用空串|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/currency/list --data 'dkh7t5'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -378,6 +403,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/currency/list --data
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -400,22 +426,23 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/currency/list --data
 ```
 
 ## 文件上传
+
 ### 上传文件
+
 **URL:** /api/v2/file/upload
 
 **Type:** POST
 
-
 **Content-Type:** multipart/form-data
 
-**Description:** 把加签加密参数放在url后?apiKey=xxx&bizContent=参数加密哈希后的串&sign=xxx&key=xxx;支持的文件格式: jpg、jpeg、png、pdf、zip、rar、7z
+**Description:** 把加签加密参数放在url后?apiKey=xxx&bizContent=参数加密哈希后的串&sign=xxx&key=xxx;支持的文件格式:
+jpg、jpeg、png、pdf、zip、rar、7z
 
 **Request-headers:**
 
 | Header | Type | Required | Description | Since |
 |--------|------|----------|-------------|-------|
 |x-user-ip|string|true|No comments found.|-|
-
 
 **Query-parameters:**
 
@@ -429,9 +456,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/currency/list --data
 | sign       | string | true     | 签名                                                                                | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v2/file/upload --data 'apiKey=6o2hdx&timestamp=1715065450461266&bizContent=conkhb&key=w5et16&sign=i8dqwf'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -445,6 +474,7 @@ curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v2/file/u
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -459,11 +489,12 @@ curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v2/file/u
 ```
 
 ## 资金账号模块
+
 ### 查询账号币种列表,资金账户合并,该接口可同时查询法币和加密货币账户余额
+
 **URL:** /api/v2/fund/account/currency/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -478,6 +509,7 @@ curl -X POST -H 'Content-Type: multipart/form-data' -F 'file=' -i /api/v2/file/u
 |currencyKey|string|false|币种唯一标识|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/currency/list --data '{
   "clientId": "1663027675055698121",
@@ -485,6 +517,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/currenc
   "currencyKey": "USDT_ERC20"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -501,6 +534,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/currenc
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -520,10 +554,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/currenc
 ```
 
 ### 查询用户单个币种的收款地址
+
 **URL:** /api/v2/fund/account/currency/deposit
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -537,12 +571,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/currenc
 |currencyKey|string|true|资金币种|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/currency/deposit --data '{
   "clientId": "1663027675055698121",
   "currencyKey": "USD"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -577,6 +613,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/currenc
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -614,10 +651,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/currenc
 ```
 
 ### 通过conetId查询用户名
+
 **URL:** /api/v2/fund/account/queryConetId
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -632,6 +669,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/currenc
 |currencyKey|string|true|币种标识|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/queryConetId --data '{
   "clientId": "1663027675055698121",
@@ -639,6 +677,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/queryCo
   "currencyKey": "ETH"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -653,6 +692,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/queryCo
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -668,11 +708,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/queryCo
 ```
 
 ## 收款人管理模块
+
 ### 查询法币创建收款方可支持的通道
+
 **URL:** /api/v2/recipient/fiat/supportCreateChannel
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -686,12 +727,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fund/account/queryCo
 |currencyKey|string|true|币种标识|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/supportCreateChannel --data '{
   "clientId": "1663027675055698121",
   "currencyKey": "USD"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -706,6 +749,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/suppo
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -723,10 +767,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/suppo
 ```
 
 ### 法币创建收款方请求（需要用户授权）
+
 **URL:** /api/v2/recipient/fiat/create
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -767,6 +811,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/suppo
 |label|string|false|标签别称|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/create --data '{
   "clientId": "1663027675055698121",
@@ -800,6 +845,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/creat
   "label": "zhangsan"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -813,6 +859,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/creat
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -827,10 +874,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/creat
 ```
 
 ### 法币直接创建收款方请求
+
 **URL:** /api/v2/recipient/fiat/create/direct
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -871,6 +918,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/creat
 |label|string|false|标签别称|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/create/direct --data '{
   "clientId": "1663027675055698121",
@@ -904,6 +952,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/creat
   "label": "zhangsan"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -918,6 +967,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/creat
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -933,10 +983,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/creat
 ```
 
 ### 法币获取收款地址列表
+
 **URL:** /api/v2/recipient/fiat/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -951,6 +1001,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/creat
 |status|int32|false|收款方状态(1:审批中；2:已生效；3:审批拒绝；)|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/list --data '{
   "clientId": "1663027675055698121",
@@ -958,6 +1009,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/list 
   "status": 2
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -1001,6 +1053,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/list 
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -1047,10 +1100,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/list 
 ```
 
 ### 法币获取收款地址详情
+
 **URL:** /api/v2/recipient/fiat/detail
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -1065,6 +1118,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/list 
 |customerRefId|string|false|调用方唯一业务id|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/detail --data '{
   "clientId": "1663027675055698121",
@@ -1072,6 +1126,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/detai
   "customerRefId": "53d73bed-0a15-4ad6-95f6-9e73381ec17d"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -1115,6 +1170,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/detai
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -1159,10 +1215,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/detai
 ```
 
 ### 法币删除收款方
+
 **URL:** /api/v2/recipient/fiat/delete
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -1176,12 +1232,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/detai
 |recipientId|string|true|收款地址id|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/delete --data '{
   "clientId": "1663027675055698121",
   "recipientId": "11"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -1195,6 +1253,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/delet
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -1209,10 +1268,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/delet
 ```
 
 ### 加密货币创建收款方请求（需要用户授权）
+
 **URL:** /api/v2/recipient/crypto/create
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -1229,6 +1288,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/fiat/delet
 |address|string|true|加密货币地址|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/create --data '{
   "clientId": "1663027675055698121",
@@ -1238,6 +1298,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/cre
   "address": "0x2B2711eADBb960f99221BF795EDFdc036798822D"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -1251,6 +1312,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/cre
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -1265,10 +1327,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/cre
 ```
 
 ### 加密货币直接创建收款方请求
+
 **URL:** /api/v2/recipient/crypto/create/direct
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -1285,6 +1347,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/cre
 |address|string|true|加密货币地址|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/create/direct --data '{
   "clientId": "1663027675055698121",
@@ -1294,6 +1357,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/cre
   "address": "0x2B2711eADBb960f99221BF795EDFdc036798822D"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -1308,6 +1372,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/cre
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -1323,10 +1388,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/cre
 ```
 
 ### 加密货币获取收款地址列表
+
 **URL:** /api/v2/recipient/crypto/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -1340,12 +1405,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/cre
 |currencyKey|string|false|资金币种|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/list --data '{
   "clientId": "1663027675055698121",
   "currencyKey": "USDT_TRC20"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -1364,6 +1431,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/lis
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -1385,10 +1453,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/lis
 ```
 
 ### 加密货币获取收款地址详情
+
 **URL:** /api/v2/recipient/crypto/detail
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -1403,6 +1471,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/lis
 |customerRefId|string|false|调用方唯一业务id|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/detail --data '{
   "clientId": "1663027675055698121",
@@ -1410,6 +1479,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/det
   "customerRefId": "53d73bed-0a15-4ad6-95f6-9e73381ec17d"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -1428,6 +1498,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/det
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -1447,10 +1518,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/det
 ```
 
 ### 加密货币删除收款方
+
 **URL:** /api/v2/recipient/crypto/delete
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -1464,12 +1535,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/det
 |recipientId|string|true|收款地址id|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/delete --data '{
   "clientId": "1663027675055698121",
   "recipientId": "11"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -1483,6 +1556,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/del
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -1497,11 +1571,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/del
 ```
 
 ## 交易
+
 ### 创建交易加密交易（需要用户授权）
+
 **URL:** /api/v2/transaction/crypto/create
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -1519,6 +1594,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/recipient/crypto/del
 |note|string|false|备注，最长100|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/create --data '{
   "clientId": "1663027675055698121",
@@ -1529,6 +1605,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/c
   "note": "差旅费"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -1542,6 +1619,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/c
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -1556,10 +1634,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/c
 ```
 
 ### 直接创建交易加密交易
+
 **URL:** /api/v2/transaction/crypto/create/direct
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -1577,6 +1655,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/c
 |note|string|false|备注，最长100|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/create/direct --data '{
   "clientId": "1663027675055698121",
@@ -1587,6 +1666,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/c
   "note": "差旅费"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -1601,6 +1681,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/c
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -1616,10 +1697,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/c
 ```
 
 ### 创建一个法币转账（需要用户授权）
+
 **URL:** /api/v2/transaction/fiat/create
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -1642,6 +1723,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/c
 |note|string|false|备注|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/create --data '{
   "clientId": "1663027675055698121",
@@ -1660,6 +1742,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/cre
   "note": "jglye5"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -1673,6 +1756,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/cre
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -1687,10 +1771,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/cre
 ```
 
 ### 直接创建一个法币转账
+
 **URL:** /api/v2/transaction/fiat/create/direct
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -1713,6 +1797,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/cre
 |note|string|false|备注|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/create/direct --data '{
   "clientId": "1663027675055698121",
@@ -1731,6 +1816,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/cre
   "note": "cqn6bj"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -1745,6 +1831,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/cre
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -1760,10 +1847,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/cre
 ```
 
 ### 查询交易列表
+
 **URL:** /api/v2/transaction/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -1782,6 +1869,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/cre
 |createTimestampTo|int64|false|创建时间结束时间戳，UNIX 时间戳毫秒数|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/list --data '{
   "clientId": "1663027675055698121",
@@ -1793,6 +1881,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/list --d
   "createTimestampTo": 1672056033898
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -1832,6 +1921,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/list --d
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -1874,10 +1964,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/list --d
 ```
 
 ### 查询交易详情
+
 **URL:** /api/v2/transaction/detail
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -1892,6 +1982,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/list --d
 |transactionNo|string|false|交易号，与参数customerRefId二选一必填，如果两个都有值，将按照两个参数查询|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/detail --data '{
   "clientId": "1663027675055698121",
@@ -1899,6 +1990,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/detail -
   "transactionNo": "1663027675055698130"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -1941,6 +2033,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/detail -
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -1984,10 +2077,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/detail -
 ```
 
 ### 查询法币交易手续费
+
 **URL:** /api/v2/transaction/fiat/fee
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -2005,6 +2098,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/detail -
 |recipientId|int64|true|收款方ID|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/fee --data '{
   "clientId": "1663027675055698121",
@@ -2015,6 +2109,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/fee
   "recipientId": 140
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -2028,6 +2123,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/fee
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -2042,10 +2138,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/fee
 ```
 
 ### 查询加密货币交易预估手续费
+
 **URL:** /api/v2/transaction/crypto/estimated/fee
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -2061,8 +2157,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/fee
 | recipientId |string| false    | 收款方ID,和address任选其一,优先address   |-|
 | address     |string| false    | 收款地址,和recipientId任选其一,优先address |-|
 
-
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/estimated/fee --data '{
   "clientId": "1663027675055698121",
@@ -2071,6 +2167,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/e
   "recipientId": "11"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -2085,6 +2182,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/e
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -2100,10 +2198,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/e
 ```
 
 ### 添加交易凭证
+
 **URL:** /api/v2/transaction/proof/add
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -2118,6 +2216,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/e
 |objectKeyList|array|true| 上传后的对象key列表 |-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/proof/add --data '{
   "clientId": "1663027675055698121",
@@ -2125,6 +2224,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/proof/ad
   "objectKey": ["clearones-fiat-test/tt/1.zip", "clearones-fiat-test/tt/2.zip"]
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -2138,6 +2238,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/proof/ad
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -2150,11 +2251,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/proof/ad
   "sign": "LwpZUp"
 }
 ```
+
 ### 获取转账凭证下载地址
+
 **URL:** /api/v2/transaction/transferNotice/download
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -2168,12 +2270,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/proof/ad
 |transactionNo|string|true|交易号|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/transferNotice/download --data '{
   "clientId": "1663027675055698121",
   "transactionNo": "1663027675055698130"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -2187,6 +2291,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/transfer
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -2200,18 +2305,19 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/transfer
 }
 ```
 
-
 ## 授权
+
 ### 授权验证
+
 **URL:** /api/v2/authorization/verify
 
 **Type:** POST
 
-
 **Content-Type:** application/json
 
 **Description:** 对于创建交易和收款人的操作,Clearones会下发邮件验证码给用户,用户收到验证码后需要填写验证码才能继续后续的业务操作;
-授权验证接口就是在调用写操作接口(1:加密货币提币；2:法币转账；3:加密货币添加收款地址；4:法币添加收款人；5:连接账号提币；6:FX创建交易；)后续需要验证该操作并真正执行上述接口操作的接口
+授权验证接口就是在调用写操作接口(1:加密货币提币；2:法币转账；3:加密货币添加收款地址；4:法币添加收款人；5:连接账号提币；6:
+FX创建交易；)后续需要验证该操作并真正执行上述接口操作的接口
 
 **Body-parameters:**
 
@@ -2223,6 +2329,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/transfer
 |verificationCode|string|true|验证码|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/authorization/verify --data '{
   "clientId": "1663027675055698121",
@@ -2231,6 +2338,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/authorization/verify
   "verificationCode": "123456"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -2245,6 +2353,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/authorization/verify
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -2260,11 +2369,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/authorization/verify
 ```
 
 ## 账单
+
 ### 查询合并账单列表
+
 **URL:** /api/v2/bill/merged/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -2282,6 +2392,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/authorization/verify
 |createTimestampTo|int64|false|创建时间结束时间戳，UNIX 时间戳毫秒数|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/bill/merged/list --data '{
   "fromNo": "20240307701775180101",
@@ -2292,6 +2403,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/bill/merged/list --d
   "createTimestampTo": 1672056033898
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -2314,6 +2426,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/bill/merged/list --d
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -2339,10 +2452,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/bill/merged/list --d
 ```
 
 ### 查询子账单列表
+
 **URL:** /api/v2/bill/sub/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -2361,6 +2474,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/bill/merged/list --d
 |createTimestampTo|int64|false|创建时间结束时间戳，UNIX 时间戳毫秒数|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/bill/sub/list --data '{
   "fromNo": "20240307701775180101",
@@ -2372,6 +2486,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/bill/sub/list --data
   "createTimestampTo": 1672056033898
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -2391,6 +2506,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/bill/sub/list --data
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -2413,11 +2529,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/bill/sub/list --data
 ```
 
 ## 连接账号
+
 ### 查询账号列表
+
 **URL:** /api/v2/connect/account/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -2432,6 +2549,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/bill/sub/list --data
 |limit|int32|false|查询数量，默认20，最大100|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/list --data '{
   "clientId": "1663027675055698121",
@@ -2439,6 +2557,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/list
   "limit": 20
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -2459,6 +2578,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/list
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -2485,10 +2605,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/list
 ```
 
 ### 查询账号详情
+
 **URL:** /api/v2/connect/account/detail
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -2503,6 +2623,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/list
 |accountNo|string|false|账号编号，与参数customerRefId二选一必填，如果两个都有值，将按照两个参数查询|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/detail --data '{
   "clientId": "1663027675055698121",
@@ -2510,6 +2631,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/deta
   "accountNo": "11063639"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -2530,6 +2652,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/deta
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -2554,10 +2677,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/deta
 ```
 
 ### 查询账号币种列表
+
 **URL:** /api/v2/connect/account/currency/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -2571,12 +2694,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/deta
 |accountNo|string|true|账号编号|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/currency/list --data '{
   "clientId": "1663027675055698121",
   "accountNo": "11063639"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -2595,6 +2720,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/curr
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -2619,10 +2745,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/curr
 ```
 
 ### 查询账号币种详情
+
 **URL:** /api/v2/connect/account/currency/detail
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -2637,6 +2763,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/curr
 |currencyKey|string|true|币种唯一标识|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/currency/detail --data '{
   "clientId": "1663027675055698121",
@@ -2644,6 +2771,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/curr
   "currencyKey": "BTC"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -2662,6 +2790,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/curr
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -2684,11 +2813,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/curr
 ```
 
 ## 连接账号交易
+
 ### 预估交易手续费
+
 **URL:** /api/v2/connect/transaction/estimated/fee
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -2705,6 +2835,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/account/curr
 |toAddress|string|false|提币目标地址（当blockchainKey是solana时，必传，其他传了计算预估手续费会更精确）|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/estimated/fee --data '{
   "clientId": "1663027675055698121",
@@ -2714,6 +2845,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
   "toAddress": "0xfDb1FC3Ff8479bA88D4Ee44fF5Dbf8BB904a0E93"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -2728,6 +2860,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -2743,10 +2876,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 ```
 
 ### 创建交易（需要用户授权）
+
 **URL:** /api/v2/connect/transaction/create
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -2765,6 +2898,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 |note|string|false|备注，最长100|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/create --data '{
   "clientId": "1663027675055698121",
@@ -2776,6 +2910,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
   "note": "差旅费"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -2789,6 +2924,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -2803,10 +2939,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 ```
 
 ### 直接创建交易
+
 **URL:** /api/v2/connect/transaction/create/direct
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -2825,6 +2961,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 |note|string|false|备注，最长100|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/create/direct --data '{
   "clientId": "1663027675055698121",
@@ -2836,6 +2973,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
   "note": "差旅费"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -2850,6 +2988,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -2865,10 +3004,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 ```
 
 ### 查询交易列表
+
 **URL:** /api/v2/connect/transaction/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -2888,6 +3027,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 |createTimestampTo|int64|false|创建时间结束时间戳，UNIX 时间戳毫秒数|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/list --data '{
   "clientId": "1663027675055698121",
@@ -2900,6 +3040,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
   "createTimestampTo": 1672056033898
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -2928,6 +3069,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -2959,10 +3101,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 ```
 
 ### 查询交易详情
+
 **URL:** /api/v2/connect/transaction/detail
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -2977,6 +3119,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 |transactionNo|string|false|交易号，与参数customerRefId二选一必填，如果两个都有值，将按照两个参数查询|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/detail --data '{
   "clientId": "1663027675055698121",
@@ -2984,6 +3127,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
   "transactionNo": "1663027675055698130"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -3012,6 +3156,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -3041,11 +3186,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 ```
 
 ## FX兑换业务
+
 ### 查询用户FX交易对列表
+
 **URL:** /api/v2/fx/client/pair/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -3058,9 +3204,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/connect/transaction/
 |empty|string|false|参数使用空字符串|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/client/pair/list --data '801hmr'
 ```
+
 **Response-fields:**
 
 | Field | Type   | Description | Since |
@@ -3083,6 +3231,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/client/pair/list 
 |sign| string |签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -3107,10 +3256,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/client/pair/list 
 ```
 
 ### 查询FX交易列表
+
 **URL:** /api/v2/fx/transaction/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -3129,6 +3278,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/client/pair/list 
 |createTimestampTo|int64|false|创建时间结束时间戳，UNIX 时间戳毫秒数|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/list --data '{
   "clientId": "1663027675055698121",
@@ -3140,6 +3290,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/list 
   "createTimestampTo": 1672056033898
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -3171,6 +3322,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/list 
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -3204,10 +3356,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/list 
 ```
 
 ### 查询FX交易详情
+
 **URL:** /api/v2/fx/transaction/detail
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -3222,6 +3374,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/list 
 |transactionNo|string|false|交易号，与参数customerRefId二选一必填，如果两个都有值，将按照两个参数查询|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detail --data '{
   "clientId": "1663027675055698121",
@@ -3229,6 +3382,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detai
   "transactionNo": "1663027675055698130"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type   | Description | Since |
@@ -3260,6 +3414,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detai
 |sign| string |签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -3291,10 +3446,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detai
 ```
 
 ### 创建FX交易（需要用户授权）
+
 **URL:** /api/v2/fx/transaction/create
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -3313,6 +3468,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/detai
 |exchangeRate|string|false|使用的汇率|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/create --data '{
   "clientId": "1663027675055698121",
@@ -3324,6 +3480,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/creat
   "exchangeRate": "7.7832"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -3337,6 +3494,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/creat
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -3351,10 +3509,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/creat
 ```
 
 ### 直接创建FX交易
+
 **URL:** /api/v2/fx/transaction/create/direct
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -3373,6 +3531,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/creat
 |exchangeRate|string|false|使用的汇率|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/create/direct --data '{
   "clientId": "1663027675055698121",
@@ -3384,6 +3543,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/creat
   "exchangeRate": "7.7832"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -3398,6 +3558,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/creat
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -3413,10 +3574,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/creat
 ```
 
 ### 预算FX交易
+
 **URL:** /api/v2/fx/transaction/check
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -3433,6 +3594,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/creat
 |additionalFeeRate|string|false|附加服务费费率|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/check --data '{
   "clientId": "1663027675055698121",
@@ -3442,6 +3604,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/check
   "additionalFeeRate": "0.001"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -3461,6 +3624,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/check
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -3479,12 +3643,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/check
   "sign": "LwpZUp"
 }
 ```
+
 ## 卡业务
+
 ### 机构账户信息
+
 **URL:** /api/v2/build/card/merchant/info
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -3497,9 +3663,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/fx/transaction/check
 |empty|string|false|No comments found.|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/info --data '5uc7bs'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -3519,6 +3687,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -3542,10 +3711,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/
 ```
 
 ### 机构账户充值
+
 **URL:** /api/v2/build/card/merchant/deposit
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -3559,12 +3728,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/
 |amount|number|true|交易号|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/deposit --data '{
   "currencyKey": "USD",
   "amount": 200.1
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -3578,6 +3749,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -3592,10 +3764,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/
 ```
 
 ### 机构账户充值记录
+
 **URL:** /api/v2/build/card/merchant/deposit/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -3612,6 +3784,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/
 |createTimestampTo|int64|false|创建时间开始时间戳|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/deposit/list --data '{
   "fromNo": "1663027675055698130",
@@ -3621,6 +3794,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/
   "createTimestampTo": 1772056033898
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -3638,6 +3812,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -3658,10 +3833,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/
 ```
 
 ### 创建用户
+
 **URL:** /api/v2/build/card/user/create
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -3732,6 +3907,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/
 |legalEntityType|string|true|用户类型:INDIVIDUAL,COMPANY|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/create --data '{
   "individual": {
@@ -3806,6 +3982,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/crea
   "legalEntityType": "COMPANY"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -3819,6 +3996,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/crea
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -3833,10 +4011,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/crea
 ```
 
 ### 修改用户
+
 **URL:** /api/v2/build/card/user/update
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -3908,6 +4086,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/crea
 |id|string|true|用户id|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/update --data '{
   "individual": {
@@ -3983,6 +4162,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/upda
   "id": "18719918238131"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -3996,6 +4176,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/upda
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -4010,10 +4191,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/upda
 ```
 
 ### 用户列表
+
 **URL:** /api/v2/build/card/user/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -4033,6 +4214,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/upda
 |createTimestampTo|int64|false|创建时间开始时间戳|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/list --data '{
   "pageNo": 211,
@@ -4045,6 +4227,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/list
   "createTimestampTo": 1772056033898
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -4071,6 +4254,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/list
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -4101,10 +4285,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/list
 ```
 
 ### 用户详情
+
 **URL:** /api/v2/build/card/user/detail
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -4117,11 +4301,13 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/list
 |id|string|true|记录id|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/detail --data '{
   "id": "81823"
 }'
 ```
+
 **Response-fields:**
 
 | Field | Type | Description | Since |
@@ -4198,6 +4384,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/deta
 |sign|string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -4286,10 +4473,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/deta
 ```
 
 ### 创建卡
+
 **URL:** /api/v2/build/card/create
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -4355,6 +4542,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/user/deta
 |└─material|string|false|卡片材质|-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/create --data '{
   "uid": "18812391293",
@@ -4417,19 +4605,20 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/create --
   }
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|└─applicationId|string|申请id|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field           | Type | Description | Since |
+|-----------------|------|-------------|-------|
+| code            |int32|响应码|-|
+| message         |string|响应描述|-|
+| data            |object|响应数据|-|
+| └─applicationId |string|申请id |-||  timestamp       |string|时间戳毫秒|-|
+| key             |string|加密key|-|
+| sign            |string|签名|-|
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -4444,10 +4633,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/create --
 ```
 
 ### 卡申请列表
+
 **URL:** /api/v2/build/card/application/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -4470,6 +4659,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/create --
 | createTimestampTo   | int64  | false    | 创建时间开始时间戳                                         | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/application/list --data '{
   "pageNo": 297,
@@ -4485,6 +4675,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/applicati
   "createTimestampTo": 1772056033898
 }'
 ```
+
 **Response-fields:**
 
 | Field                                             | Type   | Description                                                                    | Since |
@@ -4516,6 +4707,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/applicati
 | sign                                              | string | 签名                                                                             | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -4551,10 +4743,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/applicati
 ```
 
 ### 审核卡
+
 **URL:** /api/v2/build/card/review
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -4562,32 +4754,35 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/applicati
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description                   | Since |
-|-----------|------|----------|-------------------------------|-------|
-|applicationId|string|true| 申请记录id                        |-|
-|reviewStatus|string|true| 审核 Allowed: APPROVED,REJECTED |-|
+| Parameter     | Type   | Require  d | Description                 | Sin ce |
+|---------------|------------------------------------------------------------|
+| applicationId | st ri ng       |true| 申请记录id                             |-|
+| reviewStatus |  stri      ng |true| 审核 All o w     ed: APPROVED,REJECTED |-|
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/review --data '{
   "applicationId": "ETLPzgGfSzDtuPNfeTMQqhonq-",
   "reviewStatus": "APPROVED"
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|└─applicationId|string|申请记录id|-|
-|└─cardId|string|卡id|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field           | Type   | Description | Since |
+|-----------------|--------|-------------|-------|
+| code            | int32  | 响应码         | -     |
+| message         | string | 响应描述        | -     |
+| data            | object | 响应数据        | -     |
+| └─applicationId | string | 申请记录id      | -     |
+| └─cardId        | string | 卡id         | -     |
+| timestamp       | string | 时间戳毫秒       | -     |
+| key             | string | 加密key       | -     |
+| sign            | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -4603,10 +4798,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/review --
 ```
 
 ### 实体卡签发卡
+
 **URL:** /api/v2/build/card/issuePhyCard
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -4614,14 +4809,15 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/review --
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|applicationId|string|true|申请记录id|-|
-|pan|string|true|卡号|-|
-|activationCode|string|true|激活码|-|
-|expiry|string|true|有效期|-|
+| Parameter      | Type   | Required | Description | Since |
+|----------------|--------|----------|-------------|-------|
+| applicationId  | string | true     | 申请记录id      | -     |
+| pan            | string | true     | 卡号          | -     |
+| activationCode | string | true     | 激活码         | -     |
+| expiry         | string | true     | 有效期         | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/issuePhyCard --data '{
   "applicationId": "ETLPzgGfSzDtuPNfeTMQqhonq-",
@@ -4630,18 +4826,20 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/issuePhyC
   "expiry": "203009"
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| code      | int32  | 响应码         | -     |
+| message   | string | 响应描述        | -     |
+| data      | object | 响应数据        | -     |
+| timestamp | string | 时间戳毫秒       | -     |
+| key       | string | 加密key       | -     |
+| sign      | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -4653,10 +4851,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/issuePhyC
 ```
 
 ### 卡片列表
+
 **URL:** /api/v2/build/card/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -4664,19 +4862,20 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/issuePhyC
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|pageNo|int64|false|No comments found.|-|
-|pageSize|int64|false|No comments found.|-|
-|cardHolderName|string|false|卡持有人名|-|
-|cardType|string|false|卡类型 PHY,VIRTUAL|-|
-|category|string|false|卡分类 DEBIT_CARD,PREPAID_CARD,CREDIT_CARD|-|
-|currency|string|false|结算币种|-|
-|cardStatus|string|false|卡状态|-|
-|createTimestampFrom|int64|false|创建时间开始时间戳|-|
-|createTimestampTo|int64|false|创建时间开始时间戳|-|
+| Parameter           | Type   | Required | Description                             | Since |
+|---------------------|--------|----------|-----------------------------------------|-------|
+| pageNo              | int64  | false    | No comments found.                      | -     |
+| pageSize            | int64  | false    | No comments found.                      | -     |
+| cardHolderName      | string | false    | 卡持有人名                                   | -     |
+| cardType            | string | false    | 卡类型 PHY,VIRTUAL                         | -     |
+| category            | string | false    | 卡分类 DEBIT_CARD,PREPAID_CARD,CREDIT_CARD | -     |
+| currency            | string | false    | 结算币种                                    | -     |
+| cardStatus          | string | false    | 卡状态                                     | -     |
+| createTimestampFrom | int64  | false    | 创建时间开始时间戳                               | -     |
+| createTimestampTo   | int64  | false    | 创建时间开始时间戳                               | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/list --data '{
   "pageNo": 75,
@@ -4690,36 +4889,38 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/list --da
   "createTimestampTo": 1772056033898
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|└─totalCount|int64|Total record count|-|
-|└─pageSize|int64|Page size|-|
-|└─totalPage|int64|Total pages|-|
-|└─pageNo|int64|Current page|-|
-|└─data|array|data records|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|用户uid|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardId|string|卡id|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cvv2|string|cvv2|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─expiry|string|有效期|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency|string|结算币种|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType|string|卡类型 PHYSICAL,VIRTUAL|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡分类 DEBIT_CARD,PREPAID_CARD,CREDIT_CARD|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardHolderName|string|卡持有人名|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─pan|string|卡号|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panFirst6|string|卡号前6位|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panLast4|string|卡号后4位|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardStatus|string|卡状态 NEW, CREATED, PRE_ACTIVATION, DISPATCHED, INVALID, ACTIVE, TEMP_BLOCKED, PERM_BLOCKED, REJECTED|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createTimestamp|int64|创建时间|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field                                           | Type   | Description                                                                                         | Since |
+|-------------------------------------------------|--------|-----------------------------------------------------------------------------------------------------|-------|
+| code                                            | int32  | 响应码                                                                                                 | -     |
+| message                                         | string | 响应描述                                                                                                | -     |
+| data                                            | object | 响应数据                                                                                                | -     |
+| └─totalCount                                    | int64  | Total record count                                                                                  | -     |
+| └─pageSize                                      | int64  | Page size                                                                                           | -     |
+| └─totalPage                                     | int64  | Total pages                                                                                         | -     |
+| └─pageNo                                        | int64  | Current page                                                                                        | -     |
+| └─data                                          | array  | data records                                                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid             | string | 用户uid                                                                                               | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardId          | string | 卡id                                                                                                 | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cvv2            | string | cvv2                                                                                                | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─expiry          | string | 有效期                                                                                                 | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency        | string | 结算币种                                                                                                | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType        | string | 卡类型 PHYSICAL,VIRTUAL                                                                                | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category        | string | 卡分类 DEBIT_CARD,PREPAID_CARD,CREDIT_CARD                                                             | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardHolderName  | string | 卡持有人名                                                                                               | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─pan             | string | 卡号                                                                                                  | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panFirst6       | string | 卡号前6位                                                                                               | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panLast4        | string | 卡号后4位                                                                                               | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardStatus      | string | 卡状态 NEW, CREATED, PRE_ACTIVATION, DISPATCHED, INVALID, ACTIVE, TEMP_BLOCKED, PERM_BLOCKED, REJECTED | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createTimestamp | int64  | 创建时间                                                                                                | -     |
+| timestamp                                       | string | 时间戳毫秒                                                                                               | -     |
+| key                                             | string | 加密key                                                                                               | -     |
+| sign                                            | string | 签名                                                                                                  | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -4754,10 +4955,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/list --da
 ```
 
 ### 卡详情
+
 **URL:** /api/v2/build/card/detail
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -4765,145 +4966,148 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/list --da
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|id|string|true|记录id|-|
+| Parameter | Type   | Required | Description | Since |
+|-----------|--------|----------|-------------|-------|
+| id        | string | true     | 记录id        | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/detail --data '{
   "id": "81823"
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|└─card|object|卡信息|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─id|string|卡id|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─customerId|string|卡业务类型|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─pan|string|卡号|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panFirst6|string|卡号前6位|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panLast4|string|卡号后4位|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|用户uid|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cvv2|string|cvv2|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─expiry|string|有效期|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType|string|卡类型 PHYSICAL,VIRTUAL|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡分类 DEBIT_CARD,PREPAID_CARD,CREDIT_CARD|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─status|string|卡状态|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createdAt|int64|创建时间|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─updatedAt|int64|修改时间|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardHolderName|string|卡持有人名|-|
-|└─cardProfile|object|卡片简介|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─logo|string|logo|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardNoRange|string|卡号范围|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─pinFailCount|int32|密码错误次数|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reissue|int32|补发次数|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─embossedName|string|图案名称|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─upstreamSeqNum|int32|上游序列号|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─billingAddress|object|No comments found.|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST,USER,BILLING|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|地址所在州、省、县或地区|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|地址第一行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|地址第二行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|地址第三行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postAddress|object|No comments found.|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST,USER,BILLING|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|地址所在州、省、县或地区|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|地址第一行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|地址第二行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|地址第三行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createdAt|int64|创建时间|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─updatedAt|int64|修改时间|-|
-|└─cardApplication|object|卡申请信息|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─id|string|申请记录id|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|用户id|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reference|string|唯一标识防重|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName|string|名|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─midName|string|中间名|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName|string|姓|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─birthday|string|出生日期，格式为YYYY-MM-DD|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneNo|string|电话号码，格式：{countryCode,0 ... 4 个字符}-{phoneNumber,0 ... 33 个字符}|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─email|string|邮箱地址|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|性别Allowed: MALE┃FEMALE|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─name|string|名字|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─userAddr|object|No comments found.|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST,USER,BILLING|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|地址所在州、省、县或地区|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|地址第一行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|地址第二行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|地址第三行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardBillingAddress|object|No comments found.|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST,USER,BILLING|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|地址所在州、省、县或地区|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|地址第一行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|地址第二行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|地址第三行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardPostAddress|object|No comments found.|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|地址类型 POST,USER,BILLING|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|地址所在州、省、县或地区|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|地址第一行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|地址第二行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|地址第三行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType|string|卡类型 Allowed: VIRTUAL,PHY|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡类别 Allowed: DEBIT_CARD,PREPAID_CARD,CREDIT_CARD|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─profile|string|申请卡简介|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardId|string|卡id|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─status|string|卡状态|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createdAt|int64|创建时间|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─updatedAt|int64|修改时间|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─limitAmount|string|消费限额|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─limitCurrency|string|限额币种|-|
-|└─cardLimit|object|卡消费限额|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─limit|int64|消费限额|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency|string|限额币种|-|
-|└─cardDesign|object|卡片设计信息|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─picFrontUrl|string|卡正面图|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─picBackUrl|string|卡别面图|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─name|string|卡名字|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field                                                                       | Type   | Description                                                  | Since |
+|-----------------------------------------------------------------------------|--------|--------------------------------------------------------------|-------|
+| code                                                                        | int32  | 响应码                                                          | -     |
+| message                                                                     | string | 响应描述                                                         | -     |
+| data                                                                        | object | 响应数据                                                         | -     |
+| └─card                                                                      | object | 卡信息                                                          | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─id                                          | string | 卡id                                                          | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─customerId                                  | string | 卡业务类型                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─pan                                         | string | 卡号                                                           | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panFirst6                                   | string | 卡号前6位                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panLast4                                    | string | 卡号后4位                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid                                         | string | 用户uid                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cvv2                                        | string | cvv2                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─expiry                                      | string | 有效期                                                          | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType                                    | string | 卡类型 PHYSICAL,VIRTUAL                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category                                    | string | 卡分类 DEBIT_CARD,PREPAID_CARD,CREDIT_CARD                      | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─status                                      | string | 卡状态                                                          | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createdAt                                   | int64  | 创建时间                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─updatedAt                                   | int64  | 修改时间                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardHolderName                              | string | 卡持有人名                                                        | -     |
+| └─cardProfile                                                               | object | 卡片简介                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─logo                                        | string | logo                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardNoRange                                 | string | 卡号范围                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─pinFailCount                                | int32  | 密码错误次数                                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reissue                                     | int32  | 补发次数                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─embossedName                                | string | 图案名称                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─upstreamSeqNum                              | int32  | 上游序列号                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─billingAddress                              | object | No comments found.                                           | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type          | string | 地址类型 POST,USER,BILLING                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country       | string | 国家IOS码                                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city          | string | 城市或地区                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood  | string | 最近的建築物                                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state         | string | 地址所在州、省、县或地区                                                 | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1  | string | 地址第一行                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2  | string | 地址第二行                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3  | string | 地址第三行                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1 | string |                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2 | string |                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3 | string |                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode      | string | 邮政编码或邮政编码                                                    | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postAddress                                 | object | No comments found.                                           | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type          | string | 地址类型 POST,USER,BILLING                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country       | string | 国家IOS码                                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city          | string | 城市或地区                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood  | string | 最近的建築物                                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state         | string | 地址所在州、省、县或地区                                                 | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1  | string | 地址第一行                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2  | string | 地址第二行                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3  | string | 地址第三行                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1 | string |                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2 | string |                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3 | string |                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode      | string | 邮政编码或邮政编码                                                    | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createdAt                                   | int64  | 创建时间                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─updatedAt                                   | int64  | 修改时间                                                         | -     |
+| └─cardApplication                                                           | object | 卡申请信息                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─id                                          | string | 申请记录id                                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid                                         | string | 用户id                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reference                                   | string | 唯一标识防重                                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName                                   | string | 名                                                            | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─midName                                     | string | 中间名                                                          | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName                                    | string | 姓                                                            | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─birthday                                    | string | 出生日期，格式为YYYY-MM-DD                                           | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneNo                                     | string | 电话号码，格式：{countryCode,0 ... 4 个字符}-{phoneNumber,0 ... 33 个字符} | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─email                                       | string | 邮箱地址                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender                                      | string | 性别Allowed: MALE┃FEMALE                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─name                                        | string | 名字                                                           | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─userAddr                                    | object | No comments found.                                           | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type          | string | 地址类型 POST,USER,BILLING                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country       | string | 国家IOS码                                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city          | string | 城市或地区                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood  | string | 最近的建築物                                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state         | string | 地址所在州、省、县或地区                                                 | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1  | string | 地址第一行                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2  | string | 地址第二行                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3  | string | 地址第三行                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1 | string |                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2 | string |                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3 | string |                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode      | string | 邮政编码或邮政编码                                                    | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardBillingAddress                          | object | No comments found.                                           | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type          | string | 地址类型 POST,USER,BILLING                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country       | string | 国家IOS码                                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city          | string | 城市或地区                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood  | string | 最近的建築物                                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state         | string | 地址所在州、省、县或地区                                                 | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1  | string | 地址第一行                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2  | string | 地址第二行                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3  | string | 地址第三行                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1 | string |                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2 | string |                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3 | string |                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode      | string | 邮政编码或邮政编码                                                    | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardPostAddress                             | object | No comments found.                                           | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type          | string | 地址类型 POST,USER,BILLING                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country       | string | 国家IOS码                                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city          | string | 城市或地区                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood  | string | 最近的建築物                                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state         | string | 地址所在州、省、县或地区                                                 | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1  | string | 地址第一行                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2  | string | 地址第二行                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3  | string | 地址第三行                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1 | string |                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2 | string |                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3 | string |                                                              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode      | string | 邮政编码或邮政编码                                                    | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType                                    | string | 卡类型 Allowed: VIRTUAL,PHY                                     | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category                                    | string | 卡类别 Allowed: DEBIT_CARD,PREPAID_CARD,CREDIT_CARD             | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─profile                                     | string | 申请卡简介                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardId                                      | string | 卡id                                                          | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─status                                      | string | 卡状态                                                          | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createdAt                                   | int64  | 创建时间                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─updatedAt                                   | int64  | 修改时间                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─limitAmount                                 | string | 消费限额                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─limitCurrency                               | string | 限额币种                                                         | -     |
+| └─cardLimit                                                                 | object | 卡消费限额                                                        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─limit                                       | int64  | 消费限额                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency                                    | string | 限额币种                                                         | -     |
+| └─cardDesign                                                                | object | 卡片设计信息                                                       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─picFrontUrl                                 | string | 卡正面图                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─picBackUrl                                  | string | 卡别面图                                                         | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─name                                        | string | 卡名字                                                          | -     |
+| timestamp                                                                   | string | 时间戳毫秒                                                        | -     |
+| key                                                                         | string | 加密key                                                        | -     |
+| sign                                                                        | string | 签名                                                           | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5044,10 +5248,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/detail --
 ```
 
 ### 卡订单列表
+
 **URL:** /api/v2/build/card/order/list
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5055,20 +5259,21 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/detail --
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|pageNo|int64|false|No comments found.|-|
-|pageSize|int64|false|No comments found.|-|
-|holderName|string|false|持卡人名字|-|
-|cardId|string|false|卡id|-|
-|uid|string|false|用户uid|-|
-|amountStart|number|false|金额from|-|
-|amountEnd|number|false|金额to|-|
-|orderStatus|string|false|订单状态 PENDING,WAITING FOR REVIEW,COMPLETED,CANCELLED,FAILED|-|
-|createTimestampFrom|int64|false|创建时间开始时间戳|-|
-|createTimestampTo|int64|false|创建时间开始时间戳|-|
+| Parameter           | Type   | Required | Description                                                | Since |
+|---------------------|--------|----------|------------------------------------------------------------|-------|
+| pageNo              | int64  | false    | No comments found.                                         | -     |
+| pageSize            | int64  | false    | No comments found.                                         | -     |
+| holderName          | string | false    | 持卡人名字                                                      | -     |
+| cardId              | string | false    | 卡id                                                        | -     |
+| uid                 | string | false    | 用户uid                                                      | -     |
+| amountStart         | number | false    | 金额from                                                     | -     |
+| amountEnd           | number | false    | 金额to                                                       | -     |
+| orderStatus         | string | false    | 订单状态 PENDING,WAITING FOR REVIEW,COMPLETED,CANCELLED,FAILED | -     |
+| createTimestampFrom | int64  | false    | 创建时间开始时间戳                                                  | -     |
+| createTimestampTo   | int64  | false    | 创建时间开始时间戳                                                  | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/list --data '{
   "pageNo": 520,
@@ -5083,43 +5288,45 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/lis
   "createTimestampTo": 1772056033898
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|└─totalCount|int64|Total record count|-|
-|└─pageSize|int64|Page size|-|
-|└─totalPage|int64|Total pages|-|
-|└─pageNo|int64|Current page|-|
-|└─data|array|data records|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|用户uid|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderNo|string|订单编号|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardId|string|卡id|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency|string|币种|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─holderName|string|持卡人名|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderAmount|number|订单金额|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─settleAmount|number|结算金额|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reversalAmount|number|退款金额|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─transactionType|string|交易类型 PURCHASE|REFUND|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─merchantName|string|商户名|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createTime|int64|用户uid|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderType|string|订单类型|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─transactionAmount|number|交易金额|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─transactionCurrency|string|交易币种|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardPresent|int32|是否有卡 1-有 0-没|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家ISO|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─mcc|string|交易mcc|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─relatedOrderNo|string|关联订单号用逗号分隔|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderStatus|string|订单状态 PENDING,WAITING FOR REVIEW,COMPLETED,CANCELLED,FAILED|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field                                               | Type   | Description                                                | Since  |
+|-----------------------------------------------------|--------|------------------------------------------------------------|--------|
+| code                                                | int32  | 响应码                                                        | -      |
+| message                                             | string | 响应描述                                                       | -      |
+| data                                                | object | 响应数据                                                       | -      |
+| └─totalCount                                        | int64  | Total record count                                         | -      |
+| └─pageSize                                          | int64  | Page size                                                  | -      |
+| └─totalPage                                         | int64  | Total pages                                                | -      |
+| └─pageNo                                            | int64  | Current page                                               | -      |
+| └─data                                              | array  | data records                                               | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid                 | string | 用户uid                                                      | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderNo             | string | 订单编号                                                       | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardId              | string | 卡id                                                        | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency            | string | 币种                                                         | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─holderName          | string | 持卡人名                                                       | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderAmount         | number | 订单金额                                                       | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─settleAmount        | number | 结算金额                                                       | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reversalAmount      | number | 退款金额                                                       | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─transactionType     | string | 交易类型 PURCHASE                                              | REFUND |-|
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─merchantName        | string | 商户名                                                        | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createTime          | int64  | 用户uid                                                      | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderType           | string | 订单类型                                                       | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─transactionAmount   | number | 交易金额                                                       | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─transactionCurrency | string | 交易币种                                                       | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardPresent         | int32  | 是否有卡 1-有 0-没                                               | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country             | string | 国家ISO                                                      | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city                | string | 城市                                                         | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─mcc                 | string | 交易mcc                                                      | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─relatedOrderNo      | string | 关联订单号用逗号分隔                                                 | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderStatus         | string | 订单状态 PENDING,WAITING FOR REVIEW,COMPLETED,CANCELLED,FAILED | -      |
+| timestamp                                           | string | 时间戳毫秒                                                      | -      |
+| key                                                 | string | 加密key                                                      | -      |
+| sign                                                | string | 签名                                                         | -      |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5161,10 +5368,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/lis
 ```
 
 ### 卡订单详情
+
 **URL:** /api/v2/build/card/order/detail
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5172,48 +5379,51 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/lis
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|orderNo|string| true     |订单号|-|
+| Parameter | Type   | Required | Description | Since |
+|-----------|--------|----------|-------------|-------|
+| orderNo   | string | true     | 订单号         | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/detail --data '{
   "orderNo": "1834499556319834112"
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|└─uid|string|用户uid|-|
-|└─orderNo|string|订单编号|-|
-|└─cardId|string|卡id|-|
-|└─currency|string|币种|-|
-|└─holderName|string|持卡人名|-|
-|└─orderAmount|number|订单金额|-|
-|└─settleAmount|number|结算金额|-|
-|└─reversalAmount|number|退款金额|-|
-|└─transactionType|string|交易类型 PURCHASE|REFUND|-|
-|└─merchantName|string|商户名|-|
-|└─createTime|int64|用户uid|-|
-|└─orderType|string|订单类型|-|
-|└─transactionAmount|number|交易金额|-|
-|└─transactionCurrency|string|交易币种|-|
-|└─cardPresent|int32|是否有卡 1-有 0-没|-|
-|└─country|string|国家ISO|-|
-|└─city|string|城市|-|
-|└─mcc|string|交易mcc|-|
-|└─relatedOrderNo|string|关联订单号用逗号分隔|-|
-|└─orderStatus|string|订单状态 PENDING,WAITING FOR REVIEW,COMPLETED,CANCELLED,FAILED|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field                 | Type   | Description                                                | Since  |
+|-----------------------|--------|------------------------------------------------------------|--------|
+| code                  | int32  | 响应码                                                        | -      |
+| message               | string | 响应描述                                                       | -      |
+| data                  | object | 响应数据                                                       | -      |
+| └─uid                 | string | 用户uid                                                      | -      |
+| └─orderNo             | string | 订单编号                                                       | -      |
+| └─cardId              | string | 卡id                                                        | -      |
+| └─currency            | string | 币种                                                         | -      |
+| └─holderName          | string | 持卡人名                                                       | -      |
+| └─orderAmount         | number | 订单金额                                                       | -      |
+| └─settleAmount        | number | 结算金额                                                       | -      |
+| └─reversalAmount      | number | 退款金额                                                       | -      |
+| └─transactionType     | string | 交易类型 PURCHASE                                              | REFUND |-|
+| └─merchantName        | string | 商户名                                                        | -      |
+| └─createTime          | int64  | 用户uid                                                      | -      |
+| └─orderType           | string | 订单类型                                                       | -      |
+| └─transactionAmount   | number | 交易金额                                                       | -      |
+| └─transactionCurrency | string | 交易币种                                                       | -      |
+| └─cardPresent         | int32  | 是否有卡 1-有 0-没                                               | -      |
+| └─country             | string | 国家ISO                                                      | -      |
+| └─city                | string | 城市                                                         | -      |
+| └─mcc                 | string | 交易mcc                                                      | -      |
+| └─relatedOrderNo      | string | 关联订单号用逗号分隔                                                 | -      |
+| └─orderStatus         | string | 订单状态 PENDING,WAITING FOR REVIEW,COMPLETED,CANCELLED,FAILED | -      |
+| timestamp             | string | 时间戳毫秒                                                      | -      |
+| key                   | string | 加密key                                                      | -      |
+| sign                  | string | 签名                                                         | -      |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5245,11 +5455,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/det
   "sign": "LwpZUp"
 }
 ```
+
 ### 更新持卡人手机
+
 **URL:** /api/v2/build/card/holder/updatePhone
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5257,13 +5468,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/det
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|phoneNumber|string|true|手机号|-|
-|countryCode|string|true|国家号|-|
-|uid|string|true|用户id|-|
+| Parameter   | Type   | Required | Description | Since |
+|-------------|--------|----------|-------------|-------|
+| phoneNumber | string | true     | 手机号         | -     |
+| countryCode | string | true     | 国家号         | -     |
+| uid         | string | true     | 用户id        | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/updatePhone --data '{
   "phoneNumber": "123456",
@@ -5271,18 +5483,20 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/up
   "uid": "1881937643756720128"
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| code      | int32  | 响应码         | -     |
+| message   | string | 响应描述        | -     |
+| data      | object | 响应数据        | -     |
+| timestamp | string | 时间戳毫秒       | -     |
+| key       | string | 加密key       | -     |
+| sign      | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5294,10 +5508,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/up
 ```
 
 ### 更个新持卡人邮箱地址
+
 **URL:** /api/v2/build/card/holder/updateEmail
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5305,30 +5519,33 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/up
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|email|string|true|邮箱地址|-|
-|uid|string|true|用户id|-|
+| Parameter | Type   | Required | Description | Since |
+|-----------|--------|----------|-------------|-------|
+| email     | string | true     | 邮箱地址        | -     |
+| uid       | string | true     | 用户id        | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/updateEmail --data '{
   "email": "somewhere@gmail.com",
   "uid": "1881937643756720128"
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| code      | int32  | 响应码         | -     |
+| message   | string | 响应描述        | -     |
+| data      | object | 响应数据        | -     |
+| timestamp | string | 时间戳毫秒       | -     |
+| key       | string | 加密key       | -     |
+| sign      | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5340,10 +5557,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/up
 ```
 
 ### 更新持卡人信息
+
 **URL:** /api/v2/build/card/holder/updateCardHolder
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5351,16 +5568,17 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/up
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|uid|string|true|用户id|-|
-|firstName|string|false|名|-|
-|midName|string|false|中间名|-|
-|lastName|string|false|姓|-|
-|birthday|string|false|生日|-|
-|gender|string|false|性别 MALE,FEMALE|-|
+| Parameter | Type   | Required | Description    | Since |
+|-----------|--------|----------|----------------|-------|
+| uid       | string | true     | 用户id           | -     |
+| firstName | string | false    | 名              | -     |
+| midName   | string | false    | 中间名            | -     |
+| lastName  | string | false    | 姓              | -     |
+| birthday  | string | false    | 生日             | -     |
+| gender    | string | false    | 性别 MALE,FEMALE | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/updateCardHolder --data '{
   "uid": "1881937643756720128",
@@ -5371,18 +5589,20 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/up
   "gender": "MALE"
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| code      | int32  | 响应码         | -     |
+| message   | string | 响应描述        | -     |
+| data      | object | 响应数据        | -     |
+| timestamp | string | 时间戳毫秒       | -     |
+| key       | string | 加密key       | -     |
+| sign      | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5394,10 +5614,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/up
 ```
 
 ### 更新持卡人账单地址
+
 **URL:** /api/v2/build/card/holder/updateBillingAddress
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5405,22 +5625,23 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/up
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|cardId|string|true|卡id|-|
-|country|string|true|国家IOS码|-|
-|city|string|true|城市或地区|-|
-|neighborhood|string|false|最近的建築物|-|
-|state|string|true|地址所在州、省、县或地区|-|
-|addressLine1|string|true|地址第一行|-|
-|addressLine2|string|false|地址第二行|-|
-|addressLine3|string|false|地址第三行|-|
-|phoneticLine1|string|false||-|
-|phoneticLine2|string|false||-|
-|phoneticLine3|string|false||-|
-|postcode|string|true|邮政编码或邮政编码|-|
+| Parameter     | Type   | Required | Description  | Since |
+|---------------|--------|----------|--------------|-------|
+| cardId        | string | true     | 卡id          | -     |
+| country       | string | true     | 国家IOS码       | -     |
+| city          | string | true     | 城市或地区        | -     |
+| neighborhood  | string | false    | 最近的建築物       | -     |
+| state         | string | true     | 地址所在州、省、县或地区 | -     |
+| addressLine1  | string | true     | 地址第一行        | -     |
+| addressLine2  | string | false    | 地址第二行        | -     |
+| addressLine3  | string | false    | 地址第三行        | -     |
+| phoneticLine1 | string | false    |              | -     |
+| phoneticLine2 | string | false    |              | -     |
+| phoneticLine3 | string | false    |              | -     |
+| postcode      | string | true     | 邮政编码或邮政编码    | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/updateBillingAddress --data '{
   "cardId": "ETLPzgGfSzgnqqi",
@@ -5437,18 +5658,20 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/up
   "postcode": "100001"
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| code      | int32  | 响应码         | -     |
+| message   | string | 响应描述        | -     |
+| data      | object | 响应数据        | -     |
+| timestamp | string | 时间戳毫秒       | -     |
+| key       | string | 加密key       | -     |
+| sign      | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5460,10 +5683,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/up
 ```
 
 ### 查询持卡人详情
+
 **URL:** /api/v2/build/card/holder/detail
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5471,50 +5694,53 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/up
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|id|string|true|记录id|-|
+| Parameter | Type   | Required | Description | Since |
+|-----------|--------|----------|-------------|-------|
+| id        | string | true     | 记录id        | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/detail --data '{
   "id": "81823"
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|└─id|string|持卡人id|-|
-|└─uid|string|持卡人用户id|-|
-|└─name|string|持卡人全名|-|
-|└─firstName|string|持卡人名|-|
-|└─midName|string|持卡人中间名|-|
-|└─lastName|string|持卡人姓|-|
-|└─birthday|string|持卡人生日|-|
-|└─phoneNo|string|持卡人手机|-|
-|└─email|string|持卡人邮箱|-|
-|└─gender|string|持卡人性别|-|
-|└─addr|object|地址|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家IOS码|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|城市或地区|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|最近的建築物|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|地址所在州、省、县或地区|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|地址第一行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2|string|地址第二行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3|string|地址第三行|-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3|string||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮政编码或邮政编码|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field                                         | Type   | Description  | Since |
+|-----------------------------------------------|--------|--------------|-------|
+| code                                          | int32  | 响应码          | -     |
+| message                                       | string | 响应描述         | -     |
+| data                                          | object | 响应数据         | -     |
+| └─id                                          | string | 持卡人id        | -     |
+| └─uid                                         | string | 持卡人用户id      | -     |
+| └─name                                        | string | 持卡人全名        | -     |
+| └─firstName                                   | string | 持卡人名         | -     |
+| └─midName                                     | string | 持卡人中间名       | -     |
+| └─lastName                                    | string | 持卡人姓         | -     |
+| └─birthday                                    | string | 持卡人生日        | -     |
+| └─phoneNo                                     | string | 持卡人手机        | -     |
+| └─email                                       | string | 持卡人邮箱        | -     |
+| └─gender                                      | string | 持卡人性别        | -     |
+| └─addr                                        | object | 地址           | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country       | string | 国家IOS码       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city          | string | 城市或地区        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood  | string | 最近的建築物       | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state         | string | 地址所在州、省、县或地区 | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1  | string | 地址第一行        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine2  | string | 地址第二行        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine3  | string | 地址第三行        | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine1 | string |              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine2 | string |              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneticLine3 | string |              | -     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode      | string | 邮政编码或邮政编码    | -     |
+| timestamp                                     | string | 时间戳毫秒        | -     |
+| key                                           | string | 加密key        | -     |
+| sign                                          | string | 签名           | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5550,12 +5776,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/de
 }
 ```
 
-
 ### 更新卡pin
+
 **URL:** /api/v2/build/card/updateCardPin
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5563,13 +5788,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/holder/de
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|uid|string| true     |用户uid|-|
-|cardId|string| true     |卡id|-|
-|pin|string| true     |卡密码|-|
+| Parameter | Type   | Required | Description | Since |
+|-----------|--------|----------|-------------|-------|
+| uid       | string | true     | 用户uid       | -     |
+| cardId    | string | true     | 卡id         | -     |
+| pin       | string | true     | 卡密码         | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/updateCardPin --data '{
   "uid": "18781278312312",
@@ -5577,18 +5803,20 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/updateCar
   "pin": "1234"
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| code      | int32  | 响应码         | -     |
+| message   | string | 响应描述        | -     |
+| data      | object | 响应数据        | -     |
+| timestamp | string | 时间戳毫秒       | -     |
+| key       | string | 加密key       | -     |
+| sign      | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5600,10 +5828,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/updateCar
 ```
 
 ### 解禁临时禁用卡
+
 **URL:** /api/v2/build/card/releaseBlock
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5611,13 +5839,14 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/updateCar
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|cardId|string| true       |卡id|-|
-|memo|string| false    |memo|-|
-|startTime|int64| false    |开始时间|-|
+| Parameter | Type   | Required | Description | Since |
+|-----------|--------|----------|-------------|-------|
+| cardId    | string | true     | 卡id         | -     |
+| memo      | string | false    | memo        | -     |
+| startTime | int64  | false    | 开始时间        | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/releaseBlock --data '{
   "cardId": "ETLPzgGfSzgmno",
@@ -5625,18 +5854,20 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/releaseBl
   "startTime": 0
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| code      | int32  | 响应码         | -     |
+| message   | string | 响应描述        | -     |
+| data      | object | 响应数据        | -     |
+| timestamp | string | 时间戳毫秒       | -     |
+| key       | string | 加密key       | -     |
+| sign      | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5648,10 +5879,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/releaseBl
 ```
 
 ### 临时禁用卡
+
 **URL:** /api/v2/build/card/block
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5659,14 +5890,15 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/releaseBl
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description                                                                                                     | Since |
-|-----------|------|----------|-----------------------------------------------------------------------------------------------------------------|-------|
-|cardId|string| true     | 卡id                                                                                                             |-|
-|memo|string| false    | memo                                                                                                            |-|
-|reason|string| true     | 原因 REPORTED_LOST_OR_STOLEN,TEMPORARY_SUSPENSION,FRAUD_PREVENTION,SYSTEM_RELATED,ACTIVATION_RELATED,DEACTIVATION |-|
-|startTime|int64| false    | 开始时间                                                                                                            |-|
+| Parameter | Type   | Required | Description                                                                                                     | Since |
+|-----------|--------|----------|-----------------------------------------------------------------------------------------------------------------|-------|
+| cardId    | string | true     | 卡id                                                                                                             | -     |
+| memo      | string | false    | memo                                                                                                            | -     |
+| reason    | string | true     | 原因 REPORTED_LOST_OR_STOLEN,TEMPORARY_SUSPENSION,FRAUD_PREVENTION,SYSTEM_RELATED,ACTIVATION_RELATED,DEACTIVATION | -     |
+| startTime | int64  | false    | 开始时间                                                                                                            | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/block --data '{
   "cardId": "ETLPzgGfSzgmno",
@@ -5675,18 +5907,20 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/block --d
   "startTime": 0
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| code      | int32  | 响应码         | -     |
+| message   | string | 响应描述        | -     |
+| data      | object | 响应数据        | -     |
+| timestamp | string | 时间戳毫秒       | -     |
+| key       | string | 加密key       | -     |
+| sign      | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5698,10 +5932,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/block --d
 ```
 
 ### 激活实体卡
+
 **URL:** /api/v2/build/card/activePhy
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5709,30 +5943,33 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/block --d
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|activationCode|string| true     |激活码|-|
-|expiry|string| false    |有效期|-|
+| Parameter      | Type   | Required | Description | Since |
+|----------------|--------|----------|-------------|-------|
+| activationCode | string | true     | 激活码         | -     |
+| expiry         | string | false    | 有效期         | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/activePhy --data '{
   "activationCode": "6675798267016130852",
   "expiry": "203009"
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| code      | int32  | 响应码         | -     |
+| message   | string | 响应描述        | -     |
+| data      | object | 响应数据        | -     |
+| timestamp | string | 时间戳毫秒       | -     |
+| key       | string | 加密key       | -     |
+| sign      | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5744,11 +5981,12 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/activePhy
 ```
 
 ## 卡业务模拟
+
 ### 模拟卡消费退款
+
 **URL:** /api/v2/build/card/simulate/reversal
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5756,17 +5994,18 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/activePhy
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|cardId|string|true|卡id|-|
-|acceptorName|string|true|接收者名字|-|
-|transactionSource|string|true|交易来源|-|
-|originalAuthorizationId|string|false|原始验证id|-|
-|originalTransactionId|string|false|原始交易id|-|
-|partial|int32|true|partial|-|
-|amount|number|true|金额|-|
+| Parameter               | Type   | Required | Description | Since |
+|-------------------------|--------|----------|-------------|-------|
+| cardId                  | string | true     | 卡id         | -     |
+| acceptorName            | string | true     | 接收者名字       | -     |
+| transactionSource       | string | true     | 交易来源        | -     |
+| originalAuthorizationId | string | false    | 原始验证id      | -     |
+| originalTransactionId   | string | false    | 原始交易id      | -     |
+| partial                 | int32  | true     | partial     | -     |
+| amount                  | number | true     | 金额          | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/reversal --data '{
   "cardId": "ETLPzgGfSzgmn_",
@@ -5778,19 +6017,21 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
   "amount": 10
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|└─id|string|id|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| code      | int32  | 响应码         | -     |
+| message   | string | 响应描述        | -     |
+| data      | object | 响应数据        | -     |
+| └─id      | string | id          | -     |
+| timestamp | string | 时间戳毫秒       | -     |
+| key       | string | 加密key       | -     |
+| sign      | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5805,10 +6046,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 ```
 
 ### 模拟卡消费结算
+
 **URL:** /api/v2/build/card/simulate/transaction
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5816,18 +6057,19 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|cardId|string|true|卡id|-|
-|acceptorName|string|false||-|
-|transactionSource|string|false||-|
-|currency|string|true|币种|-|
-|amount|number|true|金额|-|
-|authorizationId|string|false|验证id|-|
-|type|string|true|交易类型 PURCHASE,REFUND|-|
-|partnerTransactionType|string|true|合作方交易类型 LOAD,WITHDRAW|-|
+| Parameter              | Type   | Required | Description           | Since |
+|------------------------|--------|----------|-----------------------|-------|
+| cardId                 | string | true     | 卡id                   | -     |
+| acceptorName           | string | false    |                       | -     |
+| transactionSource      | string | false    |                       | -     |
+| currency               | string | true     | 币种                    | -     |
+| amount                 | number | true     | 金额                    | -     |
+| authorizationId        | string | false    | 验证id                  | -     |
+| type                   | string | true     | 交易类型 PURCHASE,REFUND  | -     |
+| partnerTransactionType | string | true     | 合作方交易类型 LOAD,WITHDRAW | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/transaction --data '{
   "cardId": "ETLPzgGfSzgmn_",
@@ -5840,19 +6082,21 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
   "partnerTransactionType": "LOAD"
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|└─transactionId|string|交易记录id|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field           | Type   | Description | Since |
+|-----------------|--------|-------------|-------|
+| code            | int32  | 响应码         | -     |
+| message         | string | 响应描述        | -     |
+| data            | object | 响应数据        | -     |
+| └─transactionId | string | 交易记录id      | -     |
+| timestamp       | string | 时间戳毫秒       | -     |
+| key             | string | 加密key       | -     |
+| sign            | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5867,10 +6111,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 ```
 
 ### 模拟卡消费发起验证
+
 **URL:** /api/v2/build/card/simulate/authorization
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5878,18 +6122,19 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|cardId|string|true|卡id|-|
-|originalAuthId|string|false|如果 original_auth_id 不为空，则为增量冻结资金|-|
-|currency|string|true|币种|-|
-|amount|number|true|金额|-|
-|acceptorName|string|false||-|
-|transactionSource|string|true||-|
-|type|string|true|交易类型 PURCHASE,REFUND|-|
-|partnerTransactionType|string|true|合作方交易类型 LOAD,WITHDRAW|-|
+| Parameter              | Type   | Required | Description                      | Since |
+|------------------------|--------|----------|----------------------------------|-------|
+| cardId                 | string | true     | 卡id                              | -     |
+| originalAuthId         | string | false    | 如果 original_auth_id 不为空，则为增量冻结资金 | -     |
+| currency               | string | true     | 币种                               | -     |
+| amount                 | number | true     | 金额                               | -     |
+| acceptorName           | string | false    |                                  | -     |
+| transactionSource      | string | true     |                                  | -     |
+| type                   | string | true     | 交易类型 PURCHASE,REFUND             | -     |
+| partnerTransactionType | string | true     | 合作方交易类型 LOAD,WITHDRAW            | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/authorization --data '{
   "cardId": "ETLPzgGfSzgmn_",
@@ -5902,20 +6147,22 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
   "partnerTransactionType": "LOAD"
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|└─authorizationId|string|授权记录id|-|
-|└─message|string|message|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field             | Type   | Description | Since |
+|-------------------|--------|-------------|-------|
+| code              | int32  | 响应码         | -     |
+| message           | string | 响应描述        | -     |
+| data              | object | 响应数据        | -     |
+| └─authorizationId | string | 授权记录id      | -     |
+| └─message         | string | message     | -     |
+| timestamp         | string | 时间戳毫秒       | -     |
+| key               | string | 加密key       | -     |
+| sign              | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5931,10 +6178,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 ```
 
 ### 模拟卡绑定电子钱包时验证码发送
+
 **URL:** /api/v2/build/card/simulate/behavior/activationCode
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5942,14 +6189,15 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|activationCode|string|true|激活码|-|
-|activationMethod|string|true|激活码方式,SMS,EMAIL|-|
-|cardId|string|true|卡id|-|
-|expirationTime|int64|true|失效时间戳|-|
+| Parameter        | Type   | Required | Description     | Since |
+|------------------|--------|----------|-----------------|-------|
+| activationCode   | string | true     | 激活码             | -     |
+| activationMethod | string | true     | 激活码方式,SMS,EMAIL | -     |
+| cardId           | string | true     | 卡id             | -     |
+| expirationTime   | int64  | true     | 失效时间戳           | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/behavior/activationCode --data '{
   "activationCode": "555666",
@@ -5958,18 +6206,20 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
   "expirationTime": 1737525034246
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| code      | int32  | 响应码         | -     |
+| message   | string | 响应描述        | -     |
+| data      | object | 响应数据        | -     |
+| timestamp | string | 时间戳毫秒       | -     |
+| key       | string | 加密key       | -     |
+| sign      | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -5981,10 +6231,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 ```
 
 ### 模拟发送OTP消息
+
 **URL:** /api/v2/build/card/simulate/behavior/sendOtp
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -5992,18 +6242,19 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|uid|string|false|用户id|-|
-|cardId|string|false|卡id|-|
-|option|string|false|方式，SMS,EMAIL|-|
-|otp|string|false|一次性验证码|-|
-|remark|object|false|备注信息|-|
-|└─amount|string|false|金额|-|
-|└─currency|string|false|币种|-|
-|└─merchantName|string|false|商户名|-|
+| Parameter      | Type   | Required | Description  | Since |
+|----------------|--------|----------|--------------|-------|
+| uid            | string | false    | 用户id         | -     |
+| cardId         | string | false    | 卡id          | -     |
+| option         | string | false    | 方式，SMS,EMAIL | -     |
+| otp            | string | false    | 一次性验证码       | -     |
+| remark         | object | false    | 备注信息         | -     |
+| └─amount       | string | false    | 金额           | -     |
+| └─currency     | string | false    | 币种           | -     |
+| └─merchantName | string | false    | 商户名          | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/behavior/sendOtp --data '{
   "uid": "1870731091074093056",
@@ -6017,18 +6268,20 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
   }
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| code      | int32  | 响应码         | -     |
+| message   | string | 响应描述        | -     |
+| data      | object | 响应数据        | -     |
+| timestamp | string | 时间戳毫秒       | -     |
+| key       | string | 加密key       | -     |
+| sign      | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -6040,10 +6293,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 ```
 
 ### 模拟发送验证方式选择消息
+
 **URL:** /api/v2/build/card/simulate/behavior/verificationChoose
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -6051,30 +6304,33 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|uid|string|false|用户id|-|
-|cardId|string|false|卡id|-|
+| Parameter | Type   | Required | Description | Since |
+|-----------|--------|----------|-------------|-------|
+| uid       | string | false    | 用户id        | -     |
+| cardId    | string | false    | 卡id         | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/behavior/verificationChoose --data '{
   "uid": "1870731091074093056",
   "cardId": "ETLPzgGfSzgmhhj"
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| code      | int32  | 响应码         | -     |
+| message   | string | 响应描述        | -     |
+| data      | object | 响应数据        | -     |
+| timestamp | string | 时间戳毫秒       | -     |
+| key       | string | 加密key       | -     |
+| sign      | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -6086,10 +6342,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 ```
 
 ### 模拟OBB验证
+
 **URL:** /api/v2/build/card/simulate/behavior/obbValidate
 
 **Type:** POST
-
 
 **Content-Type:** application/json
 
@@ -6097,30 +6353,33 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 
 **Body-parameters:**
 
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|uid|string|false|用户id|-|
-|cardId|string|false|卡id|-|
+| Parameter | Type   | Required | Description | Since |
+|-----------|--------|----------|-------------|-------|
+| uid       | string | false    | 用户id        | -     |
+| cardId    | string | false    | 卡id         | -     |
 
 **Request-example:**
+
 ```
 curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/behavior/obbValidate --data '{
   "uid": "1870731091074093056",
   "cardId": "ETLPzgGfSzgmhhj"
 }'
 ```
+
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| code      | int32  | 响应码         | -     |
+| message   | string | 响应描述        | -     |
+| data      | object | 响应数据        | -     |
+| timestamp | string | 时间戳毫秒       | -     |
+| key       | string | 加密key       | -     |
+| sign      | string | 签名          | -     |
 
 **Response-example:**
+
 ```
 {
   "code": 200,
@@ -6130,25 +6389,86 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
   "sign": "LwpZUp"
 }
 ```
+## 卡业务回调处理
+### 概述
+卡业务有部分场景需要接入方确认的场景，接入方收到请求后，需要返回对应的消息进行确认，比如
++ 消费授权
++ 下发验证码
++ ...
+
+**这部分回调功能需要单独配置新的回调URL才能使用**
+
+### 授权
+**Request payload**
+| Field           | Type   | Description        | Since |
+|-----------------|--------|--------------------|-------|
+| authAmount      | string | 授权金额               | -     |
+| currency        | string | 币种                 | -     |
+| uid             | string | 用户id               | -     |
+| cardId          | string | 卡id                | -     |
+| tranTime        | long   | 交易时间戳              | -     |
+| merchantName    | string | 支付商户名              | -     |
+| id              | string | 卡交易id              | -     |
+| orderNo         | string | 关联的订单号             | -     |
+| transactionType | string | 交易类型               | -     |
+| authType        | string | 授权类型,AUTH,REVERSAL | -     |
+
+**Request-example:**
+```
+{
+  "authAmount": 128.88,
+  "currency": "USD",
+  "uid": "1808026787681538048",
+  "cardId": "ETLPzgGfSzg-ef",
+  "tranTime": 1724783070549,
+  "merchantName": "PELICANA.",
+  "id": "ETLPzgGfSzDTTLQuKEvVlssjq5mer",
+  "orderNo": "1828633042242514944",
+  "transactionType": "PURCHASE",
+  "authType": "AUTH"
+}
+```
+**Response-fields:**
+
+| Field             | Type   | Description      | Since |
+|-------------------|--------|------------------|-------|
+| responseCode      | int32  | 响应码,0标识成功，其他标识失败 | -     |
+| message           | string | 响应描述             | -     |
+| externalReference | string | 附加信息             | -     |
+
+**Response-example:**
+```
+{
+	"responseCode": 0,
+	"message": "success",
+	"externalReference": ""
+}
+```
+
 
 ## Webhook
+
 ### 概述
+
 通过Webhook主动通知您账户下发生的一些事件，比如
+
 + 创建用户账户
 + 加密货币交易状态变更
 + 银行账户收款地址创建状态变更
 + 银行交易状态变更
 + ...
 
-Webhook 回调时采用与 API鉴权 中相同的数据加密和签名方案，需要您在 ClearOnes 控制台配置您的 Webhook RSA 公钥。您可以参考 API 鉴权章节生成 RSA 公私钥对，在 ClearOnes 控制台可获取 ClearOnes Webhook RSA 公钥，您可以使用该公钥对回调数据进行验签。
+Webhook 回调时采用与 API鉴权 中相同的数据加密和签名方案，需要您在 ClearOnes 控制台配置您的 Webhook RSA 公钥。您可以参考
+API 鉴权章节生成 RSA 公私钥对，在 ClearOnes 控制台可获取 ClearOnes Webhook RSA 公钥，您可以使用该公钥对回调数据进行验签。
 
 ### 回调请求描述
-| Parameter | Type   | Description                               |
-|-----------|--------|-------------------------------------------|
-|timestamp| int64  | 时间戳毫秒                                     |
-|bizContent| string | 业务请求参数 AES 加密后数据                          |
-|key| string | 使用 ClearOnes Webhook RSA 私钥对请求参数签名得到的签名数据 |
-|sign| string | 使用您的 Webhook RSA 公钥对随机 AES Key 加密后的数据     |
+
+| Parameter  | Type   | Description                               |
+|------------|--------|-------------------------------------------|
+| timestamp  | int64  | 时间戳毫秒                                     |
+| bizContent | string | 业务请求参数 AES 加密后数据                          |
+| key        | string | 使用 ClearOnes Webhook RSA 私钥对请求参数签名得到的签名数据 |
+| sign       | string | 使用您的 Webhook RSA 公钥对随机 AES Key 加密后的数据     |
 
 您可以使用以下流程对回调数据进行解密和验签：
 
@@ -6164,7 +6484,9 @@ Webhook 回调时采用与 API鉴权 中相同的数据加密和签名方案，�
 | code      | int    | 成功固定返回200     |
 | message   | string | 成功固定返回Success |
 
-ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式时，会认为此次推送失败，会再次进行重试推送，再次推送的频率为 30s，1m，5m，1h，12h，24h
+ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式时，会认为此次推送失败，会再次进行重试推送，再次推送的频率为
+30s，1m，5m，1h，12h，24h
+
 ### 事件格式
 
 | Parameter   | Type   | Description |
@@ -6204,15 +6526,16 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | BUILD_CARD_ACTIVATION_CODE                | [buildCardActivationCode](#buildCardActivationCode)             | 卡激活码消息         |
 
 ### 事件详情
+
 **<div id="clientDetail"> clientDetail </div>**
 
-| Parameter      | Type   | Description           |
-|----------------|--------|-----------------------|
-| customerRefId  | string | 调用方唯一业务id             |
-| clientId       | string | 客户的账户Id               |
-| name           | string | 账号名                   |
-| email          | string | 创建时的邮箱地址              |
-| status         | int32  | 状态 1-审核中 2-已生效 3-审核拒绝 |
+| Parameter     | Type   | Description           |
+|---------------|--------|-----------------------|
+| customerRefId | string | 调用方唯一业务id             |
+| clientId      | string | 客户的账户Id               |
+| name          | string | 账号名                   |
+| email         | string | 创建时的邮箱地址              |
+| status        | int32  | 状态 1-审核中 2-已生效 3-审核拒绝 |
 
 **<div id="fundAccountCreated"> fundAccountCreated </div>**
 
@@ -6225,80 +6548,80 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 
 **<div id="fiatRecipientDetail"> fiatRecipientDetail </div>**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|customerRefId|string|调用方唯一业务id|-|
-|recipientId|string|收款方地址id|-|
-|channelKey|string|法币-[转账通道](#channelKey)|-|
-|subChannelKey|string|法币-[转账子通道](#channelKey)|-|
-|status|int32|收款人状态(1:审批中；2:已生效；3:审批拒绝)|-|
-|currencyKey|string|币种标识|-|
-|swiftCode|string|收款银行swift码|-|
-|bankCode|string|收款银行代号|-|
-|branchCode|string|收款银行分行code|-|
-|bankName|string|收款银行名称|-|
-|bankCountryCode|string|收款银行国家ISO code|-|
-|bankAddress|string|收款银行地址|-|
-|sortCode|string|Sort Code|-|
-|beneficiaryRoutingCode|string|Routing Code|-|
-|beneficiaryAccountNo|string|收款人银行账户号码/IBAN|-|
-|beneficiaryName|string|银行账号持有者姓名|-|
-|beneficiaryEntityType|string|收款人实体类型（individual：个人；company：公司；）|-|
-|beneficiaryCompanyName|string|收款人公司名|-|
-|beneficiaryFirstName|string|收款人first name|-|
-|beneficiaryLastName|string|收款人last name|-|
-|beneficiaryCountryCode|string|收款人国家ISO code|-|
-|beneficiaryStreet|string|收款人街道|-|
-|beneficiaryCity|string|收款人城市|-|
-|beneficiaryState|string|收款人州/省|-|
-|beneficiaryPostalCode|string|收款人邮编|-|
-|beneficiaryIdNumber|string|收款人证件号|-|
-|beneficiaryPhoneNumber|string|收款人手机号|-|
-|conetId|int64|conet收款方式对方conetId|-|
-|note|string|备注|-|
-|label|string|别称|-|
+| Field                  | Type   | Description                        | Since |
+|------------------------|--------|------------------------------------|-------|
+| customerRefId          | string | 调用方唯一业务id                          | -     |
+| recipientId            | string | 收款方地址id                            | -     |
+| channelKey             | string | 法币-[转账通道](#channelKey)             | -     |
+| subChannelKey          | string | 法币-[转账子通道](#channelKey)            | -     |
+| status                 | int32  | 收款人状态(1:审批中；2:已生效；3:审批拒绝)          | -     |
+| currencyKey            | string | 币种标识                               | -     |
+| swiftCode              | string | 收款银行swift码                         | -     |
+| bankCode               | string | 收款银行代号                             | -     |
+| branchCode             | string | 收款银行分行code                         | -     |
+| bankName               | string | 收款银行名称                             | -     |
+| bankCountryCode        | string | 收款银行国家ISO code                     | -     |
+| bankAddress            | string | 收款银行地址                             | -     |
+| sortCode               | string | Sort Code                          | -     |
+| beneficiaryRoutingCode | string | Routing Code                       | -     |
+| beneficiaryAccountNo   | string | 收款人银行账户号码/IBAN                     | -     |
+| beneficiaryName        | string | 银行账号持有者姓名                          | -     |
+| beneficiaryEntityType  | string | 收款人实体类型（individual：个人；company：公司；） | -     |
+| beneficiaryCompanyName | string | 收款人公司名                             | -     |
+| beneficiaryFirstName   | string | 收款人first name                      | -     |
+| beneficiaryLastName    | string | 收款人last name                       | -     |
+| beneficiaryCountryCode | string | 收款人国家ISO code                      | -     |
+| beneficiaryStreet      | string | 收款人街道                              | -     |
+| beneficiaryCity        | string | 收款人城市                              | -     |
+| beneficiaryState       | string | 收款人州/省                             | -     |
+| beneficiaryPostalCode  | string | 收款人邮编                              | -     |
+| beneficiaryIdNumber    | string | 收款人证件号                             | -     |
+| beneficiaryPhoneNumber | string | 收款人手机号                             | -     |
+| conetId                | int64  | conet收款方式对方conetId                 | -     |
+| note                   | string | 备注                                 | -     |
+| label                  | string | 别称                                 | -     |
 
 **<div id="cryptoRecipientDetail"> cryptoRecipientDetail </div>**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|customerRefId|string|调用方唯一业务id|-|
-|recipientId|string|收款方地址id|-|
-|status|int32|收款人状态(1:审批中；2:已生效；3:审批拒绝)|-|
-|currencyKey|string|币种标识|-|
-|address|string|加密货币地址|-|
-|label|string|别称|-|
+| Field         | Type   | Description               | Since |
+|---------------|--------|---------------------------|-------|
+| customerRefId | string | 调用方唯一业务id                 | -     |
+| recipientId   | string | 收款方地址id                   | -     |
+| status        | int32  | 收款人状态(1:审批中；2:已生效；3:审批拒绝) | -     |
+| currencyKey   | string | 币种标识                      | -     |
+| address       | string | 加密货币地址                    | -     |
+| label         | string | 别称                        | -     |
 
 **<div id="transactionDetail"> transactionDetail </div>**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|customerRefId|string|调用方唯一业务ID|-|
-|transactionNo|string|交易号|-|
-|clientId|string|客户的账户ID|-|
-|createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
-|completedTimestamp|int64|完成时间，UNIX 时间戳毫秒数|-|
-|transferCurrencyKey|string|转账币种唯一标识|-|
-|currencyCategory|int32|币种类别(1:数字货币;2:法币;)|-|
-|transactionType|int32|交易类型（1：接收；2：发送；5：退款；）|-|
-|payAccountName|string|付款方名称|-|
-|beneficiaryName|string|收款方名称|-|
-|transactionAmount|string|交易数量|-|
-|transactionStatus|string|交易状态（SUBMITTED:审批中；PROCESSING:处理中；SIGNING:签名中；BROADCASTING:广播中；CONFIRMING:确认中；UPLOADING_PROOF:待上传入账凭证；UPLOADED_PROOF:已上传凭证；SUCCESS:成功；FAILED:失败；CANCELLED:取消；REJECTED:拒绝；）|-|
-|transactionSubStatus|string|交易子状态|-|
-|platformFee|string|平台手续费|-|
-|note|string|备注|-|
-|beneficiaryId|int64|收款人ID|-|
-|fiatFeeMethod|int32|法币手续费方式（1：支付本地银行服务费；2：支付本地银行服务费与收款行服务费；）|-|
-|channelKey|string|[转账通道](#channelKey)|-|
-|subChannelKey|string|[转账子通道](#channelKey)，当转账方式为“local”时，需要指定子类型|-|
-|proofEn|string|需要上传凭证的英文说明|-|
-|proofCn|string|需要上传凭证的中文说明|-|
-|cryptoBlockHeight|int64|数字货币区块高度|-|
-|cryptoFromAddress|string|数字货币交易来源地址|-|
-|cryptoToAddress|string|数字货币交易目标地址|-|
-|cryptoTxHash|string|数字货币交易hash|-|
-|cryptoTxFee|string|数字货币链上手续费|-|                                                                                                                                                              | -     |
+| Field                | Type   | Description                                                                                                                                                                | Since |
+|----------------------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|
+| customerRefId        | string | 调用方唯一业务ID                                                                                                                                                                  | -     |
+| transactionNo        | string | 交易号                                                                                                                                                                        | -     |
+| clientId             | string | 客户的账户ID                                                                                                                                                                    | -     |
+| createTimestamp      | int64  | 创建时间，UNIX 时间戳毫秒数                                                                                                                                                           | -     |
+| completedTimestamp   | int64  | 完成时间，UNIX 时间戳毫秒数                                                                                                                                                           | -     |
+| transferCurrencyKey  | string | 转账币种唯一标识                                                                                                                                                                   | -     |
+| currencyCategory     | int32  | 币种类别(1:数字货币;2:法币;)                                                                                                                                                         | -     |
+| transactionType      | int32  | 交易类型（1：接收；2：发送；5：退款；）                                                                                                                                                      | -     |
+| payAccountName       | string | 付款方名称                                                                                                                                                                      | -     |
+| beneficiaryName      | string | 收款方名称                                                                                                                                                                      | -     |
+| transactionAmount    | string | 交易数量                                                                                                                                                                       | -     |
+| transactionStatus    | string | 交易状态（SUBMITTED:审批中；PROCESSING:处理中；SIGNING:签名中；BROADCASTING:广播中；CONFIRMING:确认中；UPLOADING_PROOF:待上传入账凭证；UPLOADED_PROOF:已上传凭证；SUCCESS:成功；FAILED:失败；CANCELLED:取消；REJECTED:拒绝；） | -     |
+| transactionSubStatus | string | 交易子状态                                                                                                                                                                      | -     |
+| platformFee          | string | 平台手续费                                                                                                                                                                      | -     |
+| note                 | string | 备注                                                                                                                                                                         | -     |
+| beneficiaryId        | int64  | 收款人ID                                                                                                                                                                      | -     |
+| fiatFeeMethod        | int32  | 法币手续费方式（1：支付本地银行服务费；2：支付本地银行服务费与收款行服务费；）                                                                                                                                   | -     |
+| channelKey           | string | [转账通道](#channelKey)                                                                                                                                                        | -     |
+| subChannelKey        | string | [转账子通道](#channelKey)，当转账方式为“local”时，需要指定子类型                                                                                                                                | -     |
+| proofEn              | string | 需要上传凭证的英文说明                                                                                                                                                                | -     |
+| proofCn              | string | 需要上传凭证的中文说明                                                                                                                                                                | -     |
+| cryptoBlockHeight    | int64  | 数字货币区块高度                                                                                                                                                                   | -     |
+| cryptoFromAddress    | string | 数字货币交易来源地址                                                                                                                                                                 | -     |
+| cryptoToAddress      | string | 数字货币交易目标地址                                                                                                                                                                 | -     |
+| cryptoTxHash         | string | 数字货币交易hash                                                                                                                                                                 | -     |
+| cryptoTxFee          | string | 数字货币链上手续费                                                                                                                                                                  | -     |                                                                                                                                                              | -     |
 
 **<div id="currencyStatusDetail"> currencyStatusDetail </div>**
 
@@ -6311,136 +6634,136 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 
 **<div id="depositAddressAddDetail"> depositAddressAddDetail </div>**
 
-| Field                  | Type   | Description                                 | Since |
-|------------------------|--------|---------------------------------------------|-------|
-| clientId               | string | 客户的账户ID                                     | -     |
-| depositAddressList     | array  | 地址列表                                        | -     |
-| └─conetId              | int64  | 用于内部转账的收款账号id                               | -     |
-| └─currencyCategory     | int32  | 币种分类 1-数字货币 2-法币                            | -     |
-| └─currencyKey          | string | 币种标识                                        | -     |
-| └─currencyName         | string | 币种名                                         | -     |
-| └─channelKey           | string | 币种-[转账通道](#channelKey)            | -     |
+| Field                  | Type   | Description                                  | Since |
+|------------------------|--------|----------------------------------------------|-------|
+| clientId               | string | 客户的账户ID                                      | -     |
+| depositAddressList     | array  | 地址列表                                         | -     |
+| └─conetId              | int64  | 用于内部转账的收款账号id                                | -     |
+| └─currencyCategory     | int32  | 币种分类 1-数字货币 2-法币                             | -     |
+| └─currencyKey          | string | 币种标识                                         | -     |
+| └─currencyName         | string | 币种名                                          | -     |
+| └─channelKey           | string | 币种-[转账通道](#channelKey)                       | -     |
 | └─subChannelKey        | string | 法币-[转账子通道](#channelKey),当channelKey=local时有值 | -     |
-| └─bankAccountType      | int32  | 法币-银行账号类型 1-CA 2-VA                         | -     |
-| └─bankName             | string | 法币-银行名称                                     | -     |
-| └─bankAddress          | string | 法币-银行地址                                     | -     |
-| └─bankCode             | string | 法币-银行代码                                     | -     |
-| └─branchCode           | string | 法币-分行代码                                     | -     |
-| └─swiftCode            | string | 法币-SWIFT                                    | -     |
-| └─bankCountry          | string | 法币-银行国家                                     | -     |
-| └─beneficiaryAccountNo | string | 法币-银行账号                                     | -     |
-| └─beneficiaryName      | string | 法币-收款人姓名                                    | -     |
-| └─beneficiaryCountry   | string | 法币-收款人国家                                    | -     |
-| └─beneficiaryAddress   | string | 法币-收款人地址                                    | -     |
-| └─note                 | string | 法币-转入需要的附言                                  | -     |
+| └─bankAccountType      | int32  | 法币-银行账号类型 1-CA 2-VA                          | -     |
+| └─bankName             | string | 法币-银行名称                                      | -     |
+| └─bankAddress          | string | 法币-银行地址                                      | -     |
+| └─bankCode             | string | 法币-银行代码                                      | -     |
+| └─branchCode           | string | 法币-分行代码                                      | -     |
+| └─swiftCode            | string | 法币-SWIFT                                     | -     |
+| └─bankCountry          | string | 法币-银行国家                                      | -     |
+| └─beneficiaryAccountNo | string | 法币-银行账号                                      | -     |
+| └─beneficiaryName      | string | 法币-收款人姓名                                     | -     |
+| └─beneficiaryCountry   | string | 法币-收款人国家                                     | -     |
+| └─beneficiaryAddress   | string | 法币-收款人地址                                     | -     |
+| └─note                 | string | 法币-转入需要的附言                                   | -     |
 
 **<div id="depositAddressChangeDetail"> depositAddressChangeDetail </div>**
 
-| Field                | Type   | Description                                 | Since |
-|----------------------|--------|---------------------------------------------|-------|
-| clientId             | string | 客户的账户ID                                     | -     |
-| conetId              | int64  | 用于内部转账的收款账号id                               | -     |
-| currencyCategory     | int32  | 币种分类 1-数字货币 2-法币                            | -     |
-| currencyKey          | string | 币种标识                                        | -     |
-| currencyName         | string | 币种名                                         | -     |
-| channelKey           | string | 币种-[转账通道](#channelKey)            | -     |
+| Field                | Type   | Description                                  | Since |
+|----------------------|--------|----------------------------------------------|-------|
+| clientId             | string | 客户的账户ID                                      | -     |
+| conetId              | int64  | 用于内部转账的收款账号id                                | -     |
+| currencyCategory     | int32  | 币种分类 1-数字货币 2-法币                             | -     |
+| currencyKey          | string | 币种标识                                         | -     |
+| currencyName         | string | 币种名                                          | -     |
+| channelKey           | string | 币种-[转账通道](#channelKey)                       | -     |
 | subChannelKey        | string | 法币-[转账子通道](#channelKey),当channelKey=local时有值 | -     |
-| bankAccountType      | int32  | 法币-银行账号类型 1-CA 2-VA                         | -     |
-| bankName             | string | 法币-银行名称                                     | -     |
-| bankAddress          | string | 法币-银行地址                                     | -     |
-| bankCode             | string | 法币-银行代码                                     | -     |
-| branchCode           | string | 法币-分行代码                                     | -     |
-| swiftCode            | string | 法币-SWIFT                                    | -     |
-| bankCountry          | string | 法币-银行国家                                     | -     |
-| beneficiaryAccountNo | string | 法币-银行账号                                     | -     |
-| beneficiaryName      | string | 法币-收款人姓名                                    | -     |
-| beneficiaryCountry   | string | 法币-收款人国家                                    | -     |
-| beneficiaryAddress   | string | 法币-收款人地址                                    | -     |
-| status               | int32  | 状态 1-关闭 2-开启                                | -     |
-| note                 | string | 法币-转入需要的附言                                  | -     |
+| bankAccountType      | int32  | 法币-银行账号类型 1-CA 2-VA                          | -     |
+| bankName             | string | 法币-银行名称                                      | -     |
+| bankAddress          | string | 法币-银行地址                                      | -     |
+| bankCode             | string | 法币-银行代码                                      | -     |
+| branchCode           | string | 法币-分行代码                                      | -     |
+| swiftCode            | string | 法币-SWIFT                                     | -     |
+| bankCountry          | string | 法币-银行国家                                      | -     |
+| beneficiaryAccountNo | string | 法币-银行账号                                      | -     |
+| beneficiaryName      | string | 法币-收款人姓名                                     | -     |
+| beneficiaryCountry   | string | 法币-收款人国家                                     | -     |
+| beneficiaryAddress   | string | 法币-收款人地址                                     | -     |
+| status               | int32  | 状态 1-关闭 2-开启                                 | -     |
+| note                 | string | 法币-转入需要的附言                                   | -     |
 
 **<div id="connectTransactionDetail"> connectTransactionDetail </div>**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|customerRefId|string|调用方唯一业务ID|-|
-|createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
-|transactionNo|string|交易号|-|
-|clientId|string|客户的账户ID|-|
-|accountNo|string|账号编号|-|
-|currencyKey|string|币种唯一标识|-|
-|transactionType|int8|交易类型（1:接收；2:发送；）|-|
-|txAmount|string|交易金额|-|
-|transactionStatus|string|交易状态（SUBMITTED:审批中；PROCESSING:处理中；SIGNING:签名中；BROADCASTING:广播中；CONFIRMING:确认中；SUCCESS:成功；FAILED:失败；CANCELLED:取消；REJECTED:拒绝；）|-|
-|transactionSubStatus|string|交易子状态|-|
-|note|string|备注|-|
-|blockHeight|int64|区块高度|-|
-|fromAddress|string|交易来源地址|-|
-|toAddress|string|交易目标地址|-|
-|txHash|string|交易hash|-|
-|txFee|string|交易手续费|-|
+| Field                | Type   | Description                                                                                                                   | Since |
+|----------------------|--------|-------------------------------------------------------------------------------------------------------------------------------|-------|
+| customerRefId        | string | 调用方唯一业务ID                                                                                                                     | -     |
+| createTimestamp      | int64  | 创建时间，UNIX 时间戳毫秒数                                                                                                              | -     |
+| transactionNo        | string | 交易号                                                                                                                           | -     |
+| clientId             | string | 客户的账户ID                                                                                                                       | -     |
+| accountNo            | string | 账号编号                                                                                                                          | -     |
+| currencyKey          | string | 币种唯一标识                                                                                                                        | -     |
+| transactionType      | int8   | 交易类型（1:接收；2:发送；）                                                                                                              | -     |
+| txAmount             | string | 交易金额                                                                                                                          | -     |
+| transactionStatus    | string | 交易状态（SUBMITTED:审批中；PROCESSING:处理中；SIGNING:签名中；BROADCASTING:广播中；CONFIRMING:确认中；SUCCESS:成功；FAILED:失败；CANCELLED:取消；REJECTED:拒绝；） | -     |
+| transactionSubStatus | string | 交易子状态                                                                                                                         | -     |
+| note                 | string | 备注                                                                                                                            | -     |
+| blockHeight          | int64  | 区块高度                                                                                                                          | -     |
+| fromAddress          | string | 交易来源地址                                                                                                                        | -     |
+| toAddress            | string | 交易目标地址                                                                                                                        | -     |
+| txHash               | string | 交易hash                                                                                                                        | -     |
+| txFee                | string | 交易手续费                                                                                                                         | -     |
 
 **<div id="superOrgCryptoRecipientDetail"> superOrgCryptoRecipientDetail </div>**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|recipientId|string|收款方地址id|-|
-|channelKey|string|[转账通道](#channelKey)（crypto；conet；）|-|
-|currencyKey|string|币种标识|-|
-|status|int32|收款人状态（2：已生效；3：已删除；）|-|
-|conetId|int64|conet收款方式对方conetId|-|
-|address|string|加密货币地址|-|
-|label|string|别称|-|
+| Field       | Type   | Description                        | Since |
+|-------------|--------|------------------------------------|-------|
+| recipientId | string | 收款方地址id                            | -     |
+| channelKey  | string | [转账通道](#channelKey)（crypto；conet；） | -     |
+| currencyKey | string | 币种标识                               | -     |
+| status      | int32  | 收款人状态（2：已生效；3：已删除；）                | -     |
+| conetId     | int64  | conet收款方式对方conetId                 | -     |
+| address     | string | 加密货币地址                             | -     |
+| label       | string | 别称                                 | -     |
 
 **<div id="superOrgFiatRecipientDetail"> superOrgFiatRecipientDetail </div>**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|recipientId|string|收款方地址id|-|
-|channelKey|string|[转账通道](#channelKey)（conet；）|-|
-|currencyKey|string|币种标识|-|
-|status|int32|收款人状态（2：已生效；3：已删除；）|-|
-|conetId|int64|conet收款方式对方conetId|-|
-|label|string|别称|-|
+| Field       | Type   | Description                 | Since |
+|-------------|--------|-----------------------------|-------|
+| recipientId | string | 收款方地址id                     | -     |
+| channelKey  | string | [转账通道](#channelKey)（conet；） | -     |
+| currencyKey | string | 币种标识                        | -     |
+| status      | int32  | 收款人状态（2：已生效；3：已删除；）         | -     |
+| conetId     | int64  | conet收款方式对方conetId          | -     |
+| label       | string | 别称                          | -     |
 
 **<div id="fxPairDetail"> fxPairDetail </div>**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|weeklyLimitUsd|number|周交易限额（单位：USD），统计范围：按照东八区本周周一至周日，toCurrencyKey兑换数量按照兑换时汇率折算为USD进行统计|-|
-|pairs|array|交易对列表|-|
-|&nbsp;&nbsp;&nbsp;└─fromCurrencyKey|string|付款币种Key|-|
-|&nbsp;&nbsp;&nbsp;└─toCurrencyKey|string|收款币种Key|-|
-|&nbsp;&nbsp;&nbsp;└─exchangeRate|string|兑换汇率|-|
-|&nbsp;&nbsp;&nbsp;└─feeRate|string|手续费费率|-|
-|&nbsp;&nbsp;&nbsp;└─minAmount|string|最小兑换fromCurrencyKey数量|-|
-|&nbsp;&nbsp;&nbsp;└─maxAmount|string|最大兑换fromCurrencyKey数量|-|
-|&nbsp;&nbsp;&nbsp;└─thresholdAmount|string|高手续费阈值金额(fromAmount < thresholdAmount时，手续费率使用thresholdFeeRate)|-|
-|&nbsp;&nbsp;&nbsp;└─thresholdFeeRate|string|高手续费率|-|
+| Field                                | Type   | Description                                                        | Since |
+|--------------------------------------|--------|--------------------------------------------------------------------|-------|
+| weeklyLimitUsd                       | number | 周交易限额（单位：USD），统计范围：按照东八区本周周一至周日，toCurrencyKey兑换数量按照兑换时汇率折算为USD进行统计 | -     |
+| pairs                                | array  | 交易对列表                                                              | -     |
+| &nbsp;&nbsp;&nbsp;└─fromCurrencyKey  | string | 付款币种Key                                                            | -     |
+| &nbsp;&nbsp;&nbsp;└─toCurrencyKey    | string | 收款币种Key                                                            | -     |
+| &nbsp;&nbsp;&nbsp;└─exchangeRate     | string | 兑换汇率                                                               | -     |
+| &nbsp;&nbsp;&nbsp;└─feeRate          | string | 手续费费率                                                              | -     |
+| &nbsp;&nbsp;&nbsp;└─minAmount        | string | 最小兑换fromCurrencyKey数量                                              | -     |
+| &nbsp;&nbsp;&nbsp;└─maxAmount        | string | 最大兑换fromCurrencyKey数量                                              | -     |
+| &nbsp;&nbsp;&nbsp;└─thresholdAmount  | string | 高手续费阈值金额(fromAmount < thresholdAmount时，手续费率使用thresholdFeeRate)     | -     |
+| &nbsp;&nbsp;&nbsp;└─thresholdFeeRate | string | 高手续费率                                                              | -     |
 
 **<div id="fxTransactionDetail"> fxTransactionDetail </div>**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|customerRefId|string|调用方唯一业务ID|-|
-|createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
-|completedTimestamp|int64|完成时间，UNIX 时间戳毫秒数|-|
-|transactionNo|string|交易号|-|
-|clientId|string|客户的账户ID|-|
-|transactionStatus|string|交易状态<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/></pre>|-|
-|fromCurrencyKey|string|付款币种Key|-|
-|toCurrencyKey|string|收款币种Key|-|
-|exchangeRate|string|兑换汇率|-|
-|fromAmount|string|付款币种数量|-|
-|toAmount|string|收款币种数量|-|
-|feeRate|string|总服务费费率（平台服务费费率+附加服务费费率）|-|
-|fee|string|总服务费|-|
-|feeCurrencyKey|string|服务费币种Key|-|
-|additionalFeeRate|string|附加服务费费率|-|
-|additionalFee|string|附加服务费|-|
-|transferNo|string|转账交易号|-|
-|receiveNo|string|收款交易号|-|
-|refundNo|string|退款交易号|-|
+| Field              | Type   | Description                                                                                                                                                                                  | Since |
+|--------------------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|
+| customerRefId      | string | 调用方唯一业务ID                                                                                                                                                                                    | -     |
+| createTimestamp    | int64  | 创建时间，UNIX 时间戳毫秒数                                                                                                                                                                             | -     |
+| completedTimestamp | int64  | 完成时间，UNIX 时间戳毫秒数                                                                                                                                                                             | -     |
+| transactionNo      | string | 交易号                                                                                                                                                                                          | -     |
+| clientId           | string | 客户的账户ID                                                                                                                                                                                      | -     |
+| transactionStatus  | string | 交易状态<br/><br/><pre><br/>SUBMITTED：已提交，此状态时用户账户已经冻结交易金额<br/>PROCESSING：进行中，此状态时用户账户已发起转账，等待交易完成<br/>SUCCESS：成功，用户转账完成并且已收到对应币种<br/>FAILED：失败，失败原因有用户转账失败、用户收款失败等。如用户转账完成后失败，会退款给用户<br/></pre> | -     |
+| fromCurrencyKey    | string | 付款币种Key                                                                                                                                                                                      | -     |
+| toCurrencyKey      | string | 收款币种Key                                                                                                                                                                                      | -     |
+| exchangeRate       | string | 兑换汇率                                                                                                                                                                                         | -     |
+| fromAmount         | string | 付款币种数量                                                                                                                                                                                       | -     |
+| toAmount           | string | 收款币种数量                                                                                                                                                                                       | -     |
+| feeRate            | string | 总服务费费率（平台服务费费率+附加服务费费率）                                                                                                                                                                      | -     |
+| fee                | string | 总服务费                                                                                                                                                                                         | -     |
+| feeCurrencyKey     | string | 服务费币种Key                                                                                                                                                                                     | -     |
+| additionalFeeRate  | string | 附加服务费费率                                                                                                                                                                                      | -     |
+| additionalFee      | string | 附加服务费                                                                                                                                                                                        | -     |
+| transferNo         | string | 转账交易号                                                                                                                                                                                        | -     |
+| receiveNo          | string | 收款交易号                                                                                                                                                                                        | -     |
+| refundNo           | string | 退款交易号                                                                                                                                                                                        | -     |
 
 **<div id="buildCardOrder"> buildCardOrder </div>**
 
@@ -6450,6 +6773,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | orderNo             | string  | 订单id        | -     |
 | uid                 | string  | 用户id        | -     |
 | cardId              | string  | 卡id         | -     |
+| currency            | string  | 结算币种        | -     |
 | orderAmount         | string  | 订单金额        | -     |
 | settleAmount        | string  | 结算金额        | -     |
 | reversalAmount      | string  | 退款金额        | -     |
@@ -6495,111 +6819,111 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 
 ## 错误码列表
 
-| Error code | Description                  |
-|------------|------------------------------|
-| 401        | 未登录                          |
-| 412        | 参数错误                         |
-| 413        | 远程调用参数错误                     |
-| 414        | 远程调用业务异常                     |
-| 415        | 远程调用超时                       |
-| 500        | 系统异常                         |
-| 10101      | 验证签名失败                       |
-| 10102      | 解密请求失败                       |
-| 10103      | 重复提交                         |
-| 10104      | 请求频繁，请稍后重试                   |
-| 10105      | 幂等调用                         |
-| 10106      | IP拒绝                         |
-| 10201      | 钱包名称不能超过{0}个字符               |
-| 10202      | 只能删除余额小于10美元的账号              |
-| 10203      | 账号已冻结                        |
-| 10204      | 审批人数量大于管理员数量                 |
-| 10205      | 钱包账号不支持该币种                   |
-| 10206      | 存在进行中的审批                     |
-| 10207      | 冻结时间必须是将来时间                  |
-| 10208      | 账号不存在                        |
-| 10209      | 账号不支持该币种                     |
-| 10301      | 输入错误次数过多，请{0}分钟后再试           |
+| Error code | Description                      |
+|------------|----------------------------------|
+| 401        | 未登录                              |
+| 412        | 参数错误                             |
+| 413        | 远程调用参数错误                         |
+| 414        | 远程调用业务异常                         |
+| 415        | 远程调用超时                           |
+| 500        | 系统异常                             |
+| 10101      | 验证签名失败                           |
+| 10102      | 解密请求失败                           |
+| 10103      | 重复提交                             |
+| 10104      | 请求频繁，请稍后重试                       |
+| 10105      | 幂等调用                             |
+| 10106      | IP拒绝                             |
+| 10201      | 钱包名称不能超过{0}个字符                   |
+| 10202      | 只能删除余额小于10美元的账号                  |
+| 10203      | 账号已冻结                            |
+| 10204      | 审批人数量大于管理员数量                     |
+| 10205      | 钱包账号不支持该币种                       |
+| 10206      | 存在进行中的审批                         |
+| 10207      | 冻结时间必须是将来时间                      |
+| 10208      | 账号不存在                            |
+| 10209      | 账号不支持该币种                         |
+| 10301      | 输入错误次数过多，请{0}分钟后再试               |
 | 10302      | 验证码无效，在您的账户被锁定{1}分钟前，您还有{0}次尝试机会 |
-| 10303      | 验证码无效，您还有{0}次尝试机会            |
-| 10401      | 用户已存在                        |
-| 10402      | 用户不存在                        |
-| 10403      | 不能删除审批中的用户                   |
-| 10404      | 不能删除自己                       |
-| 10405      | 当前钱包存在审批，无法删除钱包管理员           |
-| 10406      | 在删除管理员之前需要先减少审批数量            |
-| 10501      | 钱包提币白名单标签不能超过20个字符           |
-| 10502      | 钱包提币白名单地址不能超过200个字符          |
-| 10503      | 该白名单地址已存在                    |
-| 10504      | 不能删除审批中的白名单                  |
-| 10601      | 提币规则已存在                      |
-| 10701      | 接收地址格式错误                     |
-| 10702      | 您的收款地址有风险，不能转账               |
-| 10703      | 目标地址不能为合约地址                  |
-| 10704      | 钱包资产余额不足，无法提币                |
+| 10303      | 验证码无效，您还有{0}次尝试机会                |
+| 10401      | 用户已存在                            |
+| 10402      | 用户不存在                            |
+| 10403      | 不能删除审批中的用户                       |
+| 10404      | 不能删除自己                           |
+| 10405      | 当前钱包存在审批，无法删除钱包管理员               |
+| 10406      | 在删除管理员之前需要先减少审批数量                |
+| 10501      | 钱包提币白名单标签不能超过20个字符               |
+| 10502      | 钱包提币白名单地址不能超过200个字符              |
+| 10503      | 该白名单地址已存在                        |
+| 10504      | 不能删除审批中的白名单                      |
+| 10601      | 提币规则已存在                          |
+| 10701      | 接收地址格式错误                         |
+| 10702      | 您的收款地址有风险，不能转账                   |
+| 10703      | 目标地址不能为合约地址                      |
+| 10704      | 钱包资产余额不足，无法提币                    |
 | 10705      | 预估网络费用不足，您需要向此钱包至少存入{0}来支付提币网络费用 |
-| 10706      | 提币数量小数精度不能超过{0}              |
-| 10707      | 提币数量超过组织限额                   |
-| 10708      | 提币数量超过限制                     |
-| 10709      | 暂停充币                         |
-| 10710      | 暂停提币                         |
-| 10711      | 钱包被冻结，无法提币                   |
-| 10712      | 更新二次验证码后，24小时内禁止提币           |
-| 10713      | 更新登录密码后，24小时内禁止提币            |
-| 10714      | 该机构已失效，无法提币                  |
-| 10715      | 收款账号未生效，不能收款                 |
-| 10801      | 该机构已失效，无法转账                  |
-| 10802      | 暂停充值                         |
-| 10803      | 暂停转账                         |
-| 10804      | 钱包被冻结，无法转账                   |
-| 10805      | 更新二次验证码后，24小时内禁止转账           |
-| 10806      | 更新登录密码后，24小时内禁止转账            |
-| 10807      | 转账数量小数精度不能超过{0}              |
-| 10808      | 单笔转账最低{0} {1}                |
-| 10808      | 单笔转账最大{0} {1}                |
-| 10809      | 托管⾏不同，请选择银行转账                |
-| 10810      | 收款账号被冻结，不能收款                 |
-| 10811      | 收款机构已失效，无法收款                 |
-| 10812      | 转账手续费已经变更，请重新提交              |
-| 10813      | 准备金不足                        |
-| 10814      | 币种不存在                        |
-| 10815      | 手续费规则不存在                     |
-| 10901      | 操作授权验证失败                     |
-| 10902      | 收款人不存在                       |
-| 10903      | 收款人信息错误                      |
-| 10904      | 收款人状态不允许删除                   |
-| 10905      | 收款人添加通道已关闭                   |
-| 11001      | 交易记录不存在                      |
-| 11002      | 当前交易状态不允许的操作                 |
-| 11101      | 账单自动付款方式已存在                  |
-| 11102      | 账单已经支付                       |
-| 11103      | 账单已经存在支付请求                   |
-| 11104      | 账单支付超时                       |
-| 11105      | 超过自动支付限额                     |
-| 11106      | 账户余额不足                       |
-| 11201      | 只能添加一个CA账号                   |
-| 11202      | 银行不存在                        |
-| 11203      | 银行不支持创建虚拟账号                  |
-| 11204      | 只能添加一种VA账号                   |
-| 11301      | 冻结金额大于可用余额                   |
-| 11302      | 解冻金额大于冻结金额                   |
-| 11401      | 该机构已失效，无法交易                  |
-| 11402      | 该机构未开通交易服务                   |
-| 11403      | 交易对不可用                       |
-| 11404      | 钱包被冻结，无法交易                   |
-| 11405      | 更新二次验证码后，24小时内禁止交易           |
-| 11406      | 更新登录密码后，24小时内禁止交易            |
-| 11407      | 交易数量小数精度不能超过{0}              |
-| 11408      | 交易数量超过限额                     |
-| 11409      | 钱包资产余额不足，无法交易                |
-| 11410      | 兑换金额过大，请联系客服处理               |
-| 11411      | 单笔交易最低{0} {1}                |
-| 11412      | 单笔交易最大{0} {1}                |
-| 11413      | 交易出售数字货币gas不足                |
-| 11414      | 总服务费费率小于0                    |
-| 11415      | 创建交易汇率失效                     |
-| 11417      | 获取汇率异常                       |
-| 11413      | Gas不足                        |
-| 11501      | 汇率异常                         |
+| 10706      | 提币数量小数精度不能超过{0}                  |
+| 10707      | 提币数量超过组织限额                       |
+| 10708      | 提币数量超过限制                         |
+| 10709      | 暂停充币                             |
+| 10710      | 暂停提币                             |
+| 10711      | 钱包被冻结，无法提币                       |
+| 10712      | 更新二次验证码后，24小时内禁止提币               |
+| 10713      | 更新登录密码后，24小时内禁止提币                |
+| 10714      | 该机构已失效，无法提币                      |
+| 10715      | 收款账号未生效，不能收款                     |
+| 10801      | 该机构已失效，无法转账                      |
+| 10802      | 暂停充值                             |
+| 10803      | 暂停转账                             |
+| 10804      | 钱包被冻结，无法转账                       |
+| 10805      | 更新二次验证码后，24小时内禁止转账               |
+| 10806      | 更新登录密码后，24小时内禁止转账                |
+| 10807      | 转账数量小数精度不能超过{0}                  |
+| 10808      | 单笔转账最低{0} {1}                    |
+| 10808      | 单笔转账最大{0} {1}                    |
+| 10809      | 托管⾏不同，请选择银行转账                    |
+| 10810      | 收款账号被冻结，不能收款                     |
+| 10811      | 收款机构已失效，无法收款                     |
+| 10812      | 转账手续费已经变更，请重新提交                  |
+| 10813      | 准备金不足                            |
+| 10814      | 币种不存在                            |
+| 10815      | 手续费规则不存在                         |
+| 10901      | 操作授权验证失败                         |
+| 10902      | 收款人不存在                           |
+| 10903      | 收款人信息错误                          |
+| 10904      | 收款人状态不允许删除                       |
+| 10905      | 收款人添加通道已关闭                       |
+| 11001      | 交易记录不存在                          |
+| 11002      | 当前交易状态不允许的操作                     |
+| 11101      | 账单自动付款方式已存在                      |
+| 11102      | 账单已经支付                           |
+| 11103      | 账单已经存在支付请求                       |
+| 11104      | 账单支付超时                           |
+| 11105      | 超过自动支付限额                         |
+| 11106      | 账户余额不足                           |
+| 11201      | 只能添加一个CA账号                       |
+| 11202      | 银行不存在                            |
+| 11203      | 银行不支持创建虚拟账号                      |
+| 11204      | 只能添加一种VA账号                       |
+| 11301      | 冻结金额大于可用余额                       |
+| 11302      | 解冻金额大于冻结金额                       |
+| 11401      | 该机构已失效，无法交易                      |
+| 11402      | 该机构未开通交易服务                       |
+| 11403      | 交易对不可用                           |
+| 11404      | 钱包被冻结，无法交易                       |
+| 11405      | 更新二次验证码后，24小时内禁止交易               |
+| 11406      | 更新登录密码后，24小时内禁止交易                |
+| 11407      | 交易数量小数精度不能超过{0}                  |
+| 11408      | 交易数量超过限额                         |
+| 11409      | 钱包资产余额不足，无法交易                    |
+| 11410      | 兑换金额过大，请联系客服处理                   |
+| 11411      | 单笔交易最低{0} {1}                    |
+| 11412      | 单笔交易最大{0} {1}                    |
+| 11413      | 交易出售数字货币gas不足                    |
+| 11414      | 总服务费费率小于0                        |
+| 11415      | 创建交易汇率失效                         |
+| 11417      | 获取汇率异常                           |
+| 11413      | Gas不足                            |
+| 11501      | 汇率异常                             |
 | 11801      | 钱包资金来源存疑                         |
 
 
