@@ -3677,6 +3677,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/
 |data|object|响应数据|-|
 |└─depositFee|number|充值手续费率|-|
 |└─cardAuthUrl|string|卡片消费认证回调接口|-|
+|└─cardTdsUrl|string|卡片3DS回调接口|-|
 |└─assets|array|资金情况|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currencyKey|string|币种|-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─availableBalance|number|可用余额|-|
@@ -3694,7 +3695,8 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/merchant/
   "message": "Success",
   "data": {
     "depositFee": 0.004,
-    "cardAuthUrl": "https://test.quantumtrust.com/card/callback",
+    "cardAuthUrl": "https://test.quantumtrust.com/card/callback/auth",
+    "cardAuthUrl": "https://test.quantumtrust.com/card/callback/3ds",
     "assets": [
       {
         "currencyKey": "USD",
@@ -6399,7 +6401,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 **这部分回调功能需要单独配置新的回调URL才能使用**
 
 ### 授权
+使用配置的cardAuthUrl进行回调接收信息，并且客户需要在2s内及时做出符合规则的响应
+
 **Request payload**
+
 | Field           | Type   | Description        | Since |
 |-----------------|--------|--------------------|-------|
 | authAmount      | string | 授权金额               | -     |
@@ -6442,6 +6447,216 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 	"responseCode": 0,
 	"message": "success",
 	"externalReference": ""
+}
+```
+### 卡3DS相关
+用于在用户刷卡时验证用户身份
+使用配置的cardTdsUrl进行回调接收信息，并做出相关响应
+
+**事件类型**
+
+| Event               | Description |
+|---------------------|-------------|
+| VERIFICATION_CHOOSE | 验证方式选择      |
+| OTP_SEND            | 发送验证吗       |
+| OOB_SEND            | 发送App消息     |
+| OOB_VALIDATE        | 验证App消息     |
+
+**验证方式**
+
+| Event | Description |
+|-------|-------------|
+| SMS   | 短信          |
+| EMAIL | 邮件          |
+| OOB   | App消息       |
+
+**OOB结果**
+
+| Event     | Description |
+|-----------|-------------|
+| PENDING   | 持卡人未能确认交易请求 |
+| CONFIRMED | 持卡人确认交易请求   |
+| REJECTED  | 持卡人拒绝交易请求   |
+
+#### VERIFICATION_CHOOSE
+
+**Request payload**
+
+| Field           | Type   | Description | Since |
+|-----------------|--------|-------------|-------|
+| requestId       | string | 请求id        | -     |
+| uid             | string | 用户id        | -     |
+| cardId          | string | 卡id         | -     |
+| event           | string | 事件          | -     |
+| options         | array  | 验证方式        | -     |
+
+**Request-example:**
+
+```
+{
+  "requestId":"1668184762436685824",
+  "uid":"1668184762436685823",
+  "cardId":"ETLPzgGfSzg.pq",
+  "event":"VERIFICATION_CHOOSE",
+  "options":["EMAIL","SMS","OOB"]  
+}
+```
+**Response-fields:**
+
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| requestId | string | 请求id        | -     |
+| event     | string | 事件          | -     |
+| options   | array  | 选择的方式       | -     |
+| locale    | string | 语言          | -     |
+
+**Response-example:**
+```
+{
+  "requestId":"1668184762436685824",
+  "event":"VERIFICATION_CHOOSE",
+  "options":["EMAIL"],
+  "locale":"en_US"
+}
+```
+
+#### OTP_SEND
+
+**Request payload**
+
+| Field          | Type   | Description | Since |
+|----------------|--------|-------------|-------|
+| requestId      | string | 请求id        | -     |
+| uid            | string | 用户id        | -     |
+| cardId         | string | 卡id         | -     |
+| event          | string | 事件          | -     |
+| otp            | string | 一次性验证码      | -     |
+| option         | string | 验证方式        | -     |
+| remark         | object | 卡购买信息，可以为空  | -     |
+| └─merchantName | string | 商户名         | -     |
+| └─amount       | string | 金额          | -     |
+| └─currency     | string | 币种          | -     |
+
+**Request-example:**
+
+```
+{
+  "requestId":"1668184762436685824",
+  "uid":"1668184762436685823",
+  "cardId":"ETLPzgGfSzg.pq",
+  "event":"OTP_SEND",
+  "option":"EMAIL", 
+  "otp":"679023",
+  "remark":{
+    "merchantName":"apple.com",
+    "amount":"10.00",
+    "currency":"AUD"
+  }
+}
+```
+**Response-fields:**
+
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| requestId | string | 请求id        | -     |
+| event     | string | 事件          | -     |
+| email     | string | 邮箱          | -     |
+| mobile    | string | 手机          | -     |
+
+**Response-example:**
+```
+{
+  "requestId":"1668184762436685824",
+  "event":"OTP_SEND",
+  "email":"abc@gamil.com" 
+  "mobile":"+61490789322"  
+}
+```
+
+#### OOB_SEND
+
+**Request payload**
+
+| Field          | Type   | Description | Since |
+|----------------|--------|-------------|-------|
+| requestId      | string | 请求id        | -     |
+| uid            | string | 用户id        | -     |
+| cardId         | string | 卡id         | -     |
+| event          | string | 事件          | -     |
+| option         | string | 验证方式        | -     |
+| remark         | object | 卡购买信息，可以为空  | -     |
+| └─merchantName | string | 商户名         | -     |
+| └─amount       | string | 金额          | -     |
+| └─currency     | string | 币种          | -     |
+
+**Request-example:**
+
+```
+{
+  "requestId":"1668184762436685824",
+  "uid":"1668184762436685823",
+  "cardId":"ETLPzgGfSzg.pq",
+  "event":"OOB_SEND",
+  "option":"OOB", 
+  "remark":{
+    "merchantName":"apple.com",
+    "amount":"10.00",
+    "currency":"AUD"
+  }
+}
+```
+**Response-fields:**
+
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| requestId | string | 请求id        | -     |
+| event     | string | 事件          | -     |
+
+**Response-example:**
+```
+{
+  "requestId":"1668184762436685824",
+  "event":"OOB_SEND"
+}
+```
+
+#### OOB_VALIDATE
+
+**Request payload**
+
+| Field          | Type   | Description | Since |
+|----------------|--------|-------------|-------|
+| requestId      | string | 请求id        | -     |
+| uid            | string | 用户id        | -     |
+| cardId         | string | 卡id         | -     |
+| event          | string | 事件          | -     |
+| option         | string | 验证方式        | -     |
+
+**Request-example:**
+
+```
+{
+  "requestId":"1668184762436685824",
+  "uid":"1668184762436685823",
+  "cardId":"ETLPzgGfSzg.pq",
+  "event":"OOB_VALIDATE",
+  "option":"OOB"
+}
+```
+**Response-fields:**
+
+| Field     | Type   | Description | Since |
+|-----------|--------|-------------|-------|
+| requestId | string | 请求id        | -     |
+| event     | string | 事件          | -     |
+| result    | string | OOB 确认结果    | -     |
+
+**Response-example:**
+```
+{
+  "requestId":"1668184762436685824",
+  "event":"OOB_VALIDATE",
+  "result":"PENDING"
 }
 ```
 
