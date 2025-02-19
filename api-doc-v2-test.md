@@ -4756,10 +4756,10 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/applicati
 
 **Body-parameters:**
 
-| Parameter     | Type   | Require  d | Description                 | Sin ce |
-|---------------|------------------------------------------------------------|
-| applicationId | st ri ng       |true| 申请记录id                             |-|
-| reviewStatus |  stri      ng |true| 审核 All o w     ed: APPROVED,REJECTED |-|
+| Parameter     | Type   | Required | Description                   | Since |
+|---------------|--------|----------|-------------------------------|-------|
+| applicationId | string | true     | 申请记录id                        | -     |
+| reviewStatus  | string | true     | 审核 Allowed: APPROVED,REJECTED | -     |
 
 **Request-example:**
 
