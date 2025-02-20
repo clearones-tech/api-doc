@@ -6575,7 +6575,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 | currency        | string | 币种                 | -     |
 | uid             | string | 用户id               | -     |
 | cardId          | string | 卡id                | -     |
-| tranTime        | long   | 交易时间戳              | -     |
+| tranTime        | int64  | 交易时间戳              | -     |
 | merchantName    | string | 支付商户名              | -     |
 | id              | string | 卡交易id              | -     |
 | orderNo         | string | 关联的订单号             | -     |
@@ -7159,8 +7159,8 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | orderStatus         | string  | 订单状态        | -     |
 | transactionType     | string  | 交易类型        | -     |
 | merchantName        | string  | 卡支付商户名称     | -     |
-| createTime          | long    | 创建时间        | -     |
-| updateTime          | long    | 修改时间        | -     |
+| createTime          | int64   | 创建时间        | -     |
+| updateTime          | int64   | 修改时间        | -     |
 | orderType           | string  | 订单类型        | -     |
 | transactionAmount   | string  | 交易金额        | -     |
 | transactionCurrency | string  | 交易币种        | -     |
@@ -7176,7 +7176,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |---------------|--------|------------------------------------------------------------------------------|-------|
 | applicationId | string | 申请id                                                                         | -     |
 | status        | string | 状态,PENDING_INITIALIZATION, UNDER_REVIEW, REJECTED, APPROVED, SUCCESS, FAILED | -     |
-| timestamp     | string | 时间戳                                                                          | -     |
+| timestamp     | int64  | 时间戳                                                                          | -     |
 
 **<div id="buildCardState"> buildCardState </div>**
 
@@ -7185,7 +7185,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | cardId        | string | 卡id                                                                                                | -     |
 | applicationId | string | 申请id                                                                                               | -     |
 | status        | string | 状态,NEW, CREATED, PRE_ACTIVATION, DISPATCHED, INVALID, ACTIVE, TEMP_BLOCKED, PERM_BLOCKED, REJECTED | -     |
-| timestamp     | string | 时间戳                                                                                                | -     |
+| timestamp     | int64  | 时间戳                                                                                                | -     |
 
 **<div id="buildCardActivationCode"> buildCardActivationCode </div>**
 
@@ -7194,7 +7194,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | cardId           | string | 卡id            | -     |
 | activationCode   | string | 激活码            | -     |
 | activationMethod | string | 激活方式,SMS,EMAIL | -     |
-| expirationTime   | long   | 失效时间           | -     |
+| expirationTime   | int64  | 失效时间           | -     |
 
 ## 错误码列表
 
