@@ -4744,6 +4744,170 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/applicati
 }
 ```
 
+### 卡申请详情
+**URL:** /api/v2/build/card/application/detail
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 卡申请详情
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|id|string|true|记录id|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/application/detail --data '{
+  "id": "81823"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─id|string|记录id|-|
+|└─uid|string|用户uid|-|
+|└─name|string|姓名|-|
+|└─firstName|string|名|-|
+|└─midName|string|中间名|-|
+|└─lastName|string|姓|-|
+|└─birthday|string|生日 YYYY-MM-DD|-|
+|└─phoneNo|string|手机号|-|
+|└─email|string|邮箱地址|-|
+|└─gender|string|性别 MALE,FEMALE|-|
+|└─cardType|string|卡类型 VIRTUAL,PHY|-|
+|└─cardId|string|卡id|-|
+|└─status|string|申请状态 PENDING_INITIALIZATION, UNDER_REVIEW, REJECTED, APPROVED, SUCCESS, FAILED|-|
+|└─cardInf|object|卡信息|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─id|string|卡id|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─pan|string|卡号|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panFirst6|string|卡号前6位|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─panLast4|string|卡号后4位|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|用户id|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cvv2|string|卡cvv2|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─expiry|string|有效期|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardType|string|卡类型 VIRTUAL,PHY|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─status|string|卡状态 NEW, CREATED, PRE_ACTIVATION, DISPATCHED, INVALID, ACTIVE, TEMP_BLOCKED, PERM_BLOCKED, REJECTED|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createdAt|int64|创建时间戳|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─updatedAt|int64|更新时间戳|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─category|string|卡类型 DEBIT_CARD,PREPAID_CARD,CREDIT_CARD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency|string|币种|-|
+|└─cardHolder|object|持卡人信息|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid|string|用户uid|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─name|string|姓名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─firstName|string|名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─midName|string|中间名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastName|string|姓|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─birthday|string|生日 YYYY-MM-DD|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─phoneNo|string|手机号|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─email|string|邮箱地址|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─gender|string|性别 MALE,FEMALE|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addr|object|地址信息|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|string|类型|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country|string|国家ISO码|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city|string|市|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─neighborhood|string|邻居|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─state|string|区|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─addressLine1|string|地址|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─postcode|string|邮编|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createdAt|int64|创建时间戳|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─updatedAt|int64|更新时间戳|-|
+|└─cardProfile|object|卡简介|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─pinFailCount|int32|密码失败次数|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─reissue|int32|重新发行次数|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─embossedName|string|图案名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─profileName|string|简介名|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─upstreamSeqNum|int32|上游序列号|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─createdAt|int64|创建时间戳|-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─updatedAt|int64|更新时间戳|-|
+|└─createdAt|int64|创建时间戳|-|
+|└─updatedAt|int64|更新时间戳|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "id": "ETLPzgGfSzDtuPNfeTMQqhnij-",
+    "uid": "1877543923242373120",
+    "name": "Jack D Joe",
+    "firstName": "Jack",
+    "midName": "D",
+    "lastName": "Joe",
+    "birthday": "1990-01-01",
+    "phoneNo": "+61-123456789",
+    "email": "example@example.com",
+    "gender": "MALE",
+    "cardType": "VIRTUAL",
+    "cardId": "ETLPzgGfSzgmhih",
+    "status": "APPROVED",
+    "cardInf": {
+      "id": "ETLPzgGfSzgmhih",
+      "pan": "5185453411223010229",
+      "panFirst6": "518545",
+      "panLast4": "0229",
+      "uid": "1877543923242373120",
+      "cvv2": "671",
+      "expiry": "205001",
+      "cardType": "VIRTUAL",
+      "status": "awq5s2",
+      "createdAt": 1736476429000,
+      "updatedAt": 1736476477000,
+      "category": "PREPAID_CARD",
+      "currency": "USD"
+    },
+    "cardHolder": {
+      "uid": "1877543923242373120",
+      "name": "Jack D Joe",
+      "firstName": "Jack",
+      "midName": "D",
+      "lastName": "Joe",
+      "birthday": "1990-01-01",
+      "phoneNo": "+61-123456789",
+      "email": "example@example.com",
+      "gender": "MALE",
+      "addr": {
+        "type": "USER",
+        "country": "US",
+        "city": "Los Angeles",
+        "neighborhood": "The neighborhood",
+        "state": "Ls",
+        "addressLine1": "Unit 701,Block B,The Victoria Tower.",
+        "postcode": "200001"
+      },
+      "createdAt": 1736476429000,
+      "updatedAt": 1736476477000
+    },
+    "cardProfile": {
+      "pinFailCount": 0,
+      "reissue": 0,
+      "embossedName": "USD PREPAID1",
+      "profileName": "test_multiple_profiles",
+      "upstreamSeqNum": 1,
+      "createdAt": 1736476429000,
+      "updatedAt": 1736476477000
+    },
+    "createdAt": 1736476429000,
+    "updatedAt": 1736476477000
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
 ### 审核卡
 
 **URL:** /api/v2/build/card/review
