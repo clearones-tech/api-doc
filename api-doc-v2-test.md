@@ -5559,34 +5559,34 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/det
 
 **Response-fields:**
 
-| Field                 | Type   | Description                                                | Since  |
-|-----------------------|--------|------------------------------------------------------------|--------|
-| code                  | int32  | 响应码                                                        | -      |
-| message               | string | 响应描述                                                       | -      |
-| data                  | object | 响应数据                                                       | -      |
-| └─uid                 | string | 用户uid                                                      | -      |
-| └─orderNo             | string | 订单编号                                                       | -      |
-| └─cardId              | string | 卡id                                                        | -      |
-| └─currency            | string | 币种                                                         | -      |
-| └─holderName          | string | 持卡人名                                                       | -      |
-| └─orderAmount         | number | 订单金额                                                       | -      |
-| └─settleAmount        | number | 结算金额                                                       | -      |
-| └─reversalAmount      | number | 退款金额                                                       | -      |
-| └─transactionType     | string | 交易类型 PURCHASE                                              | REFUND |-|
-| └─merchantName        | string | 商户名                                                        | -      |
-| └─createTime          | int64  | 用户uid                                                      | -      |
-| └─orderType           | string | 订单类型                                                       | -      |
-| └─transactionAmount   | number | 交易金额                                                       | -      |
-| └─transactionCurrency | string | 交易币种                                                       | -      |
-| └─cardPresent         | int32  | 是否有卡 1-有 0-没                                               | -      |
-| └─country             | string | 国家ISO                                                      | -      |
-| └─city                | string | 城市                                                         | -      |
-| └─mcc                 | string | 交易mcc                                                      | -      |
-| └─relatedOrderNo      | string | 关联订单号用逗号分隔                                                 | -      |
-| └─orderStatus         | string | 订单状态 PENDING,WAITING FOR REVIEW,COMPLETED,CANCELLED,FAILED | -      |
-| timestamp             | string | 时间戳毫秒                                                      | -      |
-| key                   | string | 加密key                                                      | -      |
-| sign                  | string | 签名                                                         | -      |
+| Field                 | Type   | Description                                                | Since |
+|-----------------------|--------|------------------------------------------------------------|-------|
+| code                  | int32  | 响应码                                                        | -     |
+| message               | string | 响应描述                                                       | -     |
+| data                  | object | 响应数据                                                       | -     |
+| └─uid                 | string | 用户uid                                                      | -     |
+| └─orderNo             | string | 订单编号                                                       | -     |
+| └─cardId              | string | 卡id                                                        | -     |
+| └─currency            | string | 币种                                                         | -     |
+| └─holderName          | string | 持卡人名                                                       | -     |
+| └─orderAmount         | number | 订单金额                                                       | -     |
+| └─settleAmount        | number | 结算金额                                                       | -     |
+| └─reversalAmount      | number | 退款金额                                                       | -     |
+| └─transactionType     | string | 交易类型 PURCHASE,REFUND                                       | -     |
+| └─merchantName        | string | 商户名                                                        | -     |
+| └─createTime          | int64  | 创建时间戳                                                      | -     |
+| └─orderType           | string | 订单类型                                                       | -     |
+| └─transactionAmount   | number | 交易金额                                                       | -     |
+| └─transactionCurrency | string | 交易币种                                                       | -     |
+| └─cardPresent         | int32  | 是否有卡 1-有 0-没                                               | -     |
+| └─country             | string | 国家ISO                                                      | -     |
+| └─city                | string | 城市                                                         | -     |
+| └─mcc                 | string | 交易mcc                                                      | -     |
+| └─relatedOrderNo      | string | 关联订单号用逗号分隔                                                 | -     |
+| └─orderStatus         | string | 订单状态 PENDING,WAITING FOR REVIEW,COMPLETED,CANCELLED,FAILED | -     |
+| timestamp             | string | 时间戳毫秒                                                      | -     |
+| key                   | string | 加密key                                                      | -     |
+| sign                  | string | 签名                                                         | -     |
 
 **Response-example:**
 
