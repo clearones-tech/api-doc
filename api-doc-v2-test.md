@@ -6223,16 +6223,16 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 
 **Body-parameters:**
 
-| Parameter              | Type   | Required | Description           | Since |
-|------------------------|--------|----------|-----------------------|-------|
-| cardId                 | string | true     | 卡id                   | -     |
-| acceptorName           | string | false    |                       | -     |
-| transactionSource      | string | false    |                       | -     |
-| currency               | string | true     | 币种                    | -     |
-| amount                 | number | true     | 金额                    | -     |
-| authorizationId        | string | false    | 验证id                  | -     |
-| type                   | string | true     | 交易类型 PURCHASE,REFUND  | -     |
-| partnerTransactionType | string | true     | 合作方交易类型 LOAD,WITHDRAW | -     |
+| Parameter              | Type   | Required | Description                                      | Since |
+|------------------------|--------|----------|--------------------------------------------------|-------|
+| cardId                 | string | true     | 卡id                                              | -     |
+| acceptorName           | string | false    |                                                  | -     |
+| transactionSource      | string | false    |                                                  | -     |
+| currency               | string | true     | 币种                                               | -     |
+| amount                 | number | true     | 金额                                               | -     |
+| authorizationId        | string | false    | 验证id                                             | -     |
+| type                   | string | true     | 交易类型 PURCHASE,REFUND                             | -     |
+| partnerTransactionType | string | true     | 合作方交易类型 LOAD,WITHDRAW LOAD表示向账户扣减资金，WITHDRAW表示增加 | -     |
 
 **Request-example:**
 
@@ -6288,16 +6288,16 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 
 **Body-parameters:**
 
-| Parameter              | Type   | Required | Description                      | Since |
-|------------------------|--------|----------|----------------------------------|-------|
-| cardId                 | string | true     | 卡id                              | -     |
-| originalAuthId         | string | false    | 如果 original_auth_id 不为空，则为增量冻结资金 | -     |
-| currency               | string | true     | 币种                               | -     |
-| amount                 | number | true     | 金额                               | -     |
-| acceptorName           | string | false    |                                  | -     |
-| transactionSource      | string | true     |                                  | -     |
-| type                   | string | true     | 交易类型 PURCHASE,REFUND             | -     |
-| partnerTransactionType | string | true     | 合作方交易类型 LOAD,WITHDRAW            | -     |
+| Parameter              | Type   | Required | Description                                      | Since |
+|------------------------|--------|----------|--------------------------------------------------|-------|
+| cardId                 | string | true     | 卡id                                              | -     |
+| originalAuthId         | string | false    | 如果 original_auth_id 不为空，则为增量冻结资金                 | -     |
+| currency               | string | true     | 币种                                               | -     |
+| amount                 | number | true     | 金额                                               | -     |
+| acceptorName           | string | false    |                                                  | -     |
+| transactionSource      | string | true     |                                                  | -     |
+| type                   | string | true     | 交易类型 PURCHASE,REFUND                             | -     |
+| partnerTransactionType | string | true     | 合作方交易类型 LOAD,WITHDRAW LOAD表示向账户扣减资金，WITHDRAW表示增加 | -     |
 
 **Request-example:**
 
