@@ -22,6 +22,7 @@
 | 2.0.17  | 2024-11-21 11:20:00 |modify|clearones| 法币转出交易详情增加payBankName,payBankAddress,payAccountNo字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | 2.0.18  | 2024-12-17 11:20:00 |modify|clearones| 新增fx预算接口（/api/v2/fx/transaction/check），fx创建交易接口新增exchangeRate字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | 2.0.19  | 2025-01-20 11:20:00 |modify|clearones| 1. 新增接口：连接账号交易-直接创建交易（/api/v2/connect/transaction/create/direct）<br> 2. 新增接口：FX兑换业务-直接创建FX交易（/api/v2/fx/transaction/create/direct）<br> 3. 新增接口：收款人管理模块-法币直接创建收款方请求（/api/v2/recipient/fiat/create/direct）<br> 4. 新增接口：收款人管理模块-加密货币直接创建收款方请求（/api/v2/recipient/crypto/create/direct）<br> 5. 新增接口：交易-直接创建交易加密交易（/api/v2/transaction/crypto/create/direct）<br> 6. 新增接口：交易-直接创建一个法币转账（/api/v2/transaction/fiat/create/direct）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| 2.0.21  | 2025-03-20 11:20:00 |modify|clearones| 1. 修改接口：conet-交易-创建一个法币转账（需要用户授权）（/api/v2/transaction/fiat/create），新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 2. 修改接口：conet-交易-直接创建一个法币转账（/api/v2/transaction/fiat/create/direct），新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 3. 修改接口：conet-交易-查询交易列表（/api/v2/transaction/list），新增返回值additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 4. 修改接口：conet-交易-查询交易详情（/api/v2/transaction/detail），新增返回值additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 5. webhook事件'FIAT_TX_CREATED'，新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 6. webhook事件'FIAT_TX_STATUS_CHANGED'，新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 7. 新增错误码：10816：转账附加服务费小数精度错误；                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 
 ## 接入说明
 ### 请求统一参数
@@ -1638,6 +1639,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/crypto/c
 |contractList|array|false|交易合同文件列表|-|
 |└─objectKey|string|true|上传后的对象key|-|
 |note|string|false|备注|-|
+|additionalFee|string|false|附加手续费（转账手续费=平台手续费+附加手续费）|-|
 
 **Request-example:**
 ```
@@ -1652,10 +1654,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/cre
   "paymentReason": "利润结算",
   "contractList": [
     {
-      "objectKey": "oqz8v7"
+      "objectKey": "pq02dk"
     }
   ],
-  "note": "jglye5"
+  "note": "w9tred",
+  "additionalFee": "0.1"
 }'
 ```
 **Response-fields:**
@@ -1709,6 +1712,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/cre
 |contractList|array|false|交易合同文件列表|-|
 |└─objectKey|string|true|上传后的对象key|-|
 |note|string|false|备注|-|
+|additionalFee|string|false|附加手续费（转账手续费=平台手续费+附加手续费）|-|
 
 **Request-example:**
 ```
@@ -1723,10 +1727,11 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/fiat/cre
   "paymentReason": "利润结算",
   "contractList": [
     {
-      "objectKey": "k93uwk"
+      "objectKey": "1v0m4v"
     }
   ],
-  "note": "cqn6bj"
+  "note": "91iyz3",
+  "additionalFee": "0.1"
 }'
 ```
 **Response-fields:**
@@ -1812,6 +1817,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/list --d
 |└─transactionStatus|string|交易状态（SUBMITTED:审批中；PROCESSING:处理中；SIGNING:签名中；BROADCASTING:广播中；CONFIRMING:确认中；UPLOADING_PROOF:待上传入账凭证；UPLOADED_PROOF:已上传凭证；SUCCESS:成功；FAILED:失败；CANCELLED:取消；REJECTED:拒绝；）|-|
 |└─transactionSubStatus|string|交易子状态|-|
 |└─platformFee|string|平台手续费|-|
+|└─additionalFee|string|附加手续费（转账手续费=平台手续费+附加手续费）|-|
 |└─note|string|备注|-|
 |└─beneficiaryId|int64|收款人ID|-|
 |└─fiatFeeMethod|int32|法币手续费方式（1：支付本地银行服务费；2：支付本地银行服务费与收款行服务费；）|-|
@@ -1848,15 +1854,16 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/list --d
       "beneficiaryName": "Jack's Wallet",
       "transactionAmount": "1.23456789",
       "transactionStatus": "SUCCESS",
-      "transactionSubStatus": "ohzfi9",
+      "transactionSubStatus": "x6bn9g",
       "platformFee": "1.2",
+      "additionalFee": "0.2",
       "note": "差旅费",
       "beneficiaryId": 123,
       "fiatFeeMethod": 1,
       "channelKey": "swift",
       "subChannelKey": "chats",
-      "proofEn": "4oojvn",
-      "proofCn": "017bc6",
+      "proofEn": "xxaiwe",
+      "proofCn": "yg0do6",
       "cryptoBlockHeight": 8371443,
       "cryptoFromAddress": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
       "cryptoToAddress": "0xfDb1FC3Ff8479bA88D4Ee44fF5Dbf8BB904a0E93",
@@ -1918,6 +1925,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/detail -
 |└─transactionStatus|string|交易状态（SUBMITTED:审批中；PROCESSING:处理中；SIGNING:签名中；BROADCASTING:广播中；CONFIRMING:确认中；UPLOADING_PROOF:待上传入账凭证；UPLOADED_PROOF:已上传凭证；SUCCESS:成功；FAILED:失败；CANCELLED:取消；REJECTED:拒绝；）|-|
 |└─transactionSubStatus|string|交易子状态|-|
 |└─platformFee|string|平台手续费|-|
+|└─additionalFee|string|附加手续费（转账手续费=平台手续费+附加手续费）|-|
 |└─note|string|备注|-|
 |└─beneficiaryId|int64|收款人ID|-|
 |└─fiatFeeMethod|int32|法币手续费方式（1：支付本地银行服务费；2：支付本地银行服务费与收款行服务费；）|-|
@@ -1956,15 +1964,16 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/detail -
     "beneficiaryName": "Jack's Wallet",
     "transactionAmount": "1.23456789",
     "transactionStatus": "SUCCESS",
-    "transactionSubStatus": "76vp7m",
+    "transactionSubStatus": "6emop0",
     "platformFee": "1.2",
+    "additionalFee": "0.2",
     "note": "差旅费",
     "beneficiaryId": 123,
     "fiatFeeMethod": 1,
     "channelKey": "swift",
     "subChannelKey": "chats",
-    "proofEn": "wvljdz",
-    "proofCn": "jrnvsv",
+    "proofEn": "5aloif",
+    "proofCn": "6ae3nc",
     "cryptoBlockHeight": 8371443,
     "cryptoFromAddress": "0x2B2711eADBb960f99221BF795EDFdc036798822D",
     "cryptoToAddress": "0xfDb1FC3Ff8479bA88D4Ee44fF5Dbf8BB904a0E93",
@@ -3632,6 +3641,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |transactionStatus|string|交易状态（SUBMITTED:审批中；PROCESSING:处理中；SIGNING:签名中；BROADCASTING:广播中；CONFIRMING:确认中；UPLOADING_PROOF:待上传入账凭证；UPLOADED_PROOF:已上传凭证；SUCCESS:成功；FAILED:失败；CANCELLED:取消；REJECTED:拒绝；）|-|
 |transactionSubStatus|string|交易子状态|-|
 |platformFee|string|平台手续费|-|
+|additionalFee|string|附加手续费（转账手续费=平台手续费+附加手续费）|-|
 |note|string|备注|-|
 |beneficiaryId|int64|收款人ID|-|
 |fiatFeeMethod|int32|法币手续费方式（1：支付本地银行服务费；2：支付本地银行服务费与收款行服务费；）|-|
@@ -3643,7 +3653,8 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |cryptoFromAddress|string|数字货币交易来源地址|-|
 |cryptoToAddress|string|数字货币交易目标地址|-|
 |cryptoTxHash|string|数字货币交易hash|-|
-|cryptoTxFee|string|数字货币链上手续费|-|                                                                                                                                                              | -     |
+|cryptoTxFee|string|数字货币链上手续费|-|
+|hasTransferNotice|boolean|是否可下载转账凭证|-|
 
 **<div id="currencyStatusDetail"> currencyStatusDetail </div>**
 
@@ -3857,6 +3868,8 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |10813|准备金不足|
 |10814|币种不存在|
 |10815|手续费规则不存在|
+|10816|转账附加服务费小数精度不能超过{0}|
+|10817|转账附加服务费最低{0} {1}|
 |10901|操作授权验证失败|
 |10902|收款人不存在|
 |10903|收款人信息错误|
