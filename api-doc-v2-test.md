@@ -2028,7 +2028,6 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/detail -
 | └─payBankName          |string|付款方银行名|-|
 | └─payBankAddress       |string|付款方银行地址|-|
 | └─payAccountNo         |string|付款方账号|-|
-| └─re                   |string|付款方账号|-|
 | timestamp              |string|时间戳毫秒|-|
 | key                    |string|加密key|-|
 | sign                   |string|签名|-|
