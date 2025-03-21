@@ -1993,44 +1993,45 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/transaction/detail -
 
 **Response-fields:**
 
-| Field | Type | Description | Since |
-|-------|------|-------------|-------|
-|code|int32|响应码|-|
-|message|string|响应描述|-|
-|data|object|响应数据|-|
-|└─customerRefId|string|调用方唯一业务ID|-|
-|└─transactionNo|string|交易号|-|
-|└─clientId|string|客户的账户ID|-|
-|└─createTimestamp|int64|创建时间，UNIX 时间戳毫秒数|-|
-|└─completedTimestamp|int64|完成时间，UNIX 时间戳毫秒数|-|
-|└─transferCurrencyKey|string|转账币种唯一标识|-|
-|└─currencyCategory|int32|币种类别(1:数字货币;2:法币;)|-|
-|└─transactionType|int32|交易类型（1：接收；2：发送；5：退款；）|-|
-|└─payAccountName|string|付款方名称|-|
-|└─beneficiaryName|string|收款方名称|-|
-|└─transactionAmount|string|交易数量|-|
-|└─transactionStatus|string|交易状态（SUBMITTED:审批中；PROCESSING:处理中；SIGNING:签名中；BROADCASTING:广播中；CONFIRMING:确认中；UPLOADING_PROOF:待上传入账凭证；UPLOADED_PROOF:已上传凭证；SUCCESS:成功；FAILED:失败；CANCELLED:取消；REJECTED:拒绝；）|-|
-|└─transactionSubStatus|string|交易子状态|-|
-|└─platformFee|string|平台手续费|-|
-|└─note|string|备注|-|
-|└─beneficiaryId|int64|收款人ID|-|
-|└─fiatFeeMethod|int32|法币手续费方式（1：支付本地银行服务费；2：支付本地银行服务费与收款行服务费；）|-|
-|└─channelKey|string|[转账通道](#channelKey)|-|
-|└─subChannelKey|string|[转账子通道](#channelKey)，当转账方式为“local”时，需要指定子类型|-|
-|└─proofEn|string|需要上传凭证的英文说明|-|
-|└─proofCn|string|需要上传凭证的中文说明|-|
-|└─cryptoBlockHeight|int64|数字货币区块高度|-|
-|└─cryptoFromAddress|string|数字货币交易来源地址|-|
-|└─cryptoToAddress|string|数字货币交易目标地址|-|
-|└─cryptoTxHash|string|数字货币交易hash|-|
-|└─cryptoTxFee|string|数字货币链上手续费|-|
-|└─hasTransferNotice|boolean|是否可下载转账凭证|-|
-|└─payBankName|string|付款方银行名|-|
-|└─payBankAddress|string|付款方银行地址|-|
-|└─payAccountNo|string|付款方账号|-|
-|timestamp|string|时间戳毫秒|-|
-|key|string|加密key|-|
-|sign|string|签名|-|
+| Field                  | Type | Description | Since |
+|------------------------|------|-------------|-------|
+| code                   |int32|响应码|-|
+| message                |string|响应描述|-|
+| data                   |object|响应数据|-|
+| └─customerRefId        |string|调用方唯一业务ID|-|
+| └─transactionNo        |string|交易号|-|
+| └─clientId             |string|客户的账户ID|-|
+| └─createTimestamp      |int64|创建时间，UNIX 时间戳毫秒数|-|
+| └─completedTimestamp   |int64|完成时间，UNIX 时间戳毫秒数|-|
+| └─transferCurrencyKey  |string|转账币种唯一标识|-|
+| └─currencyCategory     |int32|币种类别(1:数字货币;2:法币;)|-|
+| └─transactionType      |int32|交易类型（1：接收；2：发送；5：退款；）|-|
+| └─payAccountName       |string|付款方名称|-|
+| └─beneficiaryName      |string|收款方名称|-|
+| └─transactionAmount    |string|交易数量|-|
+| └─transactionStatus    |string|交易状态（SUBMITTED:审批中；PROCESSING:处理中；SIGNING:签名中；BROADCASTING:广播中；CONFIRMING:确认中；UPLOADING_PROOF:待上传入账凭证；UPLOADED_PROOF:已上传凭证；SUCCESS:成功；FAILED:失败；CANCELLED:取消；REJECTED:拒绝；）|-|
+| └─transactionSubStatus |string|交易子状态|-|
+| └─platformFee          |string|平台手续费|-|
+| └─note                 |string|备注|-|
+| └─beneficiaryId        |int64|收款人ID|-|
+| └─fiatFeeMethod        |int32|法币手续费方式（1：支付本地银行服务费；2：支付本地银行服务费与收款行服务费；）|-|
+| └─channelKey           |string|[转账通道](#channelKey)|-|
+| └─subChannelKey        |string|[转账子通道](#channelKey)，当转账方式为“local”时，需要指定子类型|-|
+| └─proofEn              |string|需要上传凭证的英文说明|-|
+| └─proofCn              |string|需要上传凭证的中文说明|-|
+| └─cryptoBlockHeight    |int64|数字货币区块高度|-|
+| └─cryptoFromAddress    |string|数字货币交易来源地址|-|
+| └─cryptoToAddress      |string|数字货币交易目标地址|-|
+| └─cryptoTxHash         |string|数字货币交易hash|-|
+| └─cryptoTxFee          |string|数字货币链上手续费|-|
+| └─hasTransferNotice    |boolean|是否可下载转账凭证|-|
+| └─payBankName          |string|付款方银行名|-|
+| └─payBankAddress       |string|付款方银行地址|-|
+| └─payAccountNo         |string|付款方账号|-|
+| └─re                   |string|付款方账号|-|
+| timestamp              |string|时间戳毫秒|-|
+| key                    |string|加密key|-|
+| sign                   |string|签名|-|
 
 **Response-example:**
 
@@ -6966,7 +6967,6 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 |---------------|--------|---------------------------|-------|
 | customerRefId | string | 调用方唯一业务id                 | -     |
 | recipientId   | string | 收款方地址id                   | -     |
-| status        | int32  | 收款人状态(1:审批中；2:已生效；3:审批拒绝) | -     |
 | currencyKey   | string | 币种标识                      | -     |
 | address       | string | 加密货币地址                    | -     |
 | label         | string | 别称                        | -     |
