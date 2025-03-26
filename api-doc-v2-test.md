@@ -5467,7 +5467,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/lis
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─uid                 | string | 用户uid                                                      | -      |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderNo             | string | 订单编号                                                       | -      |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─cardId              | string | 卡id                                                        | -      |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─currency            | string | 币种                                                         | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderCurrency       | string | 币种                                                         | -      |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─holderName          | string | 持卡人名                                                       | -      |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderAmount         | number | 订单金额                                                       | -      |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─settleAmount        | number | 结算金额                                                       | -      |
@@ -5482,6 +5482,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/lis
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─country             | string | 国家ISO                                                      | -      |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─city                | string | 城市                                                         | -      |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─mcc                 | string | 交易mcc                                                      | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─acquiringCurrency   | string | 收单币种                                                       | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─acquiringAmount     | number | 收单金额                                                       | -      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─version             | string | 版本                                                         | -      |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─relatedOrderNo      | string | 关联订单号用逗号分隔                                                 | -      |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─orderStatus         | string | 订单状态 PENDING,WAITING FOR REVIEW,COMPLETED,CANCELLED,FAILED | -      |
 | timestamp                                           | string | 时间戳毫秒                                                      | -      |
@@ -5519,6 +5522,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/lis
         "country": "US",
         "city": "Perth",
         "mcc": "5876",
+        "acquiringCurrency": "USD",
+        "acquiringAmount": 183.12,
+        "version": "v1",
         "relatedOrderNo": "1830279551182712835,1830635075516903428",
         "orderStatus": "PENDING"
       }
@@ -5580,6 +5586,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/det
 | └─city                | string | 城市                                                         | -     |
 | └─mcc                 | string | 交易mcc                                                      | -     |
 | └─relatedOrderNo      | string | 关联订单号用逗号分隔                                                 | -     |
+| └─acquiringCurrency   | string | 收单币种                                                       | -     |
+| └─acquiringAmount     | number | 收单金额                                                       | -     |
+| └─version             | string | 版本                                                         | -     |
 | └─orderStatus         | string | 订单状态 PENDING,WAITING FOR REVIEW,COMPLETED,CANCELLED,FAILED | -     |
 | timestamp             | string | 时间戳毫秒                                                      | -     |
 | key                   | string | 加密key                                                      | -     |
@@ -5611,6 +5620,9 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/det
     "city": "Perth",
     "mcc": "5876",
     "relatedOrderNo": "1830279551182712835,1830635075516903428",
+    "acquiringCurrency": "USD",
+    "acquiringAmount": 183.12,
+    "version": "v1",
     "orderStatus": "PENDING"
   },
   "timestamp": "1685343278618",
@@ -7150,7 +7162,7 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | orderNo             | string  | 订单id        | -     |
 | uid                 | string  | 用户id        | -     |
 | cardId              | string  | 卡id         | -     |
-| currency            | string  | 结算币种        | -     |
+| orderCurrency       | string  | 结算币种        | -     |
 | orderAmount         | string  | 订单金额        | -     |
 | settleAmount        | string  | 结算金额        | -     |
 | reversalAmount      | string  | 退款金额        | -     |
@@ -7166,6 +7178,9 @@ ClearOnes 在收到非200成功状态码以及响应内容非以上成功格式�
 | country             | string  | 交易国家        | -     |
 | city                | string  | 交易城市        | -     |
 | mcc                 | string  | 交易mcc       | -     |
+| acquiringCurrency   | string  | 收单币种        | -     |
+| acquiringAmount     | string  | 收单金额        | -     |
+| version             | string  | 版本号         | -     |
 | relatedOrderNo      | string  | 关联的订单id     | -     |
 
 **<div id="buildCardApplicationState"> buildCardApplicationState </div>**
