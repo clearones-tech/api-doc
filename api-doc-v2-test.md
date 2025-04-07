@@ -20,11 +20,11 @@
 | 2.0.15  | 2024-07-23 15:20:00 |modify|clearones| 交易记录查询增加hasTransferNotice(是否可下载转账凭证)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | 2.0.16  | 2024-08-23 15:20:00 |modify|clearones| 加密货币和法币收款人查询增加 superOrgRecipientId(收款人添加来源id)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | 2.0.17  | 2024-11-21 11:20:00 |modify|clearones| 法币转出交易详情增加payBankName,payBankAddress,payAccountNo字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| 2.0.18  | 2024-12-17 11:20:00 |modify|clearones| 新增fx预算接口（/api/v2/fx/transaction/check），fx创建交易接口新增exchangeRate字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| 2.0.19  | 2025-01-20 11:20:00 |modify|clearones| 1. 新增接口：连接账号交易-直接创建交易（/api/v2/connect/transaction/create/direct）<br> 2. 新增接口：FX兑换业务-直接创建FX交易（/api/v2/fx/transaction/create/direct）<br> 3. 新增接口：收款人管理模块-法币直接创建收款方请求（/api/v2/recipient/fiat/create/direct）<br> 4. 新增接口：收款人管理模块-加密货币直接创建收款方请求（/api/v2/recipient/crypto/create/direct）<br> 5. 新增接口：交易-直接创建交易加密交易（/api/v2/transaction/crypto/create/direct）<br> 6. 新增接口：交易-直接创建一个法币转账（/api/v2/transaction/fiat/create/direct）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| 2.0.18  | 2024-12-17 11:20:00 |modify|clearones| 新增fx预算接口（/api/v2/fx/transaction/check），fx创建交易接口新增exchangeRate字段                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| 2.0.19  | 2025-01-20 11:20:00 |modify|clearones| 1. 新增接口：连接账号交易-直接创建交易（/api/v2/connect/transaction/create/direct）<br> 2. 新增接口：FX兑换业务-直接创建FX交易（/api/v2/fx/transaction/create/direct）<br> 3. 新增接口：收款人管理模块-法币直接创建收款方请求（/api/v2/recipient/fiat/create/direct）<br> 4. 新增接口：收款人管理模块-加密货币直接创建收款方请求（/api/v2/recipient/crypto/create/direct）<br> 5. 新增接口：交易-直接创建交易加密交易（/api/v2/transaction/crypto/create/direct）<br> 6. 新增接口：交易-直接创建一个法币转账（/api/v2/transaction/fiat/create/direct）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | 2.0.20  | 2025-02-05 11:20:00 |modify|clearones| 增加卡业务相关接口                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| 2.0.21  | 2025-03-20 11:20:00 |modify|clearones| 1. 修改接口：conet-交易-创建一个法币转账（需要用户授权）（/api/v2/transaction/fiat/create），新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 2. 修改接口：conet-交易-直接创建一个法币转账（/api/v2/transaction/fiat/create/direct），新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 3. 修改接口：conet-交易-查询交易列表（/api/v2/transaction/list），新增返回值additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 4. 修改接口：conet-交易-查询交易详情（/api/v2/transaction/detail），新增返回值additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 5. webhook事件'FIAT_TX_CREATED'，新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 6. webhook事件'FIAT_TX_STATUS_CHANGED'，新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 7. 新增错误码：10816：转账附加服务费小数精度错误；                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| 2.0.22  | 2025-04-07 17:02:00 |modify|clearones| 1. 新增测试环境接口：创建法币收款（仅用于测试环境）（/api/v2/demo/fait/deposit/create）<br> 2. 新增测试环境接口：法币收款审批（仅用于测试环境）（/api/v2/demo/fait/deposit/）<br> 3. 新增测试环境接口：法币转账审批（仅用于测试环境）（/api/v2/demo/fait/transfer/）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| 2.0.21  | 2025-03-20 11:20:00 |modify|clearones| 1. 修改接口：conet-交易-创建一个法币转账（需要用户授权）（/api/v2/transaction/fiat/create），新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 2. 修改接口：conet-交易-直接创建一个法币转账（/api/v2/transaction/fiat/create/direct），新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 3. 修改接口：conet-交易-查询交易列表（/api/v2/transaction/list），新增返回值additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 4. 修改接口：conet-交易-查询交易详情（/api/v2/transaction/detail），新增返回值additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 5. webhook事件'FIAT_TX_CREATED'，新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 6. webhook事件'FIAT_TX_STATUS_CHANGED'，新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 7. 新增错误码：10816：转账附加服务费小数精度错误；                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| 2.0.22  | 2025-04-07 17:02:00 |modify|clearones| 1. 新增测试环境开户审核(/api/v2/simulate/client/audit) </br> 2.创建法币收款（仅用于测试环境）（/api/v2/simulate/fait/deposit/create）<br> 3. 新增测试环境接口：法币收款审批（仅用于测试环境）（/api/v2/simulate/fait/deposit/）<br> 4. 新增测试环境接口：法币转账审批（仅用于测试环境）（/api/v2/simulate/fait/transfer/）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 
 ## 接入说明
 
@@ -6834,9 +6834,57 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 }
 ```
 
-## Demo
+## conet-模拟接口
+### 开户审核（仅用于测试环境）
+**URL:** /api/v2/simulate/client/audit
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 开户审核
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|用户id|-|
+|auditStatus|int32|true|审核类型 1-通过 0-拒绝|-|
+|remark|string|false|备注|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/simulate/client/audit --data '{
+  "clientId": "191283192831928",
+  "auditStatus": 1,
+  "remark": "name error"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
 ### 创建法币收款（仅用于测试环境）
-**URL:** /api/v2/demo/fait/deposit/create
+**URL:** /api/v2/simulate/fait/deposit/create
 
 **Type:** POST
 
@@ -6855,7 +6903,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v2/demo/fait/deposit/create --data '{
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/simulate/fait/deposit/create --data '{
   "clientId": "1663027675055698121",
   "depositAddressKey": "189123123104123",
   "amount": "1.23456789"
@@ -6888,7 +6936,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/demo/fait/deposit/cr
 ```
 
 ### 法币收款审批（仅用于测试环境）
-**URL:** /api/v2/demo/fait/deposit/approval
+**URL:** /api/v2/simulate/fait/deposit/approval
 
 **Type:** POST
 
@@ -6907,7 +6955,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/demo/fait/deposit/cr
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v2/demo/fait/deposit/approval --data '{
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/simulate/fait/deposit/approval --data '{
   "clientId": "1663027675055698121",
   "transactionNo": "1663027675055698130",
   "transactionStatus": "SUCCESS"
@@ -6940,7 +6988,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/demo/fait/deposit/ap
 ```
 
 ### 法币转账审批（仅用于测试环境）
-**URL:** /api/v2/demo/fait/transfer/approval
+**URL:** /api/v2/simulate/fait/transfer/approval
 
 **Type:** POST
 
@@ -6959,7 +7007,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/demo/fait/deposit/ap
 
 **Request-example:**
 ```
-curl -X POST -H 'Content-Type: application/json' -i /api/v2/demo/fait/transfer/approval --data '{
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/simulate/fait/transfer/approval --data '{
   "clientId": "1663027675055698121",
   "transactionNo": "1663027675055698130",
   "transactionStatus": "SUCCESS"
