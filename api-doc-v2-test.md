@@ -6581,7 +6581,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 
 | Field           | Type   | Description        | Since |
 |-----------------|--------|--------------------|-------|
-| authAmount      | string | 授权金额               | -     |
+| authAmount      | number | 授权金额               | -     |
 | currency        | string | 币种                 | -     |
 | uid             | string | 用户id               | -     |
 | cardId          | string | 卡id                | -     |
