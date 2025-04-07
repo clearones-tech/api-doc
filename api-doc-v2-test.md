@@ -24,6 +24,7 @@
 | 2.0.19  | 2025-01-20 11:20:00 |modify|clearones| 1. 新增接口：连接账号交易-直接创建交易（/api/v2/connect/transaction/create/direct）<br> 2. 新增接口：FX兑换业务-直接创建FX交易（/api/v2/fx/transaction/create/direct）<br> 3. 新增接口：收款人管理模块-法币直接创建收款方请求（/api/v2/recipient/fiat/create/direct）<br> 4. 新增接口：收款人管理模块-加密货币直接创建收款方请求（/api/v2/recipient/crypto/create/direct）<br> 5. 新增接口：交易-直接创建交易加密交易（/api/v2/transaction/crypto/create/direct）<br> 6. 新增接口：交易-直接创建一个法币转账（/api/v2/transaction/fiat/create/direct）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | 2.0.20  | 2025-02-05 11:20:00 |modify|clearones| 增加卡业务相关接口                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | 2.0.21  | 2025-03-20 11:20:00 |modify|clearones| 1. 修改接口：conet-交易-创建一个法币转账（需要用户授权）（/api/v2/transaction/fiat/create），新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 2. 修改接口：conet-交易-直接创建一个法币转账（/api/v2/transaction/fiat/create/direct），新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 3. 修改接口：conet-交易-查询交易列表（/api/v2/transaction/list），新增返回值additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 4. 修改接口：conet-交易-查询交易详情（/api/v2/transaction/detail），新增返回值additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 5. webhook事件'FIAT_TX_CREATED'，新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 6. webhook事件'FIAT_TX_STATUS_CHANGED'，新增参数additionalFee（附加手续费（转账手续费=平台手续费+附加手续费））<br> 7. 新增错误码：10816：转账附加服务费小数精度错误；                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| 2.0.22  | 2025-04-07 17:02:00 |modify|clearones| 1. 新增测试环境接口：创建法币收款（仅用于测试环境）（/api/v2/demo/fait/deposit/create）<br> 2. 新增测试环境接口：法币收款审批（仅用于测试环境）（/api/v2/demo/fait/deposit/）<br> 3. 新增测试环境接口：法币转账审批（仅用于测试环境）（/api/v2/demo/fait/transfer/）                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 
 ## 接入说明
 
@@ -6833,6 +6834,162 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/simulate/
 }
 ```
 
+## Demo
+### 创建法币收款（仅用于测试环境）
+**URL:** /api/v2/demo/fait/deposit/create
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 创建法币收款（仅用于测试环境）
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|depositAddressKey|string|false|收款方式唯一标识|-|
+|amount|string|false|交易数量|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/demo/fait/deposit/create --data '{
+  "clientId": "1663027675055698121",
+  "depositAddressKey": "189123123104123",
+  "amount": "1.23456789"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─transactionNo|string|交易号|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "transactionNo": "1663027675055698130"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 法币收款审批（仅用于测试环境）
+**URL:** /api/v2/demo/fait/deposit/approval
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 法币收款审批（仅用于测试环境）
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|transactionNo|string|false|交易号|-|
+|transactionStatus|string|false|交易状态（SUCCESS:成功；REJECTED:拒绝；）|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/demo/fait/deposit/approval --data '{
+  "clientId": "1663027675055698121",
+  "transactionNo": "1663027675055698130",
+  "transactionStatus": "SUCCESS"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─result|string|结果（SUCCESS；FAILED；）|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "result": "SUCCESS"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+### 法币转账审批（仅用于测试环境）
+**URL:** /api/v2/demo/fait/transfer/approval
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** 法币转账审批（仅用于测试环境）
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|clientId|string|true|客户的账户ID|-|
+|transactionNo|string|false|交易号|-|
+|transactionStatus|string|false|交易状态（SUCCESS:成功；REJECTED:拒绝；）|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/demo/fait/transfer/approval --data '{
+  "clientId": "1663027675055698121",
+  "transactionNo": "1663027675055698130",
+  "transactionStatus": "SUCCESS"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─result|string|结果（SUCCESS；FAILED；）|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "result": "SUCCESS"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
 
 ## Webhook
 
