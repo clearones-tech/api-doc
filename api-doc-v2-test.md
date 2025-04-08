@@ -5571,7 +5571,7 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/det
 | └─uid                 | string | 用户uid                                                      | -     |
 | └─orderNo             | string | 订单编号                                                       | -     |
 | └─cardId              | string | 卡id                                                        | -     |
-| └─currency            | string | 币种                                                         | -     |
+| └─orderCurrency       | string | 币种                                                         | -     |
 | └─holderName          | string | 持卡人名                                                       | -     |
 | └─orderAmount         | number | 订单金额                                                       | -     |
 | └─settleAmount        | number | 结算金额                                                       | -     |
