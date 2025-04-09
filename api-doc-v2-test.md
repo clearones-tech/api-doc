@@ -5632,6 +5632,65 @@ curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/order/det
 }
 ```
 
+### sdk获取密钥
+**URL:** /api/v2/build/card/sdk/upgrade
+
+**Type:** POST
+
+
+**Content-Type:** application/json
+
+**Description:** sdk获取密钥
+
+**Body-parameters:**
+
+| Parameter | Type | Required | Description | Since |
+|-----------|------|----------|-------------|-------|
+|uid|string|true|用户UID|-|
+|cardId|string|true|卡id|-|
+|panLast4|string|true|卡号后4位|-|
+|firstName|string|true|用户名|-|
+|deviceId|string|true|设备号|-|
+
+**Request-example:**
+```
+curl -X POST -H 'Content-Type: application/json' -i /api/v2/build/card/sdk/upgrade --data '{
+  "uid": "1887677970887086080",
+  "cardId": "ETLPzgGfSzgnqhv",
+  "panLast4": "1359",
+  "firstName": "Mark",
+  "deviceId": "owrq123lkadf"
+}'
+```
+**Response-fields:**
+
+| Field | Type | Description | Since |
+|-------|------|-------------|-------|
+|code|int32|响应码|-|
+|message|string|响应描述|-|
+|data|object|响应数据|-|
+|└─cardId|string|卡号|-|
+|└─secret|string|密钥|-|
+|timestamp|string|时间戳毫秒|-|
+|key|string|加密key|-|
+|sign|string|签名|-|
+
+**Response-example:**
+```
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "cardId": "ETLPzgGfSzgnqhv",
+    "secret": "eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiIxODg3Njc3OTcwODg3MDg2MDgwIiwiZGV2aWNlSWQiOiI5MTk5MjkzMDEyMyIsImV4cCI6MTc0NDc3MTgyNH0.Lk2tLYoevmgLhBh_Caau7qHtDLb2bsujQW7GO-AKJvc"
+  },
+  "timestamp": "1685343278618",
+  "key": "tvJ1Um",
+  "sign": "LwpZUp"
+}
+```
+
+
 ### 更新持卡人手机
 
 **URL:** /api/v2/build/card/holder/updatePhone
